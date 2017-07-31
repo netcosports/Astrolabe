@@ -14,7 +14,7 @@ class PlainLoaderSpec: XCTestCase {
     Gnomon.logging = true
   }
 
-  func testPlainLoader() {
+  func testPlainLoaderInitial() {
     do {
       let loader = TestPL()
       let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
@@ -73,6 +73,10 @@ class PlainLoaderSpec: XCTestCase {
     }
   }
 
+}
+
+extension PlainLoaderSpec {
+
   func testPlainLoaderPaging() {
     do {
       let loader = TestPL()
@@ -129,6 +133,10 @@ class PlainLoaderSpec: XCTestCase {
       fail("\(error)")
     }
   }
+
+}
+
+extension PlainLoaderSpec {
 
   func testPlainLoaderAutoupdate() {
     do {
@@ -188,6 +196,10 @@ class PlainLoaderSpec: XCTestCase {
     }
   }
 
+}
+
+extension PlainLoaderSpec {
+
   func testPlainLoaderPullToRefresh() {
     do {
       let loader = TestPL()
@@ -227,6 +239,143 @@ class PlainLoaderSpec: XCTestCase {
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
+        return fail("invalid cells type")
+      }
+      expect(cells).to(haveCount(1))
+
+      let testViewCell = TestViewCell()
+      var expected = 123
+
+      for data in cells {
+        data.setup(with: testViewCell)
+        expect(testViewCell.title) == String(expected)
+
+        testViewCell.title = nil
+        expected += 111
+      }
+    } catch {
+      fail("\(error)")
+    }
+  }
+
+}
+
+extension PlainLoaderSpec {
+
+  func testPlainLoaderForceUpdateDiscardOldData() {
+    do {
+      let loader = TestPL()
+
+      let intent: LoaderIntent = .force(keepData: false)
+      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      expect(results).to(haveCount(2))
+
+      guard let cachedResult = results[0] else { return fail("nil result") }
+      expect(cachedResult[0].cells).to(haveCount(0))
+
+      guard let httpResult = results[1] else { return fail("nil result") }
+      guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
+        return fail("invalid cells type")
+      }
+      expect(cells).to(haveCount(1))
+
+      let testViewCell = TestViewCell()
+      var expected = 123
+
+      for data in cells {
+        data.setup(with: testViewCell)
+        expect(testViewCell.title) == String(expected)
+
+        testViewCell.title = nil
+        expected += 111
+      }
+    } catch {
+      fail("\(error)")
+    }
+  }
+
+}
+
+extension PlainLoaderSpec {
+
+  func testPlainLoaderForceUpdateDiscardOldDataHttpCache() {
+    do {
+      let loader = TestPL()
+
+      let intent: LoaderIntent = .force(keepData: false)
+
+      _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
+
+      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      expect(results).to(haveCount(1))
+
+      guard let cacheResult = results[0] else { return fail("nil result") }
+      guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
+        return fail("invalid cells type")
+      }
+      expect(cells).to(haveCount(1))
+
+      let testViewCell = TestViewCell()
+      var expected = 123
+
+      for data in cells {
+        data.setup(with: testViewCell)
+        expect(testViewCell.title) == String(expected)
+
+        testViewCell.title = nil
+        expected += 111
+      }
+    } catch {
+      fail("\(error)")
+    }
+  }
+
+}
+
+extension PlainLoaderSpec {
+
+  func testPlainLoaderForceUpdateKeepOldData() {
+    do {
+      let loader = TestPL()
+
+      let intent: LoaderIntent = .force(keepData: true)
+      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      expect(results).to(haveCount(1))
+
+      guard let cacheResult = results[0] else { return fail("nil result") }
+      guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
+        return fail("invalid cells type")
+      }
+      expect(cells).to(haveCount(1))
+
+      let testViewCell = TestViewCell()
+      var expected = 123
+
+      for data in cells {
+        data.setup(with: testViewCell)
+        expect(testViewCell.title) == String(expected)
+
+        testViewCell.title = nil
+        expected += 111
+      }
+    } catch {
+      fail("\(error)")
+    }
+  }
+
+  func testPlainLoaderForceUpdateKeepOldDataHttpCache() {
+    do {
+      let loader = TestPL()
+
+      let intent: LoaderIntent = .force(keepData: true)
+
+      _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
+
+      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      expect(results).to(haveCount(1))
+
+      guard let cacheResult = results[0] else { return fail("nil result") }
+      guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
       }
       expect(cells).to(haveCount(1))
