@@ -1,19 +1,21 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode8.3
+rvm: 2.3.3
 
 cache:
-  directories:
-    - $HOME/.cocoapods/
+  cocoapods: true
 
-before_install:
-- gem install cocoapods-acknowledgements
-- gem install cocoapods
+install:
+- gem install cocoapods-acknowledgements cocoapods xcpretty
 - pod repo update
+- pod install
+- brew install jq
 
 env:
-  - SCHEME=iOSTests   DESTINATION='platform=iOS Simulator,name=NetcoTests/iPhone-7/iOS/10.3'
-  - SCHEME=tvOSTests  DESTINATION='platform=tvOS Simulator,name=NetcoTests/Apple-TV-1080p/tvOS/10.2'
+  - SCHEME=iOSTests   SIMULATOR='NetcoTests/iPhone-7/iOS/10.3'
+  - SCHEME=tvOSTests  SIMULATOR='NetcoTests/Apple-TV-1080p/tvOS/10.2'
 
 script:
-  - ./scripts/simulators.sh
+  - export DESTINATION="id=$(./scripts/create_simulator.sh $SIMULATOR)"
+  - xcrun simctl list
   - set -o pipefail && env NSUnbufferedIO=YES xcodebuild -workspace Demo.xcworkspace -scheme "$SCHEME" -destination "$DESTINATION" build test | xcpretty
