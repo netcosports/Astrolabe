@@ -1,6 +1,6 @@
 lane :test do
-  scan(scheme: 'iOSTests', device: 'iPhone 7')
-  scan(scheme: 'tvOSTests', device: 'Apple TV 1080p')
+  scan(scheme: 'iOSTests', device: 'NetcoTests/iPhone-7/iOS/10.3')
+  scan(scheme: 'tvOSTests', device: 'NetcoTests/Apple-TV-1080p/tvOS/10.2')
 end
 
 lane :release do |options|
