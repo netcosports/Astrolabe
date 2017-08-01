@@ -187,14 +187,13 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
     registerCellsForSections()
 
-    CATransaction.begin()
-
     let letSection = section
+    let letExpandableCell = expandableCell
     containerView.performBatchUpdates({
       self.containerView.deleteItems(at: collapseIndexes)
       self.containerView.insertItems(at: expandIndexes)
     }, completion: { [weak self] _ in
-      if let itemIndex = letSection.cells.index(where: { $0.id == expandableCell.id }) {
+      if let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
         let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
         self?.containerView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
       }

@@ -190,8 +190,9 @@ open class TableViewExpandableSource: TableViewSource {
     CATransaction.begin()
 
     let letSection = section
+    let letExpandableCell = expandableCell
     CATransaction.setCompletionBlock { [weak self] in
-      if let itemIndex = letSection.cells.index(where: { $0.id == expandableCell.id }) {
+      if let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
         let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
         self?.containerView.scrollToRow(at: indexPath, at: .middle, animated: true)
       }
