@@ -6,16 +6,16 @@ cache:
   cocoapods: true
 
 install:
-- gem install cocoapods-acknowledgements cocoapods xcpretty
+- gem install cocoapods xcpretty
 - pod repo update
 - pod install
 - brew install jq
 
 env:
-  - SCHEME=iOSTests   SIMULATOR='NetcoTests/iPhone-7/iOS/10.3'
-  - SCHEME=tvOSTests  SIMULATOR='NetcoTests/Apple-TV-1080p/tvOS/10.2'
+  - SCHEME=iOSTests
+  - SCHEME=tvOSTests
 
 script:
-  - export DESTINATION="id=$(./scripts/create_simulator.sh $SIMULATOR)"
+  - export DESTINATION="$(./scripts/destination.sh $SCHEME)"
   - xcrun simctl list
   - set -o pipefail && env NSUnbufferedIO=YES xcodebuild -workspace Demo.xcworkspace -scheme "$SCHEME" -destination "$DESTINATION" build test | xcpretty
