@@ -10,6 +10,7 @@ lane :release do |options|
   message ||= ''
   new_version(type: bump, increase: true, path: podspec)
   tag(message: message)
+  sh("git push origin master")
   pod_push
 end
 
@@ -39,6 +40,7 @@ private_lane :new_version do |options|
     )
   end
 
+  cocoapods
   if options[:increase]
     message = "Increased #{options[:path]} version #{lane_context[SharedValues::PODSPEC_VERSION_NUMBER]}"
   else
@@ -46,7 +48,7 @@ private_lane :new_version do |options|
   end
 
   git_commit(
-    path: options[:path],
+    path: [options[:path], 'Podfile.lock'],
     message: message
   )
 end
