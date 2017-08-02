@@ -1,9 +1,6 @@
 import Gnomon
 import RxSwift
 
-@available(*, unavailable, renamed: "P3Loader")
-public protocol P3L: class {}
-
 public protocol P3Loader: class {
   associatedtype P3LResult1: OptionalResult
   associatedtype P3LResult2: OptionalResult
@@ -15,11 +12,6 @@ public protocol P3Loader: class {
   func requests(for loadingIntent: LoaderIntent) throws -> P3LRequests
 
   func sections(from results: P3LResults, loadingIntent: LoaderIntent) -> [Sectionable]?
-}
-
-@available(*, unavailable, renamed: "load(p3Loader:intent:)")
-public func load<T: P3Loader>(loader: T, intent: LoaderIntent) -> SectionObservable {
-  return .just(nil)
 }
 
 public func load<T: P3Loader>(p3Loader: T, intent: LoaderIntent) -> SectionObservable {
@@ -37,7 +29,7 @@ public func load<T: P3Loader>(p3Loader: T, intent: LoaderIntent) -> SectionObser
         return .just(p3Loader?.sections(from: (res1.result, res2.result, res3.result), loadingIntent: intent))
       }
     }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default)).observeOn(MainScheduler.instance)
-  } catch let e {
-    return .error(e)
+  } catch {
+    return .error(error)
   }
 }

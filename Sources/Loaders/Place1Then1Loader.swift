@@ -1,9 +1,6 @@
 import Gnomon
 import RxSwift
 
-@available(*, unavailable, renamed: "P1T1Loader")
-public protocol P1T1L: class {}
-
 public protocol P1T1Loader: class {
   associatedtype P1T1LFirstResult: OptionalResult
   associatedtype P1T1LSecondResult: OptionalResult
@@ -17,11 +14,6 @@ public protocol P1T1Loader: class {
   func request(for loadingIntent: LoaderIntent, from result: P1T1LFirstResult) throws -> P1T1LSecondRequest
 
   func sections(from results: P1T1LResults, loadingIntent: LoaderIntent) -> [Sectionable]?
-}
-
-@available(*, unavailable, renamed: "load(p1t1Loader:intent:)")
-public func load<T: P1T1Loader>(loader: T, intent: LoaderIntent) -> SectionObservable {
-  return .just(nil)
 }
 
 public func load<T: P1T1Loader>(p1t1Loader: T, intent: LoaderIntent) -> SectionObservable {
@@ -50,7 +42,7 @@ public func load<T: P1T1Loader>(p1t1Loader: T, intent: LoaderIntent) -> SectionO
 
     return cached.concat(http).subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default))
       .observeOn(MainScheduler.instance)
-  } catch let e {
-    return .error(e)
+  } catch {
+    return .error(error)
   }
 }

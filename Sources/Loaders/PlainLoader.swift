@@ -1,20 +1,12 @@
 import Gnomon
 import RxSwift
 
-@available(*, unavailable, renamed: "PLoader")
-public protocol PL: class {}
-
 public protocol PLoader: class {
   associatedtype PLResult: OptionalResult
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult>
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]?
-}
-
-@available(*, unavailable, renamed: "load(pLoader:intent:)")
-public func load<T: PLoader>(loader: T, intent: LoaderIntent) -> SectionObservable {
-  return .just(nil)
 }
 
 public func load<T: PLoader>(pLoader: T, intent: LoaderIntent) -> SectionObservable {
@@ -39,7 +31,7 @@ public func load<T: PLoader>(pLoader: T, intent: LoaderIntent) -> SectionObserva
 
       return .just(pLoader?.sections(from: response.result, loadingIntent: intent))
     }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default)).observeOn(MainScheduler.instance)
-  } catch let e {
-    return .error(e)
+  } catch {
+    return .error(error)
   }
 }
