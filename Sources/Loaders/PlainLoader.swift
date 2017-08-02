@@ -5,13 +5,17 @@ public protocol PLoader: class {
   associatedtype PLResult: OptionalResult
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult>
-
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]?
+  func didReceive(result: PLResult, loadingIntent: LoaderIntent)
 }
 
-public func load<T: PLoader>(pLoader: T, intent: LoaderIntent) -> SectionObservable {
+public extension PLoader {
+  func didReceive(result: PLResult, loadingIntent: LoaderIntent) {}
+}
+
+public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
-    let request = try pLoader.request(for: intent)
+    let request = try loader.request(for: intent)
     let observable: Observable<Response<T.PLResult>>
     switch intent {
     case .page, .autoupdate, .pullToRefresh:
@@ -21,7 +25,7 @@ public func load<T: PLoader>(pLoader: T, intent: LoaderIntent) -> SectionObserva
     default:
       observable = Gnomon.cachedThenFetch(request)
     }
-    return observable.flatMap { [weak pLoader] response -> SectionObservable in
+    return observable.flatMap { [weak loader] response -> SectionObservable in
       switch (intent, response.responseType) {
       case (.page, _), (.autoupdate, _), (.pullToRefresh, _): break
       case (.force(let keepData), _) where keepData: break
@@ -29,7 +33,9 @@ public func load<T: PLoader>(pLoader: T, intent: LoaderIntent) -> SectionObserva
       default: break
       }
 
-      return .just(pLoader?.sections(from: response.result, loadingIntent: intent))
+      return Observable.just(loader?.sections(from: response.result, loadingIntent: intent)).do(onNext: { _ in
+        loader?.didReceive(result: response.result, loadingIntent: intent)
+      }).subscribeOn(MainScheduler.instance)
     }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default)).observeOn(MainScheduler.instance)
   } catch {
     return .error(error)

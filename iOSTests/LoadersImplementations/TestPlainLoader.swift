@@ -12,6 +12,8 @@ import Nimble
 
 class TestPL: PLoader {
 
+  var didReceiveCount = 0
+
   typealias PLResult = SingleOptionalResult<TestModel1>
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult> {
@@ -24,6 +26,11 @@ class TestPL: PLoader {
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
     return [Section(cells: [result.model].flatMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+  }
+
+  func didReceive(result: PLResult, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceiveCount += 1
   }
 
 }

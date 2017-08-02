@@ -8,7 +8,7 @@
 
 import UIKit
 
-public typealias VoidClosure = (Void) -> Void
+public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
 

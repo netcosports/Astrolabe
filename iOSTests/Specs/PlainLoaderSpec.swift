@@ -6,6 +6,8 @@ import RxBlocking
 import Nimble
 import RxSwift
 
+// swiftlint:disable file_length
+
 class PlainLoaderSpec: XCTestCase {
 
   override func setUp() {
@@ -19,6 +21,8 @@ class PlainLoaderSpec: XCTestCase {
       let loader = TestPL()
       let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
+
+      expect(loader.didReceiveCount) == 2
 
       guard let cachedResult = results[0] else { return fail("nil result") }
       expect(cachedResult[0].cells).to(haveCount(0))
@@ -52,6 +56,8 @@ class PlainLoaderSpec: XCTestCase {
       let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let cachedResult = results[0] else { return fail("nil result") }
       guard let cells = cachedResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -84,6 +90,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -112,6 +120,8 @@ extension PlainLoaderSpec {
 
       let results = try load(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
       expect(results).to(haveCount(1))
+
+      expect(loader.didReceiveCount) == 1
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -145,6 +155,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -174,6 +186,8 @@ extension PlainLoaderSpec {
 
       let results = try load(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
       expect(results).to(haveCount(1))
+
+      expect(loader.didReceiveCount) == 1
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -207,6 +221,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -236,6 +252,8 @@ extension PlainLoaderSpec {
 
       let results = try load(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
       expect(results).to(haveCount(1))
+
+      expect(loader.didReceiveCount) == 1
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -269,6 +287,8 @@ extension PlainLoaderSpec {
       let intent: LoaderIntent = .force(keepData: false)
       let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(2))
+
+      expect(loader.didReceiveCount) == 2
 
       guard let cachedResult = results[0] else { return fail("nil result") }
       expect(cachedResult[0].cells).to(haveCount(0))
@@ -309,6 +329,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -342,6 +364,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -374,6 +398,8 @@ extension PlainLoaderSpec {
       let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
+      expect(loader.didReceiveCount) == 1
+
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
@@ -396,3 +422,5 @@ extension PlainLoaderSpec {
   }
 
 }
+
+// swiftlint:enable file_length

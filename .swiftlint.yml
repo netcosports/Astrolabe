@@ -1,5 +1,5 @@
 excluded:
-  - Example/Pods
+  - Pods
 line_length: 120
 identifier_name:
   excluded:

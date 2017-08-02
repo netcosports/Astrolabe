@@ -25,6 +25,8 @@ class MixedLoaderSpec: XCTestCase {
       let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
+      expect(loader.didReceivePlainCount) == 2
+
       guard let cachedResult = results[0] else { return fail("nil result") }
       expect(cachedResult[0].cells).to(haveCount(0))
 
@@ -53,6 +55,8 @@ class MixedLoaderSpec: XCTestCase {
       let loader = TextMixedLoader()
       let results = try load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
+
+      expect(loader.didReceiveMultipleCount) == 2
 
       guard let cachedResult = results[0] else { return fail("nil section") }
       expect(cachedResult[0].cells).to(haveCount(0))

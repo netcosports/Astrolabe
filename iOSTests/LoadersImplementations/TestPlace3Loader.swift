@@ -39,4 +39,11 @@ class TestP3L: P3Loader {
     ])]
   }
 
+  var didReceiveCount = 0
+
+  func didReceive(results: TestP3L.P3LResults, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceiveCount += 1
+  }
+
 }

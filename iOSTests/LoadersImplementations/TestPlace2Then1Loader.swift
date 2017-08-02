@@ -43,4 +43,11 @@ class TestP2T1L: P2T1Loader {
     ])]
   }
 
+  var didReceiveCount = 0
+
+  func didReceive(results: TestP2T1L.P2T1LResults, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceiveCount += 1
+  }
+
 }

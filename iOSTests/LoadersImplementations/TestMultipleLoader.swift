@@ -15,7 +15,7 @@ class TestML: MLoader {
   typealias MLResult = SingleOptionalResult<TestModel1>
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestML.MLRequests {
-    return try (0...3).map { index -> Request<MLResult> in
+    return try (0 ... 3).map { index -> Request<MLResult> in
       let id = String(123 + index * 111)
       return try RequestBuilder().setURLString("http://httpbin.org/get?id1=\(id)").setMethod(.GET)
         .setXPath("args").build()
@@ -27,6 +27,13 @@ class TestML: MLoader {
   func sections(from results: TestML.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
     return [Section(cells: results.flatMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+  }
+
+  var didReceiveCount = 0
+
+  func didReceive(results: TestML.MLResults, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceiveCount += 1
   }
 
 }

@@ -7,7 +7,12 @@ import Astrolabe
 import Gnomon
 import Nimble
 
-class TextMixedLoader {}
+class TextMixedLoader {
+
+  var didReceiveMultipleCount = 0
+  var didReceivePlainCount = 0
+
+}
 
 extension TextMixedLoader: MLoader {
 
@@ -28,6 +33,11 @@ extension TextMixedLoader: MLoader {
     return [Section(cells: results.flatMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
+  func didReceive(results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceiveMultipleCount += 1
+  }
+
 }
 
 extension TextMixedLoader: PLoader {
@@ -42,6 +52,11 @@ extension TextMixedLoader: PLoader {
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
     return [Section(cells: [result.model].flatMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+  }
+
+  func didReceive(result: PLResult, loadingIntent: LoaderIntent) {
+    if !Thread.isMainThread { fail("didReceive should be called in main thread") }
+    didReceivePlainCount += 1
   }
 
 }

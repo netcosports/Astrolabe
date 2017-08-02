@@ -20,6 +20,8 @@ class MultipleLoaderSpec: XCTestCase {
       let results = try load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
+      expect(loader.didReceiveCount) == 2
+
       guard let cachedResult = results[0] else { return fail("nil section") }
       expect(cachedResult[0].cells).to(haveCount(0))
 

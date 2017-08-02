@@ -74,7 +74,7 @@ public protocol StyledData {
 public protocol StyledReusable: Reusable {
   associatedtype Data: StyledData
 
-  var style: Data.Style? { set get }
+  var style: Data.Style? { get set }
 }
 
 public extension StyledReusable {
