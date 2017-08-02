@@ -1,12 +1,12 @@
 PODS:
   - AEXML (4.1.0)
-  - Astrolabe (2.0.2):
-    - Astrolabe/Core (= 2.0.2)
-  - Astrolabe/Core (2.0.2):
+  - Astrolabe (2.0.3):
+    - Astrolabe/Core (= 2.0.3)
+  - Astrolabe/Core (2.0.3):
     - RxCocoa (~> 3.3)
     - RxSwift (~> 3.3)
     - SnapKit (~> 3.0)
-  - Astrolabe/Loaders (2.0.2):
+  - Astrolabe/Loaders (2.0.3):
     - Astrolabe/Core
     - Gnomon (~> 2.0)
   - FormatterKit/Resources (1.8.2)
@@ -40,7 +40,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 647fbb051280f3fb38a1a7caa62b0344055a851c
-  Astrolabe: e1741709625d6a884a6f13079ef68dd27f1f8679
+  Astrolabe: 0d5dd4952b991b66281931654e78ccada8551c45
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 304a337c009be36ea6b1dbfef0e9f081a83cc4ad
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
