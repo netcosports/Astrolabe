@@ -17,7 +17,7 @@ class TestPL: PLoader {
   typealias PLResult = SingleOptionalResult<TestModel1>
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult> {
-    return try RequestBuilder().setURLString("http://httpbin.org/cache/20").setMethod(.GET)
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
       .setParams(["id1": "123"]).setXPath("args").build()
   }
 

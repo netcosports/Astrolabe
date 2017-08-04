@@ -78,6 +78,8 @@
 		B5775CA81F16A7E900E484A6 /* Place3LoaderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EE11F0CC35D005146DB /* Place3LoaderSpec.swift */; };
 		B5775CA91F16A7E900E484A6 /* PlainLoaderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EE21F0CC35D005146DB /* PlainLoaderSpec.swift */; };
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
+		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
+		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,9 +105,9 @@
 		B5716ED31F0CC35D005146DB /* TestPlace1Then1Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlace1Then1Loader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B5716ED41F0CC35D005146DB /* TestPlace1Then2Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlace1Then2Loader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B5716ED51F0CC35D005146DB /* TestPlace2Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlace2Loader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B5716ED61F0CC35D005146DB /* TestPlace2Then1Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPlace2Then1Loader.swift; sourceTree = "<group>"; };
-		B5716ED71F0CC35D005146DB /* TestPlace3Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPlace3Loader.swift; sourceTree = "<group>"; };
-		B5716ED81F0CC35D005146DB /* TestPlainLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPlainLoader.swift; sourceTree = "<group>"; };
+		B5716ED61F0CC35D005146DB /* TestPlace2Then1Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlace2Then1Loader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B5716ED71F0CC35D005146DB /* TestPlace3Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlace3Loader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B5716ED81F0CC35D005146DB /* TestPlainLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestPlainLoader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B5716ED91F0CC35D005146DB /* TextMixedLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextMixedLoader.swift; sourceTree = "<group>"; };
 		B5716EDB1F0CC35D005146DB /* MixedLoaderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MixedLoaderSpec.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B5716EDC1F0CC35D005146DB /* MultipleLoaderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MultipleLoaderSpec.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -135,6 +137,8 @@
 		B5716F201F0CC5E2005146DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5775C921F16A7C700E484A6 /* tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tvOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5775C961F16A7C700E484A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
+		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -243,6 +247,8 @@
 		B5716EC81F0CC307005146DB /* iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				B5F2C9281F34733B008ABBA4 /* Params.swift */,
+				B5F2C9291F34733B008ABBA4 /* Params.swift.erb */,
 				B5716ED11F0CC35D005146DB /* LoadersImplementations */,
 				B5716EDA1F0CC35D005146DB /* Specs */,
 				B5716ECF1F0CC358005146DB /* Common.swift */,
@@ -696,6 +702,7 @@
 				B5716ED01F0CC358005146DB /* Common.swift in Sources */,
 				B5716EE91F0CC35D005146DB /* TestPlainLoader.swift in Sources */,
 				B5716EEA1F0CC35D005146DB /* TextMixedLoader.swift in Sources */,
+				B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */,
 				B5716EEE1F0CC35D005146DB /* Place1Then2LoaderSpec.swift in Sources */,
 				B5716EE41F0CC35D005146DB /* TestPlace1Then1Loader.swift in Sources */,
 				B5716EF01F0CC35D005146DB /* Place2Then1LoaderSpec.swift in Sources */,
@@ -741,6 +748,7 @@
 				B5775CA91F16A7E900E484A6 /* PlainLoaderSpec.swift in Sources */,
 				B5775CA01F16A7E400E484A6 /* TestPlainLoader.swift in Sources */,
 				B5775CA11F16A7E400E484A6 /* TextMixedLoader.swift in Sources */,
+				B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */,
 				B5775CA51F16A7E900E484A6 /* Place1Then2LoaderSpec.swift in Sources */,
 				B5775C9B1F16A7E400E484A6 /* TestPlace1Then1Loader.swift in Sources */,
 				B5775CA71F16A7E900E484A6 /* Place2Then1LoaderSpec.swift in Sources */,

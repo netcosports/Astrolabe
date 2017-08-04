@@ -16,13 +16,13 @@ class TestP1T1L: P1T1Loader {
   typealias P1T1LSecondResult = SingleOptionalResult<TestModel2>
 
   func request(for loadingIntent: LoaderIntent) throws -> TestP1T1L.P1T1LFirstRequest {
-    return try RequestBuilder().setURLString("http://httpbin.org/cache/20").setParams(["id1": "123"])
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id1": "123"])
       .setXPath("args").build()
   }
 
   func request(for loadingIntent: LoaderIntent,
                from result: TestP1T1L.P1T1LFirstResult) throws -> TestP1T1L.P1T1LSecondRequest {
-    return try RequestBuilder().setURLString("http://httpbin.org/cache/20").setParams(["id2": "234"])
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
       .setXPath("args").build()
   }
 

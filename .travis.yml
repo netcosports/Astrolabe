@@ -6,7 +6,7 @@ cache:
   cocoapods: true
 
 install:
-- gem install cocoapods xcpretty
+- bundle install -j5
 - pod repo update
 - pod install
 - brew install jq
@@ -16,6 +16,7 @@ env:
   - SCHEME=tvOSTests
 
 script:
+  - bundle exec fastlane select_httpbin
   - export DESTINATION="$(./scripts/destination.sh $SCHEME)"
   - xcrun simctl list
   - set -o pipefail && env NSUnbufferedIO=YES xcodebuild -workspace Demo.xcworkspace -scheme "$SCHEME" -destination "$DESTINATION" build test | xcpretty

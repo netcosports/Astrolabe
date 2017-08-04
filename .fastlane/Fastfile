@@ -3,6 +3,36 @@ lane :test do
   scan(scheme: 'tvOSTests', device: 'NetcoTests/Apple-TV-1080p/tvOS/10.2')
 end
 
+lane :select_httpbin do
+  if Actions.sh('which pip2 || true').length > 0
+    Actions.sh('pip2 install httpbin gunicorn')
+    Actions.sh('/usr/local/bin/gunicorn httpbin:app -D')
+    local_httpbin
+  else
+    remote_httpbin
+  end
+end
+
+lane :local_httpbin do
+  erb(
+    template: 'iOSTests/Params.swift.erb',
+    destination: 'iOSTests/Params.swift',
+    placeholders: {
+      api_base_url: 'http://localhost:8000'
+    }
+  )
+end
+
+lane :remote_httpbin do
+  erb(
+    template: 'iOSTests/Params.swift.erb',
+    destination: 'iOSTests/Params.swift',
+    placeholders: {
+      api_base_url: 'http://httpbin.org'
+    }
+  )
+end
+
 lane :release do |options|
   bump = options[:bump]
   bump ||= 'patch'

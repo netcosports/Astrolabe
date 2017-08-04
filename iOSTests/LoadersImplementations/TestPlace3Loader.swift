@@ -18,11 +18,11 @@ class TestP3L: P3Loader {
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestP3L.P3LRequests {
     return (
-      try RequestBuilder().setURLString("http://httpbin.org/cache/20").setMethod(.GET).setParams(["id1": "123"])
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id1": "123"])
         .setXPath("args").build(),
-      try RequestBuilder().setURLString("http://httpbin.org/cache/20").setMethod(.GET).setParams(["id2": "234"])
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id2": "234"])
         .setXPath("args").build(),
-      try RequestBuilder().setURLString("http://httpbin.org/cache/20").setMethod(.GET).setParams(["id3": "345"])
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id3": "345"])
         .setXPath("args").build()
     )
   }
