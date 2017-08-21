@@ -17,7 +17,7 @@ public extension P2Loader {
   func didReceive(results: P2LResults, loadingIntent: LoaderIntent) {}
 }
 
-public func load<T: P2Loader>(p2Loader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func astrLoad<T: P2Loader>(p2Loader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let (request1, request2) = try loader.requests(for: intent)
     let observable1 = Gnomon.cachedThenFetch(request1)

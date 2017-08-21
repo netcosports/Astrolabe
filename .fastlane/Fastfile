@@ -1,4 +1,5 @@
 lane :test do
+  xcversion(version: '9')
   select_httpbin
   FileUtils.cd ".." do
     ["iOSTests", "tvOSTests"].each do |scheme|

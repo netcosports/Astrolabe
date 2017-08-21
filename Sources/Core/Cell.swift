@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container: ContainerView, CellView: ReusableView & Reusable>: Cellable
+open class Cell<Container, CellView: ReusableView & Reusable>: Cellable
 where CellView.Container == Container {
   public typealias Data = CellView.Data
 
@@ -77,7 +77,7 @@ where CellView.Container == Container {
   }
 }
 
-open class ExpandableCell<Container: ContainerView, CellView: ReusableView & Reusable>: Cell<Container, CellView>,
+open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,
   ExpandableCellable where CellView.Container == Container {
 
   public var expandableCells: [Cellable]?
@@ -95,7 +95,7 @@ public typealias CollectionExpandableCell<T:ReusableView & Reusable> = Expandabl
 public typealias TableExpandableCell<T:ReusableView & Reusable> = ExpandableCell<UITableView, T>
   where T.Container == UITableView
 
-open class LoaderExpandableCell<Container: ContainerView, CellView: ReusableView & Reusable>:
+open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
   ExpandableCell<Container, CellView>, LoaderExpandableCellable where CellView.Container == Container {
 
   public init(data: Data,
@@ -139,7 +139,7 @@ public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionVi
 public typealias TableCell<T:ReusableView & Reusable> = Cell<UITableView, T>
   where T.Container == UITableView
 
-open class StyledCell<Container: ContainerView, CellView: ReusableView & StyledReusable>: Cell<Container, CellView>
+open class StyledCell<Container, CellView: ReusableView & StyledReusable>: Cell<Container, CellView>
   where CellView.Container == Container {
 
   public typealias Style = CellView.Data.Style

@@ -22,7 +22,7 @@ class MixedLoaderSpec: XCTestCase {
   func testPlainLoader() {
     do {
       let loader = TextMixedLoader()
-      let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceivePlainCount) == 2
@@ -53,7 +53,7 @@ class MixedLoaderSpec: XCTestCase {
   func testMultipleLoader() {
     do {
       let loader = TextMixedLoader()
-      let results = try load(mLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try astrLoad(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveMultipleCount) == 2

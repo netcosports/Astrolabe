@@ -4,7 +4,8 @@ use_frameworks!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon/JSON', '~> 2.1'
+  pod 'Gnomon', :git => 'https://github.com/netcosports/Gnomon', :branch => 'swift4'
+  pod 'SnapKit', :git => 'https://github.com/SnapKit/SnapKit', :branch => 'swift-4'
 
   target 'Demo' do
     platform :ios, '9.0'
@@ -17,8 +18,8 @@ abstract_target 'Astrolabe' do
   abstract_target 'Tests' do
     pod 'Astrolabe/Loaders', :path => '.'
 
-    pod 'Nimble'
-    pod 'RxBlocking'
+    pod 'Nimble', :git => 'https://github.com/Quick/Nimble.git'
+    pod 'RxBlocking', '4.0.0-alpha.1'
 
     target 'iOSTests' do
       platform :ios, '9.0'

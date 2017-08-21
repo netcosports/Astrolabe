@@ -9,7 +9,7 @@
 import UIKit
 import Astrolabe
 
-class Generator<Container: ContainerView,
+class Generator<Container,
                CellView: ReusableView & Reusable,
                HeaderView: ReusableView & Reusable>
   where CellView.Container == Container, CellView.Data == TestViewModel,
@@ -72,7 +72,7 @@ typealias TableGenerator<T1:ReusableView & Reusable, T2:ReusableView & Reusable>
 where T1.Container == UITableView, T1.Data == TestViewModel,
 T2.Container == UITableView, T2.Data == TestViewModel
 
-class StyledGenerator<Container: ContainerView,
+class StyledGenerator<Container,
                      CellView: ReusableView & StyledReusable,
                      HeaderView: ReusableView & Reusable>
   where CellView.Container == Container, CellView.Data == TestStyledViewModel,

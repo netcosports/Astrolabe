@@ -19,7 +19,7 @@ class PlainLoaderSpec: XCTestCase {
   func testPlainLoaderInitial() {
     do {
       let loader = TestPL()
-      let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveCount) == 2
@@ -53,7 +53,7 @@ class PlainLoaderSpec: XCTestCase {
       let loader = TestPL()
       _ = try Gnomon.models(for: loader.request(for: .initial)).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -87,7 +87,7 @@ extension PlainLoaderSpec {
     do {
       let loader = TestPL()
 
-      let results = try load(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -118,7 +118,7 @@ extension PlainLoaderSpec {
       let loader = TestPL()
       _ = try Gnomon.models(for: loader.request(for: .page(page: 2))).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -152,7 +152,7 @@ extension PlainLoaderSpec {
     do {
       let loader = TestPL()
 
-      let results = try load(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -184,7 +184,7 @@ extension PlainLoaderSpec {
 
       _ = try Gnomon.models(for: loader.request(for: .autoupdate)).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -218,7 +218,7 @@ extension PlainLoaderSpec {
     do {
       let loader = TestPL()
 
-      let results = try load(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -250,7 +250,7 @@ extension PlainLoaderSpec {
 
       _ = try Gnomon.models(for: loader.request(for: .pullToRefresh)).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -285,7 +285,7 @@ extension PlainLoaderSpec {
       let loader = TestPL()
 
       let intent: LoaderIntent = .force(keepData: false)
-      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveCount) == 2
@@ -326,7 +326,7 @@ extension PlainLoaderSpec {
 
       _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -361,7 +361,7 @@ extension PlainLoaderSpec {
       let loader = TestPL()
 
       let intent: LoaderIntent = .force(keepData: true)
-      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
@@ -395,7 +395,7 @@ extension PlainLoaderSpec {
 
       _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
 
-      let results = try load(pLoader: loader, intent: intent).toBlocking().toArray()
+      let results = try astrLoad(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1

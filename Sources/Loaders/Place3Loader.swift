@@ -18,7 +18,7 @@ public extension P3Loader {
   func didReceive(results: P3LResults, loadingIntent: LoaderIntent) {}
 }
 
-public func load<T: P3Loader>(p3Loader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func astrLoad<T: P3Loader>(p3Loader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let (request1, request2, request3) = try loader.requests(for: intent)
     let observable1 = Gnomon.cachedThenFetch(request1)
