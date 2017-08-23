@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Loaders' do |sub|
     sub.source_files = 'Sources/Loaders/*.swift'
-    sub.dependency 'Gnomon', '~> 2.0'
+    sub.dependency 'Gnomon/Core', '~> 2.1'
     sub.dependency 'Astrolabe/Core'
   end
 

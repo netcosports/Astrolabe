@@ -1,5 +1,4 @@
 PODS:
-  - AEXML (4.1.0)
   - Astrolabe (2.0.3):
     - Astrolabe/Core (= 2.0.3)
   - Astrolabe/Core (2.0.3):
@@ -8,15 +7,15 @@ PODS:
     - SnapKit (~> 3.0)
   - Astrolabe/Loaders (2.0.3):
     - Astrolabe/Core
-    - Gnomon (~> 2.0)
+    - Gnomon/Core (~> 2.1)
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (2.0.0):
-    - AEXML (~> 4)
+  - Gnomon/Core (2.1.0):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
-    - RxCocoa (~> 3)
     - RxSwift (~> 3)
+  - Gnomon/JSON (2.1.0):
+    - Gnomon/Core
     - SwiftyJSON (~> 3)
   - Nimble (7.0.1)
   - RxBlocking (3.6.1):
@@ -30,7 +29,7 @@ PODS:
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon (~> 2.0)
+  - Gnomon/JSON (~> 2.1)
   - Nimble
   - RxBlocking
 
@@ -39,10 +38,9 @@ EXTERNAL SOURCES:
     :path: .
 
 SPEC CHECKSUMS:
-  AEXML: 647fbb051280f3fb38a1a7caa62b0344055a851c
-  Astrolabe: 0d5dd4952b991b66281931654e78ccada8551c45
+  Astrolabe: 3b5f98c5d7d6495f800157ec4ba09cd609a900ca
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 304a337c009be36ea6b1dbfef0e9f081a83cc4ad
+  Gnomon: 03d09d3106a0c0b8c4edc115ff87dbcc64a8c654
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
   RxBlocking: 4f4bd5732e8b952e54ae8a57739bcfb645de12bc
   RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
@@ -50,6 +48,6 @@ SPEC CHECKSUMS:
   SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 0cb6a7865baacc8c1cbd671faa928e428dc219dd
+PODFILE CHECKSUM: d921b4e9ed87277e9a19e32854c699ab6755b3dd
 
 COCOAPODS: 1.3.1
