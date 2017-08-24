@@ -10,21 +10,30 @@ import UIKit
 import RxSwift
 
 open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject, ReusableSource,
-  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
-  where CellView: ReusableView, CellView.Container == UICollectionView {
+UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
 
   public typealias ContainerView = UICollectionView
 
-  public init(hostViewController: UIViewController? = nil, layout: UICollectionViewFlowLayout) {
+  public required override init() {
+    self.containerView = UICollectionView(frame: CGRect.zero, collectionViewLayout: GenericCollectionViewSource.defaultLayout)
     super.init()
-    self.hostViewController = hostViewController
-    containerView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-    containerView.backgroundColor = .clear
-    containerView.dataSource = self
-    containerView.delegate = self
+    internalInit()
   }
 
-  public var containerView: ContainerView!
+  public convenience init(hostViewController: UIViewController? = nil, layout: UICollectionViewFlowLayout) {
+    self.init()
+    self.containerView.collectionViewLayout = layout
+    self.hostViewController = hostViewController
+  }
+
+  public required init(with containerView: ContainerView) {
+    self.containerView = containerView
+    super.init()
+    internalInit()
+  }
+
+  public let containerView: ContainerView
+
   public weak var hostViewController: UIViewController?
   public var sections: [Sectionable] = [] {
     didSet {
@@ -37,6 +46,12 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject
 #if os(tvOS)
   public let focusedItem = Variable<Int>(0)
 #endif
+
+  fileprivate func internalInit() {
+    containerView.backgroundColor = .clear
+    containerView.dataSource = self
+    containerView.delegate = self
+  }
 
   public func registerCellsForSections() {
     sections.forEach { section in
@@ -226,6 +241,15 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject
         click()
       }
     }
+  }
+
+  public class var defaultLayout: UICollectionViewFlowLayout {
+    let layout = UICollectionViewFlowLayout()
+    layout.minimumLineSpacing = 0
+    layout.minimumInteritemSpacing = 0
+    layout.sectionInset = UIEdgeInsets.zero
+    layout.scrollDirection = .vertical
+    return layout
   }
 }
 

@@ -15,13 +15,25 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
 
   public typealias Container = DecoratedSource.Container
 
-  public var containerView: Container! {
+  public required init() {
+    self.source = DecoratedSource()
+    internalInit()
+  }
+
+  public required init(with containerView: DecoratedSource.Container) {
+    self.source = DecoratedSource(with: containerView)
+    internalInit()
+  }
+
+  public init(source: DecoratedSource, loader: Loader?) {
+    self.loader = loader
+    self.source = source
+    internalInit()
+  }
+
+  public var containerView: Container {
     get {
       return source.containerView
-    }
-
-    set(newValue) {
-      source.containerView = newValue
     }
   }
 
@@ -60,15 +72,13 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var selectionManagement: SelectionManagement = .none
 
   fileprivate var source: DecoratedSource
-  fileprivate var loaderDisposeBag: DisposeBag!
+  fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
   fileprivate var lastRequestedPage = 0
   fileprivate weak var loader: Loader?
 
-  public init(source: DecoratedSource, loader: Loader?) {
-    self.loader = loader
-    self.source = source
+  fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
@@ -81,6 +91,10 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
 
   public func pullToRefresh() {
     load(.pullToRefresh)
+  }
+
+  public func forceLoadNextPage() {
+    load(.page(page: nextPage()))
   }
 
   public func appear() {
@@ -172,7 +186,7 @@ extension TimelineLoaderDecoratorSource {
     let cellsCountBeforeLoad = cellsCount
     startProgress?(intent)
     state = .loading(intent: intent)
-    loaderDisposeBag = DisposeBag()
+    let loaderDisposeBag = DisposeBag()
     sectionObservable.map({ [weak self] sections -> [Sectionable]? in
       return self?.merge(incomming: sections, for: intent)
     }).observeOn(MainScheduler.instance)
@@ -223,7 +237,7 @@ extension TimelineLoaderDecoratorSource {
             }
           }
       }).addDisposableTo(loaderDisposeBag)
-
+    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
 

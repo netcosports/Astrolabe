@@ -24,11 +24,14 @@ enum LoaderResult {
 class BaseViewController<T: ReusableSource>: UIViewController, Accessor {
 
   typealias Source = T
-  var source: Source!
+  var source = Source()
 
   override func loadView() {
     super.loadView()
-    source = createSource()
+    if let source = createSource() {
+      self.source = source
+    }
+    source.hostViewController = self
   }
 
   func createSource() -> Source? {

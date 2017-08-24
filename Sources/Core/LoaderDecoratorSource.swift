@@ -13,13 +13,25 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   public typealias Container = DecoratedSource.Container
 
-  public var containerView: Container! {
+  public required init() {
+    self.source = DecoratedSource()
+    internalInit()
+  }
+
+  public required init(with containerView: DecoratedSource.Container) {
+    self.source = DecoratedSource(with: containerView)
+    internalInit()
+  }
+
+  public init(source: DecoratedSource, loader: Loader? = nil) {
+    self.loader = loader
+    self.source = source
+    internalInit()
+  }
+
+  public var containerView: Container {
     get {
       return source.containerView
-    }
-
-    set(newValue) {
-      source.containerView = newValue
     }
   }
 
@@ -57,14 +69,13 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var selectionManagement: SelectionManagement = .none
 
   fileprivate var source: DecoratedSource
-  fileprivate var loaderDisposeBag: DisposeBag!
+  fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
-  fileprivate weak var loader: Loader?
 
-  public init(source: DecoratedSource, loader: Loader?) {
-    self.loader = loader
-    self.source = source
+  public weak var loader: Loader?
+
+  fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
@@ -77,6 +88,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   public func pullToRefresh() {
     load(.pullToRefresh)
+  }
+
+  public func forceLoadNextPage() {
+    load(.page(page: nextPage()))
   }
 
   public func appear() {
@@ -166,7 +181,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     let cellsCountBeforeLoad = cellsCount
     startProgress?(intent)
     state = .loading(intent: intent)
-    loaderDisposeBag = DisposeBag()
+    let loaderDisposeBag = DisposeBag()
     sectionObservable.observeOn(MainScheduler.instance)
       .subscribe(
         onNext: { [weak self] sections in
@@ -216,6 +231,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
         }
       }).addDisposableTo(loaderDisposeBag)
 
+    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
 

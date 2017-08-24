@@ -14,10 +14,13 @@ public enum SelectionManagement {
   case manual
 }
 
-public protocol ReusableSource {
+public protocol ReusableSource: class {
   associatedtype Container: ContainerView
 
-  var containerView: Container! { get set }
+  init()
+  init(with containerView: Container)
+
+  var containerView: Container { get }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
   var selectedCell: String { get set }
@@ -35,6 +38,7 @@ public protocol LoaderReusableSource: ReusableSource {
   var loadingBehavior: LoadingBehavior { get set }
 
   func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
+  func forceLoadNextPage()
   func pullToRefresh()
   func appear()
   func disappear()

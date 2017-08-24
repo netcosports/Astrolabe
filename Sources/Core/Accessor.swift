@@ -12,7 +12,7 @@ public protocol Accessor: class {
   associatedtype Source: ReusableSource
   typealias Container = Source.Container
 
-  var source: Source! { get set }
+  var source: Source { get }
   var sections: [Sectionable] { get set }
   var containerView: Container { get }
 }

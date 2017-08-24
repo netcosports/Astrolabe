@@ -26,17 +26,26 @@ public protocol CollectionViewPager: class {
 
 open class CollectionViewPagerSource: CollectionViewSource {
 
-  typealias PageCell = CollectionCell<PagerCollectionViewCell>
-  fileprivate weak var pager: CollectionViewPager?
-  fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
-  let disposeBag = DisposeBag()
+  public required init() {
+    super.init()
+  }
+
+  public required init(with containerView: ContainerView) {
+    super.init(with: containerView)
+    internalInit()
+  }
 
   public init(hostViewController: UIViewController? = nil,
-              layout: UICollectionViewFlowLayout = CollectionViewPagerSource.defaultLayout(),
+              layout: UICollectionViewFlowLayout = CollectionViewPagerSource.defaultLayout,
               pager: CollectionViewPager) {
     self.pager = pager
-    super.init(hostViewController: hostViewController, layout: layout)
+    super.init()
+    self.hostViewController = hostViewController
+    self.containerView.collectionViewLayout = layout
+    internalInit()
+  }
 
+  fileprivate func internalInit() {
     containerView.isPagingEnabled = true
     containerView.bounces = false
     if #available(iOS 10.0, tvOS 10.0, *) {
@@ -55,6 +64,12 @@ open class CollectionViewPagerSource: CollectionViewSource {
       }).addDisposableTo(disposeBag)
   }
 
+  typealias PageCell = CollectionCell<PagerCollectionViewCell>
+
+  public weak var pager: CollectionViewPager?
+  fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
+  fileprivate let disposeBag = DisposeBag()
+
   public func reloadData() {
     guard let pager = pager else { return }
 
@@ -65,7 +80,8 @@ open class CollectionViewPagerSource: CollectionViewSource {
     containerView.reloadData()
   }
 
-  static func defaultLayout() -> UICollectionViewFlowLayout {
+
+  override public class var defaultLayout: UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
     layout.minimumLineSpacing = 0
     layout.minimumInteritemSpacing = 0

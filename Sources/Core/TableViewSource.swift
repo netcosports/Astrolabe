@@ -9,21 +9,27 @@
 import UIKit
 
 open class TableViewSource: NSObject, ReusableSource {
+
   public typealias ContainerView = UITableView
 
-  public init(hostViewController: UIViewController? = nil) {
+  public required override init() {
+    self.containerView = UITableView()
     super.init()
-    self.hostViewController = hostViewController
-    containerView.delegate = self
-    containerView.dataSource = self
-    containerView.backgroundColor = .clear
-#if !os(tvOS)
-    containerView.separatorColor = .clear
-    containerView.separatorStyle = .none
-#endif
+    internalInit()
   }
 
-  public var containerView: ContainerView! = UITableView()
+  public convenience init(hostViewController: UIViewController? = nil) {
+    self.init()
+    self.hostViewController = hostViewController
+  }
+
+  public required init(with containerView: ContainerView) {
+    self.containerView = containerView
+    super.init()
+    internalInit()
+  }
+
+  public let containerView: ContainerView
   public weak var hostViewController: UIViewController?
   public var sections: [Sectionable] = [] {
     didSet {
@@ -35,6 +41,17 @@ open class TableViewSource: NSObject, ReusableSource {
   public var selectionManagement: SelectionManagement = .none
   public var displaySectionIndex = false
   fileprivate var sectionIndexTitles: [String]?
+
+
+  fileprivate func internalInit() {
+    containerView.delegate = self
+    containerView.dataSource = self
+    containerView.backgroundColor = .clear
+    #if !os(tvOS)
+      containerView.separatorColor = .clear
+      containerView.separatorStyle = .none
+    #endif
+  }
 
   public func registerCellsForSections() {
     var indexTitles = [String]()

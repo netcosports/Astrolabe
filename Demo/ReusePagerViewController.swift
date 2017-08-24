@@ -46,7 +46,7 @@ class ExampleReusePagerItemViewController: BaseCollectionViewController<Collecti
 
 }
 
-class ReusePagerViewController: UIViewController, Accessor {
+class ReusePagerViewController: UIViewController {
 
   typealias Source = CollectionViewReusedPagerSource
   typealias CellView = ReusedPagerCollectionViewCell<ExampleReusePagerItemViewController>
@@ -55,8 +55,8 @@ class ReusePagerViewController: UIViewController, Accessor {
   typealias PageStripCell = CollectionCell<TestCollectionCell>
   typealias PageStripSource = CollectionViewSource
 
-  var pageStripSource: PageStripSource!
-  var source: Source!
+  var pageStripSource: PageStripSource?
+  var source: Source?
 
   override func loadView() {
     super.loadView()
@@ -71,12 +71,14 @@ class ReusePagerViewController: UIViewController, Accessor {
     }())
 
     if #available(iOS 10.0, *) {
-      containerView.isPrefetchingEnabled = false
+      source?.containerView.isPrefetchingEnabled = false
     }
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    guard let pageStripSource = pageStripSource, let source = source else { return }
 
     title = "Reuse Pager Source"
 
@@ -86,14 +88,14 @@ class ReusePagerViewController: UIViewController, Accessor {
 
     view.backgroundColor = .white
     view.addSubview(pageStripSource.containerView)
-    view.addSubview(containerView)
+    view.addSubview(source.containerView)
 
     pageStripSource.containerView.snp.remakeConstraints { make in
       make.leading.trailing.top.equalToSuperview()
       make.height.equalTo(64)
     }
 
-    containerView.snp.remakeConstraints { make in
+    source.containerView.snp.remakeConstraints { make in
       make.leading.trailing.bottom.equalToSuperview()
       make.top.equalTo(pageStripSource.containerView.snp.bottom)
     }
@@ -101,12 +103,12 @@ class ReusePagerViewController: UIViewController, Accessor {
     let datas = (1..<1024).map { $0 }
     let cells: [Cellable] = datas.map { Cell(data: $0) }
 
-    sections = [Section(cells: cells)]
-    containerView.reloadData()
+    source.sections = [Section(cells: cells)]
+    source.containerView.reloadData()
 
     let pageStripCells: [Cellable] = datas.enumerated().map { index, _ in
       PageStripCell(data: TestViewModel("\(index)")) {
-        self.source.rx.selectedItem.onNext(index)
+        source.rx.selectedItem.onNext(index)
       }
     }
     pageStripSource.sections = [Section(cells: pageStripCells)]

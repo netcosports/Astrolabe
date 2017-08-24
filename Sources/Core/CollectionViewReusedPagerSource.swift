@@ -12,13 +12,24 @@ import RxCocoa
 
 open class CollectionViewReusedPagerSource: CollectionViewSource {
 
-  let disposeBag = DisposeBag()
-  fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
+  public required init() {
+    super.init()
+  }
 
-  public override init(hostViewController: UIViewController? = nil,
-                       layout: UICollectionViewFlowLayout = CollectionViewPagerSource.defaultLayout()) {
-    super.init(hostViewController: hostViewController, layout: layout)
+  public required init(with containerView: ContainerView) {
+    super.init(with: containerView)
+    internalInit()
+  }
 
+  public init(hostViewController: UIViewController? = nil,
+              layout: UICollectionViewFlowLayout = CollectionViewPagerSource.defaultLayout) {
+    super.init()
+    self.hostViewController = hostViewController
+    self.containerView.collectionViewLayout = layout
+    internalInit()
+  }
+
+  fileprivate func internalInit() {
     containerView.isPagingEnabled = true
     containerView.bounces = false
     if #available(iOS 10.0, tvOS 10.0, *) {
@@ -36,6 +47,9 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
         strongSelf.containerView.setContentOffset(offset, animated: true)
       }).addDisposableTo(disposeBag)
   }
+
+  let disposeBag = DisposeBag()
+  fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
 
   public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
