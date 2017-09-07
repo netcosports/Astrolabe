@@ -56,7 +56,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var loadingBehavior = LoadingBehavior.initial
 
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCell = ""
+  public var selectionState = SelectionState.single(id: "")
   public var selectionManagement: SelectionManagement = .none
 
   fileprivate var source: DecoratedSource

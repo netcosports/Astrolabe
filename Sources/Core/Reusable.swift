@@ -14,13 +14,42 @@ public enum SelectionManagement {
   case manual
 }
 
+public enum SelectionState {
+  case single(id: String)
+  case multiple(ids: [String])
+
+  func isSelected(cellId: String) -> Bool {
+    switch self {
+    case let .single(id):
+      return id == cellId
+    case let .multiple(ids):
+      return ids.contains(cellId)
+    }
+  }
+
+  mutating func processSelection(for cellId: String) {
+    switch self {
+    case .single(_):
+      self = .single(id: cellId)
+    case var .multiple(ids):
+      if let cellIndex = ids.index(of: cellId) {
+        ids.remove(at: cellIndex)
+      } else {
+        ids.append(cellId)
+      }
+
+      self = .multiple(ids: ids)
+    }
+  }
+}
+
 public protocol ReusableSource {
   associatedtype Container: ContainerView
 
   var containerView: Container! { get set }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
-  var selectedCell: String { get set }
+  var selectionState: SelectionState { get set }
   var selectionManagement: SelectionManagement { get set }
 
   func registerCellsForSections()
