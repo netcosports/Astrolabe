@@ -32,7 +32,8 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject
     }
   }
   public var lastCellDisplayed: VoidClosure?
-  public var selectionState = SelectionState.single(id: "")
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 #if os(tvOS)
   public let focusedItem = Variable<Int>(0)
@@ -55,7 +56,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject
     cellView.containerViewController = hostViewController
     cellView.containerView = containerView
     cellView.indexPath = indexPath
-    cellView.selectedState = selectionState.isSelected(cellId: cell.id)
+    cellView.selectedState = selectedCellIds.contains(cell.id)
     cellView.cell = cell
   }
 
@@ -116,8 +117,8 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     cell.click?()
-    selectionState.processSelection(for: cell.id)
     if selectionManagement == .automatic {
+      processSelection(for: cell.id)
       containerView.reloadData()
     }
   }

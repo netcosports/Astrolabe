@@ -12,10 +12,12 @@ import SnapKit
 
 class SelectionCollectionViewController: BasicExampleCollectionViewController {
 
-  let selectionState: SelectionState
+  let selectionBehavior: SelectionBehavior
+  let initialSelectedIds: Set<String>
 
-  init(with selectionState: SelectionState) {
-    self.selectionState = selectionState
+  init(with selectionBehavior: SelectionBehavior, ids initialSelectedIds: Set<String>) {
+    self.selectionBehavior = selectionBehavior
+    self.initialSelectedIds = initialSelectedIds
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -26,7 +28,8 @@ class SelectionCollectionViewController: BasicExampleCollectionViewController {
     guard let source = source else {
       return
     }
-    source.selectionState = selectionState
+    source.selectionBehavior = selectionBehavior
+    source.selectedCellIds = initialSelectedIds
     source.selectionManagement = .automatic
   }
 
@@ -34,10 +37,12 @@ class SelectionCollectionViewController: BasicExampleCollectionViewController {
 
 class SelectionTableViewController: TableSourceViewController {
 
-  let selectionState: SelectionState
+  let selectionBehavior: SelectionBehavior
+  let initialSelectedIds: Set<String>
 
-  init(with selectionState: SelectionState) {
-    self.selectionState = selectionState
+  init(with selectionBehavior: SelectionBehavior, ids initialSelectedIds: Set<String>) {
+    self.selectionBehavior = selectionBehavior
+    self.initialSelectedIds = initialSelectedIds
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -45,7 +50,8 @@ class SelectionTableViewController: TableSourceViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    source.selectionState = selectionState
+    source.selectionBehavior = selectionBehavior
+    source.selectedCellIds = initialSelectedIds
     source.selectionManagement = .automatic
   }
   

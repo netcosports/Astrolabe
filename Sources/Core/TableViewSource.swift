@@ -31,7 +31,8 @@ open class TableViewSource: NSObject, ReusableSource {
     }
   }
   public var lastCellDisplayed: VoidClosure?
-  public var selectionState = SelectionState.single(id: "")
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
   public var displaySectionIndex = false
   fileprivate var sectionIndexTitles: [String]?
@@ -59,7 +60,7 @@ open class TableViewSource: NSObject, ReusableSource {
     cellView.containerViewController = hostViewController
     cellView.containerView = containerView
     cellView.indexPath = indexPath
-    cellView.selectedState = selectionState.isSelected(cellId: cell.id)
+    cellView.selectedState = selectedCellIds.contains(cell.id)
     cellView.cell = cell
   }
 
@@ -67,7 +68,7 @@ open class TableViewSource: NSObject, ReusableSource {
     headerView.containerViewController = hostViewController
     headerView.containerView = containerView
     headerView.indexPath = nil
-    headerView.selectedState = selectionState.isSelected(cellId: cell.id)
+    headerView.selectedState = selectedCellIds.contains(cell.id)
     headerView.cell = cell
   }
 }
@@ -104,8 +105,8 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     cell.click?()
-    selectionState.processSelection(for: cell.id)
     if selectionManagement == .automatic {
+      processSelection(for: cell.id)
       containerView.reloadData()
     }
   }
