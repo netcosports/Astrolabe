@@ -18,7 +18,7 @@ PODS:
     - RxSwift (= 4.0.0-alpha.1)
   - Gnomon/JSON (2.1.0):
     - Gnomon/Core
-    - SwiftyJSON (~> 3)
+    - SwiftyJSON (= 4.0.0-alpha.1)
   - Nimble (7.0.1)
   - RxBlocking (4.0.0-alpha.1):
     - RxSwift (~> 4.0.0-alpha.1)
@@ -26,7 +26,7 @@ PODS:
     - RxSwift (~> 4.0.0-alpha.1)
   - RxSwift (4.0.0-alpha.1)
   - SnapKit (3.2.0)
-  - SwiftyJSON (3.1.4)
+  - SwiftyJSON (4.0.0-alpha.1)
 
 DEPENDENCIES:
   - Astrolabe (from `.`)
@@ -50,10 +50,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Gnomon:
-    :commit: 99d8f03ae52441c34924715edfae37fabe4ac655
+    :commit: 520aca389741db60ca712fc1eeba1c9db75d1ca1
     :git: https://github.com/netcosports/Gnomon
   Nimble:
-    :commit: 24aa2d97405b352cb85bd963d1898f780f9bde3e
+    :commit: a63252b16eba6cdebec4e4936388c90552165a68
     :git: https://github.com/Quick/Nimble.git
   SnapKit:
     :commit: d31148f449abe819fd1a58d5e07e94874c7e6003
@@ -62,13 +62,13 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Astrolabe: 68e7302e19e96ef44232e06c905213b3f37da41b
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 2b9c6c3e5dd3181c404e77357399c21acdca108b
+  Gnomon: c52ec432a91f79a5f688f95d74200b4f183a0f55
   Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
   RxBlocking: 44ca04036a481049a159327f078420335cb68f85
   RxCocoa: d6038768c2ec4e7157ca40396fdbd8d28de9b8ce
   RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
   SnapKit: c71c530b73cedd2a8b998098687001baff265086
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  SwiftyJSON: dc88934f85fb50b263b1632b9cbad3402505783e
 
 PODFILE CHECKSUM: 3cc1554ef5040856160d790a4c6a44108536cdb5
 
