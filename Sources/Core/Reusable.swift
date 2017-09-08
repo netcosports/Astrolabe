@@ -14,46 +14,39 @@ public enum SelectionManagement {
   case manual
 }
 
-public enum SelectionState {
-  case single(id: String)
-  case multiple(ids: [String])
-
-  public func isSelected(cellId: String) -> Bool {
-    switch self {
-    case let .single(id):
-      return id == cellId
-    case let .multiple(ids):
-      return ids.contains(cellId)
-    }
-  }
-
-  public mutating func processSelection(for cellId: String) {
-    switch self {
-    case .single(_):
-      self = .single(id: cellId)
-    case var .multiple(ids):
-      if let cellIndex = ids.index(of: cellId) {
-        ids.remove(at: cellIndex)
-      } else {
-        ids.append(cellId)
-      }
-
-      self = .multiple(ids: ids)
-    }
-  }
+public enum SelectionBehavior {
+  case single, multiple
 }
 
-public protocol ReusableSource {
+public protocol ReusableSource: class {
   associatedtype Container: ContainerView
 
   var containerView: Container! { get set }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
-  var selectionState: SelectionState { get set }
+  var selectedCellIds: Set<String> { get set }
+  var selectionBehavior: SelectionBehavior { get set }
   var selectionManagement: SelectionManagement { get set }
 
   func registerCellsForSections()
   var lastCellDisplayed: VoidClosure? { get set }
+}
+
+extension ReusableSource {
+
+  func processSelection(for cellId: String) {
+    switch selectionBehavior {
+    case .single:
+      selectedCellIds = [cellId]
+    case .multiple:
+      if selectedCellIds.contains(cellId) {
+        selectedCellIds.remove(cellId)
+      } else {
+        selectedCellIds.insert(cellId)
+      }
+    }
+  }
+
 }
 
 public protocol LoaderReusableSource: ReusableSource {

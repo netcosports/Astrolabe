@@ -28,10 +28,10 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
         self?.navigationController?.pushViewController(TableStyledSourceViewController(), animated: true)
       },
       Item(data: TestViewModel("Singe Selection Example"), id: "Singe Selection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionTableViewController(with: .single(id: "")), animated: true)
+        self?.navigationController?.pushViewController(SelectionTableViewController(with: .single, ids: []), animated: true)
       },
       Item(data: TestViewModel("Multiple Selection Example"), id: "Singe Selection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionTableViewController(with: .multiple(ids: [])), animated: true)
+        self?.navigationController?.pushViewController(SelectionTableViewController(with: .multiple, ids: []), animated: true)
       },
       Item(data: TestViewModel("Loader Source infinite pageing"),
            id: "Table Loader Source infinite paging") { [weak self] in
@@ -67,10 +67,10 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
         self?.navigationController?.pushViewController(BasicDataExampleCollectionViewController(), animated: true)
       },
       Item(data: TestViewModel("Singe Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .single(id: "")), animated: true)
+        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .single, ids: []), animated: true)
       },
       Item(data: TestViewModel("Multiple Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .multiple(ids: [])), animated: true)
+        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .multiple, ids: []), animated: true)
       },
       Item(data: TestViewModel("Basic Timeline Collection Example"), id: "Basic Timeline Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicTimelineExampleCollectionViewController(), animated: true)

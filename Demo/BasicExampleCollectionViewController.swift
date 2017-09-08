@@ -36,9 +36,15 @@ class BasicExampleCollectionViewController: UIViewController {
     ]
 
     source.sections = [
-      Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
-      Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0),
-      Section(cells: models.map { Cell(data: $0) }, minimumInteritemSpacing: 44.0)
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "0-\(index)")
+      }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "1-\(index)")
+      }, minimumLineSpacing: 44.0),
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "2-\(index)")
+      }, minimumInteritemSpacing: 44.0)
     ]
     source.containerView.reloadData()
 
