@@ -207,7 +207,9 @@
 				996033184AC7DADA23561FD6 /* Pods */,
 				FC8FFC32218DD20BA0CF2251 /* Frameworks */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		B50EFACF1F0CC27E00D31FD6 /* Products */ = {
 			isa = PBXGroup;
