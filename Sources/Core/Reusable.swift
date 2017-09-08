@@ -18,7 +18,7 @@ public enum SelectionState {
   case single(id: String)
   case multiple(ids: [String])
 
-  func isSelected(cellId: String) -> Bool {
+  public func isSelected(cellId: String) -> Bool {
     switch self {
     case let .single(id):
       return id == cellId
@@ -27,7 +27,7 @@ public enum SelectionState {
     }
   }
 
-  mutating func processSelection(for cellId: String) {
+  public mutating func processSelection(for cellId: String) {
     switch self {
     case .single(_):
       self = .single(id: cellId)
