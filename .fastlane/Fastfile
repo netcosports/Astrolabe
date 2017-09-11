@@ -41,11 +41,15 @@ lane :remote_httpbin do
 end
 
 lane :release do |options|
-  bump = options[:bump]
-  bump ||= 'patch'
+  unless options[:version].nil? 
+    new_version(version: options[:version], path: podspec)
+  else
+    bump = options[:bump]
+    bump ||= 'patch'
+    new_version(type: bump, increase: true, path: podspec)
+  end
   message = options[:message]
   message ||= ''
-  new_version(type: bump, increase: true, path: podspec)
   tag(message: message)
   sh("git push origin master")
   pod_push
@@ -84,6 +88,7 @@ private_lane :new_version do |options|
     message = "Changed #{options[:path]} version #{lane_context[SharedValues::PODSPEC_VERSION_NUMBER]}"
   end
 
+  cocoapods
   git_commit(
     path: [options[:path], 'Podfile.lock'],
     message: message
