@@ -88,7 +88,6 @@ private_lane :new_version do |options|
     message = "Changed #{options[:path]} version #{lane_context[SharedValues::PODSPEC_VERSION_NUMBER]}"
   end
 
-  cocoapods
   git_commit(
     path: [options[:path], 'Podfile.lock'],
     message: message
