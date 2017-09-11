@@ -22,7 +22,7 @@ public extension P2T1Loader {
   func didReceive(results: P2T1LResults, loadingIntent: LoaderIntent) {}
 }
 
-public func astrLoad<T: P2T1Loader>(p2t1Loader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func load<T: P2T1Loader>(p2t1Loader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let (request1, request2) = try loader.requests(for: intent)
 

@@ -16,7 +16,7 @@ public extension MLoader {
   func didReceive(results: MLResults, loadingIntent: LoaderIntent) {}
 }
 
-public func astrLoad<T: MLoader>(mLoader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func load<T: MLoader>(mLoader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let requests = try loader.requests(for: intent)
     let observable = Gnomon.cachedThenFetch(requests)

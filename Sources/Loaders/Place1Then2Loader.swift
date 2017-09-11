@@ -20,7 +20,7 @@ public extension P1T2Loader {
   func didReceive(results: P1T2LResults, loadingIntent: LoaderIntent) {}
 }
 
-public func astrLoad<T: P1T2Loader>(p1t2Loader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func load<T: P1T2Loader>(p1t2Loader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let request = try loader.request(for: intent)
 

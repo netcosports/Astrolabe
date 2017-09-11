@@ -13,7 +13,7 @@ public extension PLoader {
   func didReceive(result: PLResult, loadingIntent: LoaderIntent) {}
 }
 
-public func astrLoad<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> SectionObservable {
   do {
     let request = try loader.request(for: intent)
     let observable: Observable<Response<T.PLResult>>
