@@ -13,12 +13,12 @@ import SnapKit
 class BasicExampleCollectionViewController: UIViewController {
 
   typealias Cell = CollectionCell<TestCollectionCell>
+  let containerView = CollectionView<CollectionViewSource>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    let containerView = CollectionView<CollectionViewSource>()
     containerView.collectionViewLayout = collectionViewLayout()
     view.addSubview(containerView)
     containerView.snp.remakeConstraints { make in
@@ -35,9 +35,15 @@ class BasicExampleCollectionViewController: UIViewController {
     ]
 
     containerView.source.sections = [
-      Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
-      Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0),
-      Section(cells: models.map { Cell(data: $0) }, minimumInteritemSpacing: 44.0)
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "0-\(index)")
+      }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "1-\(index)")
+      }, minimumLineSpacing: 44.0),
+      Section(cells: models.enumerated().map { index, data in
+        Cell(data: data, id: "2-\(index)")
+      }, minimumInteritemSpacing: 44.0)
     ]
     containerView.reloadData()
   }

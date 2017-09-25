@@ -61,7 +61,8 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var loadingBehavior = LoadingBehavior.initial
 
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCell = ""
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 
   public weak var loader: Loader?

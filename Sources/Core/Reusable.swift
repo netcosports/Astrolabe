@@ -14,20 +14,42 @@ public enum SelectionManagement {
   case manual
 }
 
+public enum SelectionBehavior {
+  case single, multiple
+}
+
 public protocol ReusableSource: class {
 
   init()
-
+	
   associatedtype Container: ContainerView
 
   var containerView: Container? { get set }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
-  var selectedCell: String { get set }
+  var selectedCellIds: Set<String> { get set }
+  var selectionBehavior: SelectionBehavior { get set }
   var selectionManagement: SelectionManagement { get set }
 
   func registerCellsForSections()
   var lastCellDisplayed: VoidClosure? { get set }
+}
+
+extension ReusableSource {
+
+  func processSelection(for cellId: String) {
+    switch selectionBehavior {
+    case .single:
+      selectedCellIds = [cellId]
+    case .multiple:
+      if selectedCellIds.contains(cellId) {
+        selectedCellIds.remove(cellId)
+      } else {
+        selectedCellIds.insert(cellId)
+      }
+    }
+  }
+
 }
 
 public protocol LoaderReusableSource: ReusableSource {

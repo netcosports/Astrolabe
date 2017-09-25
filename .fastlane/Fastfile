@@ -1,6 +1,13 @@
 lane :test do
-  scan(scheme: 'iOSTests', device: 'NetcoTests/iPhone-7/iOS/10.3')
-  scan(scheme: 'tvOSTests', device: 'NetcoTests/Apple-TV-1080p/tvOS/10.2')
+  select_httpbin
+  FileUtils.cd ".." do
+    ["iOSTests", "tvOSTests"].each do |scheme|
+      destination = Actions.sh "./scripts/destination.sh #{scheme}"
+      destination.strip!
+      command = "set -o pipefail && env NSUnbufferedIO=YES xcodebuild -workspace Demo.xcworkspace -scheme #{scheme} -derivedDataPath build -destination \"#{destination}\" build test | xcpretty"
+      FastlaneCore::CommandExecutor.execute(command: command, print_all: true, print_command: true)
+    end
+  end
 end
 
 lane :select_httpbin do
@@ -34,11 +41,15 @@ lane :remote_httpbin do
 end
 
 lane :release do |options|
-  bump = options[:bump]
-  bump ||= 'patch'
+  unless options[:version].nil? 
+    new_version(version: options[:version], path: podspec)
+  else
+    bump = options[:bump]
+    bump ||= 'patch'
+    new_version(type: bump, increase: true, path: podspec)
+  end
   message = options[:message]
   message ||= ''
-  new_version(type: bump, increase: true, path: podspec)
   tag(message: message)
   sh("git push origin master")
   pod_push

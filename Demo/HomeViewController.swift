@@ -23,10 +23,16 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       Item(data: TestViewModel("Styled Source"), id: "Table Styled Source") { [weak self] in
         self?.navigationController?.pushViewController(TableStyledSourceViewController(), animated: true)
       },
+      Item(data: TestViewModel("Singe Selection Example"), id: "Singe Selection Example") { [weak self] in
+        self?.navigationController?.pushViewController(SelectionTableViewController(with: .single, ids: []), animated: true)
+      },
+      Item(data: TestViewModel("Multiple Selection Example"), id: "Singe Selection Example") { [weak self] in
+        self?.navigationController?.pushViewController(SelectionTableViewController(with: .multiple, ids: []), animated: true)
+      },
       Item(data: TestViewModel("Loader Source infinite pageing"),
            id: "Table Loader Source infinite paging") { [weak self] in
-        self?.navigationController?.pushViewController(TableLoaderSourceViewController(type: .infinitePaging),
-                                                       animated: true)
+            self?.navigationController?.pushViewController(TableLoaderSourceViewController(type: .infinitePaging),
+                                                           animated: true)
       },
       Item(data: TestViewModel("Loader Source Empty"), id: "Table Loader Source empty") { [weak self] in
         self?.navigationController?.pushViewController(TableLoaderSourceViewController(type: .emptyPage1),
@@ -56,6 +62,12 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       Item(data: TestViewModel("Basic Data Collection Example"), id: "Basic Data Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicDataExampleCollectionViewController(), animated: true)
       },
+      Item(data: TestViewModel("Singe Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
+        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .single, ids: []), animated: true)
+      },
+      Item(data: TestViewModel("Multiple Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
+        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .multiple, ids: []), animated: true)
+      },
       Item(data: TestViewModel("Basic Timeline Collection Example"), id: "Basic Timeline Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicTimelineExampleCollectionViewController(), animated: true)
       },
@@ -67,8 +79,8 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       },
       Item(data: TestViewModel("Loader Source infinite pageing"),
            id: "Collection Loader Source infinite paging") { [weak self] in
-        self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .infinitePaging),
-                                                       animated: true)
+            self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .infinitePaging),
+                                                           animated: true)
       },
       Item(data: TestViewModel("Loader Source Empty"), id: "Collection Loader Source empty") { [weak self] in
         self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .emptyPage1),
@@ -80,29 +92,29 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       },
       Item(data: TestViewModel("Loader Source page 4 empty"),
            id: "Collection Loader Source page 4 empty") { [weak self] in
-        self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .emptyPage4),
-                                                       animated: true)
+            self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .emptyPage4),
+                                                           animated: true)
       },
       Item(data: TestViewModel("Loader Source page 4 error"),
            id: "Collection Loader Source page 4 error") { [weak self] in
-        self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .errorPage4),
-                                                       animated: true)
+            self?.navigationController?.pushViewController(CollectionLoaderSourceViewController(type: .errorPage4),
+                                                           animated: true)
       },
       Item(data: TestViewModel("Loader Source Expandable"), id: "Collection Loader Source Expandable") { [weak self] in
         self?.navigationController?.pushViewController(ExpandableCollectionViewController(), animated: true)
       }
     ]
-#if !os(tvOS)
-    let pagerCells: [Cellable] = [
-      Item(data: TestViewModel("Pager"), id: "Collection Pager") { [weak self] in
-        self?.navigationController?.pushViewController(PagerViewController(), animated: true)
-      },
-      Item(data: TestViewModel("Reuse Pager"), id: "Collection Reuse Pager") { [weak self] in
-        self?.navigationController?.pushViewController(ReusePagerViewController(), animated: true)
-      }
-    ]
-    collectionCells.append(contentsOf: pagerCells)
-#endif
+    #if !os(tvOS)
+      let pagerCells: [Cellable] = [
+        Item(data: TestViewModel("Pager"), id: "Collection Pager") { [weak self] in
+          self?.navigationController?.pushViewController(PagerViewController(), animated: true)
+        },
+        Item(data: TestViewModel("Reuse Pager"), id: "Collection Reuse Pager") { [weak self] in
+          self?.navigationController?.pushViewController(ReusePagerViewController(), animated: true)
+        }
+      ]
+      collectionCells.append(contentsOf: pagerCells)
+    #endif
 
     return [
       Header(cells: tableCells, headerData: TestViewModel("Table View:"), page: 0) { [weak self] in

@@ -58,7 +58,8 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var autoupdatePeriod = defaultReloadInterval
   public var loadingBehavior = LoadingBehavior.initial
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCell = ""
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 
   fileprivate var source: DecoratedSource
@@ -78,13 +79,13 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public func forceReloadData(keepCurrentDataBeforeUpdate: Bool) {
     load(.force(keepData: keepCurrentDataBeforeUpdate))
   }
+  
+  public func forceLoadNextPage() {
+    load(.page(page: nextPage()))
+  }
 
   public func pullToRefresh() {
     load(.pullToRefresh)
-  }
-
-  public func forceLoadNextPage() {
-    load(.page(page: nextPage()))
   }
 
   public func appear() {

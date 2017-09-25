@@ -51,7 +51,11 @@ extension TestCollectionCell: Reusable {
 
   func setup(with data: TestViewModel) {
     label.text = data.title
-    contentView.backgroundColor = data.color
+    if selectedState {
+      contentView.backgroundColor = .white
+    } else {
+      contentView.backgroundColor = data.color
+    }
   }
 
   static func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {

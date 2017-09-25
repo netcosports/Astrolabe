@@ -31,7 +31,8 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCell = ""
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 #if os(tvOS)
   public let focusedItem = Variable<Int>(0)
@@ -61,7 +62,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     cellView.containerViewController = hostViewController
     cellView.containerView = containerView
     cellView.indexPath = indexPath
-    cellView.selectedState = selectedCell == cell.id
+    cellView.selectedState = selectedCellIds.contains(cell.id)
     cellView.cell = cell
   }
 
@@ -122,9 +123,9 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     cell.click?()
-    selectedCell = cell.id
     if selectionManagement == .automatic {
-      collectionView.reloadData()
+      processSelection(for: cell.id)
+      containerView?.reloadData()
     }
   }
 
