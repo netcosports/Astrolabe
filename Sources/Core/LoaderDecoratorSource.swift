@@ -15,23 +15,16 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   public required init() {
     self.source = DecoratedSource()
-    internalInit()
   }
 
-  public required init(with containerView: DecoratedSource.Container) {
-    self.source = DecoratedSource(with: containerView)
-    internalInit()
-  }
-
-  public init(source: DecoratedSource, loader: Loader? = nil) {
-    self.loader = loader
-    self.source = source
-    internalInit()
-  }
-
-  public var containerView: Container {
+  public var containerView: Container? {
     get {
       return source.containerView
+    }
+
+    set(newValue) {
+      source.containerView = newValue
+      internalInit()
     }
   }
 
@@ -117,7 +110,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   }
 
   public func reloadDataWithEmptyDataSet() {
-    containerView.reloadData()
+    containerView?.reloadData()
     updateEmptyView?(state)
   }
 
@@ -215,13 +208,14 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
         default:
           ()
         }
+        guard let containerView = strongSelf.containerView else { return }
         if cellsCountAfterLoad == 0 {
           strongSelf.state = .empty
           strongSelf.reloadDataWithEmptyDataSet()
         } else {
           strongSelf.state = .hasData
           guard let lastSection = strongSelf.sections.last else { return }
-          guard let visibleItems = strongSelf.containerView.visibleItems else { return }
+          guard let visibleItems = containerView.visibleItems else { return }
           let sectionsLastIndex = strongSelf.sections.count - 1
           let itemsLastIndex = lastSection.cells.count - 1
 
@@ -272,7 +266,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
         }
         registerCellsForSections()
       }
-      containerView.reloadData()
+      containerView?.reloadData()
     default:
       assertionFailure("Should not be called in other state than loading")
     }

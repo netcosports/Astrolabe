@@ -15,12 +15,12 @@ public enum SelectionManagement {
 }
 
 public protocol ReusableSource: class {
-  associatedtype Container: ContainerView
 
   init()
-  init(with containerView: Container)
 
-  var containerView: Container { get }
+  associatedtype Container: ContainerView
+
+  var containerView: Container? { get set }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
   var selectedCell: String { get set }
@@ -31,6 +31,9 @@ public protocol ReusableSource: class {
 }
 
 public protocol LoaderReusableSource: ReusableSource {
+
+  weak var loader: Loader? { get set }
+
   var startProgress: ProgressClosure? { get set }
   var stopProgress: ProgressClosure? { get set }
   var updateEmptyView: EmptyViewClosure? { get set }

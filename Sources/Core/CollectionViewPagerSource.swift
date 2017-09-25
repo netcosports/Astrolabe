@@ -26,41 +26,29 @@ public protocol CollectionViewPager: class {
 
 open class CollectionViewPagerSource: CollectionViewSource {
 
-  public required init() {
-    super.init()
-  }
-
-  public required init(with containerView: ContainerView) {
-    super.init(with: containerView)
-    internalInit()
-  }
-
-  public init(hostViewController: UIViewController? = nil,
-              layout: UICollectionViewFlowLayout = CollectionViewPagerSource.defaultLayout,
-              pager: CollectionViewPager) {
-    self.pager = pager
-    super.init()
-    self.hostViewController = hostViewController
-    self.containerView.collectionViewLayout = layout
-    internalInit()
+  override public var containerView: UICollectionView? {
+    didSet {
+      internalInit()
+    }
   }
 
   fileprivate func internalInit() {
-    containerView.isPagingEnabled = true
-    containerView.bounces = false
+    containerView?.isPagingEnabled = true
+    containerView?.bounces = false
     if #available(iOS 10.0, tvOS 10.0, *) {
-      containerView.isPrefetchingEnabled = false
+      containerView?.isPrefetchingEnabled = false
     }
 
     selectedItem.asObservable().skip(1).observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] index in
         guard let strongSelf = self else { return }
+        guard let containerView = strongSelf.containerView else { return }
 
-        let offset = CGPoint(x: CGFloat(index) * strongSelf.containerView.frame.width, y: 0)
-        if offset == strongSelf.containerView.contentOffset { return }
+        let offset = CGPoint(x: CGFloat(index) * containerView.frame.width, y: 0)
+        if offset == containerView.contentOffset { return }
 
-        strongSelf.containerView.setContentOffset(offset, animated: true)
-        strongSelf.containerView.isUserInteractionEnabled = false
+        containerView.setContentOffset(offset, animated: true)
+        containerView.isUserInteractionEnabled = false
       }).addDisposableTo(disposeBag)
   }
 
@@ -77,9 +65,8 @@ open class CollectionViewPagerSource: CollectionViewSource {
       PageCell(data: PagerViewModel(viewController: $0.controller, cellId: $0.id))
     }
     sections = [Section(cells: cells)]
-    containerView.reloadData()
+    containerView?.reloadData()
   }
-
 
   override public class var defaultLayout: UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
@@ -91,12 +78,15 @@ open class CollectionViewPagerSource: CollectionViewSource {
   }
 
   public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    guard let containerView = containerView else { return }
+
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
     selectedItem.onNext(page)
     containerView.isUserInteractionEnabled = true
   }
 
   public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    guard let containerView = containerView else { return }
     containerView.isUserInteractionEnabled = true
   }
 }

@@ -41,23 +41,21 @@ class BasicTimelineExampleCollectionViewController: UIViewController {
     return label
   }()
 
-  var loaderSource: TimelineLoaderDecoratorSource<CollectionViewSource>?
+  let containerView = CollectionView<TimelineLoaderDecoratorSource<CollectionViewSource>>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    let source = CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-    let loaderSource = TimelineLoaderDecoratorSource(source: source, loader: self)
-    loaderSource.loadingBehavior = [.initial, .paging, .autoupdate]
-    loaderSource.startProgress = { [weak self] _ in
+    containerView.source.loader = self
+    containerView.source.loadingBehavior = [.initial, .paging, .autoupdate]
+    containerView.source.startProgress = { [weak self] _ in
       self?.activityIndicator.startAnimating()
     }
-    loaderSource.stopProgress = { [weak self] _ in
+    containerView.source.stopProgress = { [weak self] _ in
       self?.activityIndicator.stopAnimating()
     }
-
-    loaderSource.updateEmptyView = { [weak self] state in
+    containerView.source.updateEmptyView = { [weak self] state in
       guard let strongSelf = self else { return }
 
       switch state {
@@ -72,9 +70,10 @@ class BasicTimelineExampleCollectionViewController: UIViewController {
         strongSelf.errorLabel.isHidden = true
       }
     }
+    containerView.collectionViewLayout = collectionViewLayout()
 
-    view.addSubview(source.containerView)
-    source.containerView.snp.remakeConstraints { make in
+    view.addSubview(containerView)
+    containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()
     }
 
@@ -86,8 +85,6 @@ class BasicTimelineExampleCollectionViewController: UIViewController {
     activityIndicator.center = view.center
     noDataLabel.center = view.center
     errorLabel.center = view.center
-
-    self.loaderSource = loaderSource
   }
 
   func collectionViewLayout() -> UICollectionViewFlowLayout {
@@ -101,13 +98,13 @@ class BasicTimelineExampleCollectionViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    self.loaderSource?.appear()
+    containerView.source.appear()
   }
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
-    self.loaderSource?.disappear()
+    containerView.source.disappear()
   }
 }
 

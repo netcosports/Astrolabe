@@ -12,10 +12,6 @@ import RxSwift
 
 class ExpandableTableViewController: BaseTableViewController<TableViewExpandableSource> {
 
-  override func createSource() -> Source? {
-    return TableViewExpandableSource(hostViewController: self)
-  }
-
   override func sections() -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let cells1: [Cellable] = [
@@ -59,10 +55,6 @@ class ExpandableTableViewController: BaseTableViewController<TableViewExpandable
 }
 
 class ExpandableCollectionViewController: BaseCollectionViewController<CollectionViewExpandableSource> {
-
-  override func createSource() -> Source? {
-    return CollectionViewExpandableSource(hostViewController: self, layout: collectionViewLayout())
-  }
 
   override func cells() -> [Cellable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()

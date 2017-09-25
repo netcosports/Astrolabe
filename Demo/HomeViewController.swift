@@ -14,10 +14,6 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
   typealias Item = TableCell<TestTableCell>
   typealias Header = TableHeaderSection<TestTableHeader>
 
-  override func createSource() -> Source? {
-    return TableViewSource(hostViewController: self)
-  }
-
   // swiftlint:disable:next function_body_length
   override func sections() -> [Sectionable]? {
     let tableCells: [Cellable] = [

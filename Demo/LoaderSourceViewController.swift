@@ -9,11 +9,7 @@
 import UIKit
 import Astrolabe
 
-class TableLoaderSourceViewController: BaseLoaderTableViewController<TableViewSource> {
-
-  override func createSource() -> Source? {
-    return TableViewSource(hostViewController: self)
-  }
+class TableLoaderSourceViewController: BaseLoaderTableViewController<LoaderDecoratorSource<TableViewSource>> {
 
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
@@ -24,11 +20,7 @@ class TableLoaderSourceViewController: BaseLoaderTableViewController<TableViewSo
 
 }
 
-class CollectionLoaderSourceViewController: BaseLoaderCollectionViewController<CollectionViewSource> {
-
-  override func createSource() -> Source? {
-    return CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-  }
+class CollectionLoaderSourceViewController: BaseLoaderCollectionViewController<LoaderDecoratorSource<CollectionViewSource>> {
 
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()

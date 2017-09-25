@@ -14,15 +14,14 @@ class BasicExampleCollectionViewController: UIViewController {
 
   typealias Cell = CollectionCell<TestCollectionCell>
 
-  var source: CollectionViewSource?
-
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    let source = CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-    view.addSubview(source.containerView)
-    source.containerView.snp.remakeConstraints { make in
+    let containerView = CollectionView<CollectionViewSource>()
+    containerView.collectionViewLayout = collectionViewLayout()
+    view.addSubview(containerView)
+    containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()
     }
 
@@ -35,14 +34,12 @@ class BasicExampleCollectionViewController: UIViewController {
       TestViewModel("Test title 6")
     ]
 
-    source.sections = [
+    containerView.source.sections = [
       Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
       Section(cells: models.map { Cell(data: $0) }, minimumLineSpacing: 44.0),
       Section(cells: models.map { Cell(data: $0) }, minimumInteritemSpacing: 44.0)
     ]
-    source.containerView.reloadData()
-
-    self.source = source
+    containerView.reloadData()
   }
 
   func collectionViewLayout() -> UICollectionViewFlowLayout {

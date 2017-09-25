@@ -9,20 +9,15 @@
 import UIKit
 import Astrolabe
 
-class PagerViewController: UIViewController, CollectionViewPager {
-  typealias Source = CollectionViewPagerSource
-  var source: Source?
+class PagerViewController: BaseCollectionViewController<CollectionViewPagerSource>, CollectionViewPager {
 
   override func loadView() {
     super.loadView()
-
-    source = Source(hostViewController: self, pager: self)
+    source.pager = self
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    guard let source = source else { return }
 
     edgesForExtendedLayout = []
     extendedLayoutIncludesOpaqueBars = false
@@ -31,12 +26,16 @@ class PagerViewController: UIViewController, CollectionViewPager {
     title = "Pager Source"
 
     view.backgroundColor = .white
-    view.addSubview(source.containerView)
-    source.containerView.snp.remakeConstraints { make in
+    view.addSubview(containerView)
+    containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()
     }
 
     source.reloadData()
+  }
+
+  override func collectionViewLayout() -> UICollectionViewFlowLayout {
+    return CollectionViewPagerSource.defaultLayout
   }
 
   var pages: [Page] {

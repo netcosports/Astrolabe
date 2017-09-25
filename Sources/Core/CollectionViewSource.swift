@@ -12,27 +12,17 @@ import RxSwift
 open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject, ReusableSource,
 UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
 
-  public typealias ContainerView = UICollectionView
+  public typealias Container = UICollectionView
 
   public required override init() {
-    self.containerView = UICollectionView(frame: CGRect.zero, collectionViewLayout: GenericCollectionViewSource.defaultLayout)
     super.init()
-    internalInit()
   }
 
-  public convenience init(hostViewController: UIViewController? = nil, layout: UICollectionViewFlowLayout) {
-    self.init()
-    self.containerView.collectionViewLayout = layout
-    self.hostViewController = hostViewController
+  public weak var containerView: Container? {
+    didSet {
+      internalInit()
+    }
   }
-
-  public required init(with containerView: ContainerView) {
-    self.containerView = containerView
-    super.init()
-    internalInit()
-  }
-
-  public let containerView: ContainerView
 
   public weak var hostViewController: UIViewController?
   public var sections: [Sectionable] = [] {
@@ -48,12 +38,13 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
 #endif
 
   fileprivate func internalInit() {
-    containerView.backgroundColor = .clear
-    containerView.dataSource = self
-    containerView.delegate = self
+    containerView?.backgroundColor = .clear
+    containerView?.dataSource = self
+    containerView?.delegate = self
   }
 
   public func registerCellsForSections() {
+    guard let containerView = containerView else { return }
     sections.forEach { section in
       section.supplementaryTypes.forEach {
         if let supplementary = section.supplementary(for: $0) {
@@ -133,7 +124,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     cell.click?()
     selectedCell = cell.id
     if selectionManagement == .automatic {
-      containerView.reloadData()
+      collectionView.reloadData()
     }
   }
 

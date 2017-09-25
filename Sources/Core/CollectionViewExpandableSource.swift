@@ -20,13 +20,14 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     let cell = sectionCells[indexPath.item]
 
     guard var expandableCell = cell as? ExpandableCellable else {
+      guard let containerView = containerView else { return }
       super.collectionView(containerView, didSelectItemAt: indexPath)
       return
     }
 
     guard let expandableCells = expandableCell.expandableCells else {
       expandableCell.expanded = !expandableCell.expanded
-      containerView.reloadData()
+      containerView?.reloadData()
       return
     }
 
@@ -91,11 +92,11 @@ open class CollectionViewExpandableSource: CollectionViewSource {
                               sectionCells: &sectionCells,
                               sectionIndex: sectionIndex)
     registerCellsForSections()
-    containerView.insertItems(at: indexes)
+    containerView?.insertItems(at: indexes)
 
     expandableCell.expanded = !expandableCell.expanded
     if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
-      containerView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+      containerView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
     }
   }
 
@@ -138,7 +139,7 @@ open class CollectionViewExpandableSource: CollectionViewSource {
                                 sectionCells: &sectionCells,
                                 sectionIndex: sectionIndex)
     registerCellsForSections()
-    containerView.deleteItems(at: indexes)
+    containerView?.deleteItems(at: indexes)
 
     expandableCell.expanded = !expandableCell.expanded
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
@@ -187,20 +188,20 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
     registerCellsForSections()
 
-    let letSection = section
-    let letExpandableCell = expandableCell
-    containerView.performBatchUpdates({
-      self.containerView.deleteItems(at: collapseIndexes)
-      self.containerView.insertItems(at: expandIndexes)
-    }, completion: { [weak self] _ in
-      if let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
-        let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
-        self?.containerView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-      }
-    })
-
     expandableCell.expanded = !expandableCell.expanded
     collapseableCell.expanded = !collapseableCell.expanded
+
+    let letSection = section
+    let letExpandableCell = expandableCell
+    containerView?.performBatchUpdates({
+      self.containerView?.deleteItems(at: collapseIndexes)
+      self.containerView?.insertItems(at: expandIndexes)
+    }, completion: { _ in
+      if let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
+        let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
+        self.containerView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+      }
+    })
 
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: collapseableCell)
@@ -213,12 +214,12 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
     let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
 
-    if let cellView = containerView.cellForItem(at: indexPath) as? CollectionViewCell {
+    if let cellView = containerView?.cellForItem(at: indexPath) as? CollectionViewCell {
       setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
       cell.setup(with: cellView)
     } else {
-      UIView.performWithoutAnimation { [weak self] in
-        self?.containerView.reloadItems(at: [indexPath])
+      UIView.performWithoutAnimation {
+        self.containerView?.reloadItems(at: [indexPath])
       }
     }
 
@@ -286,8 +287,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
         targetIndex = loaderIndex
         sectionCells.remove(at: loaderIndex)
         var expandableCell = loaderExpandableCell
-        containerView.performBatchUpdates({
-          self.containerView.deleteItems(at: [IndexPath(row: loaderIndex, section: indexPath.section)])
+        containerView?.performBatchUpdates({
+          self.containerView?.deleteItems(at: [IndexPath(row: loaderIndex, section: indexPath.section)])
           if let loadedCells = expandableCell.loadedCells {
             var indexes: [IndexPath] = []
             (0..<loadedCells.count).forEach {
@@ -296,7 +297,7 @@ open class CollectionViewExpandableSource: CollectionViewSource {
             sectionCells.insert(contentsOf: loadedCells, at: targetIndex)
             section.cells = sectionCells
             self.registerCellsForSections()
-            self.containerView.insertItems(at: indexes)
+            self.containerView?.insertItems(at: indexes)
             expandableCell.expandableCells = expandableCell.loadedCells
           }
         }, completion: nil)
@@ -312,7 +313,7 @@ open class CollectionViewExpandableSource: CollectionViewSource {
             sectionCells.insert(contentsOf: loadedCells, at: expandableCellIndex + 1)
           }
           section.cells = sectionCells
-          containerView.reloadData()
+          containerView?.reloadData()
         }
       }
     }

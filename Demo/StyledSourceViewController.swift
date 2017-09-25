@@ -11,10 +11,6 @@ import Astrolabe
 
 class TableStyledSourceViewController: BaseTableViewController<TableViewSource> {
 
-  override func createSource() -> Source? {
-    return TableViewSource(hostViewController: self)
-  }
-
   override func sections() -> [Sectionable]? {
     let gen = TableStyledGenerator<TestTableStyledCell, TestTableHeader>()
     return [
@@ -28,10 +24,6 @@ class TableStyledSourceViewController: BaseTableViewController<TableViewSource> 
 }
 
 class CollectionStyledSourceViewController: BaseCollectionViewController<CollectionViewSource> {
-
-  override func createSource() -> Source? {
-    return CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-  }
 
   override func sections() -> [Sectionable]? {
     let gen = CollectionStyledGenerator<TestStyledCollectionCell, TestCollectionCell>()

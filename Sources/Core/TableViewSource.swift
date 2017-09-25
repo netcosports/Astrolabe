@@ -10,26 +10,18 @@ import UIKit
 
 open class TableViewSource: NSObject, ReusableSource {
 
-  public typealias ContainerView = UITableView
+  public typealias Container = UITableView
 
   public required override init() {
-    self.containerView = UITableView()
     super.init()
-    internalInit()
   }
 
-  public convenience init(hostViewController: UIViewController? = nil) {
-    self.init()
-    self.hostViewController = hostViewController
+  public var containerView: Container? {
+    didSet {
+      internalInit()
+    }
   }
 
-  public required init(with containerView: ContainerView) {
-    self.containerView = containerView
-    super.init()
-    internalInit()
-  }
-
-  public let containerView: ContainerView
   public weak var hostViewController: UIViewController?
   public var sections: [Sectionable] = [] {
     didSet {
@@ -44,16 +36,17 @@ open class TableViewSource: NSObject, ReusableSource {
 
 
   fileprivate func internalInit() {
-    containerView.delegate = self
-    containerView.dataSource = self
-    containerView.backgroundColor = .clear
+    containerView?.delegate = self
+    containerView?.dataSource = self
+    containerView?.backgroundColor = .clear
     #if !os(tvOS)
-      containerView.separatorColor = .clear
-      containerView.separatorStyle = .none
+      containerView?.separatorColor = .clear
+      containerView?.separatorStyle = .none
     #endif
   }
 
   public func registerCellsForSections() {
+    guard let containerView = containerView else { return }
     var indexTitles = [String]()
     sections.forEach { section in
       if let header = section.supplementary(for: .header) {
@@ -123,7 +116,7 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     cell.click?()
     selectedCell = cell.id
     if selectionManagement == .automatic {
-      containerView.reloadData()
+      containerView?.reloadData()
     }
   }
 

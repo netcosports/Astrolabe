@@ -20,20 +20,13 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
     internalInit()
   }
 
-  public required init(with containerView: DecoratedSource.Container) {
-    self.source = DecoratedSource(with: containerView)
-    internalInit()
-  }
-
-  public init(source: DecoratedSource, loader: Loader?) {
-    self.loader = loader
-    self.source = source
-    internalInit()
-  }
-
-  public var containerView: Container {
+  public var containerView: Container? {
     get {
       return source.containerView
+    }
+
+    set(newValue) {
+      source.containerView = newValue
     }
   }
 
@@ -71,12 +64,13 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var selectedCell = ""
   public var selectionManagement: SelectionManagement = .none
 
+  public weak var loader: Loader?
+
   fileprivate var source: DecoratedSource
   fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
   fileprivate var lastRequestedPage = 0
-  fileprivate weak var loader: Loader?
 
   fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
@@ -118,7 +112,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   }
 
   public func reloadDataWithEmptyDataSet() {
-    containerView.reloadData()
+    containerView?.reloadData()
     updateEmptyView?(state)
   }
 
@@ -226,9 +220,11 @@ extension TimelineLoaderDecoratorSource {
             strongSelf.state = .empty
             strongSelf.reloadDataWithEmptyDataSet()
           } else {
+            guard let containerView = strongSelf.containerView else { return }
+
             strongSelf.state = .hasData
             guard let lastSection = strongSelf.sections.last else { return }
-            guard let visibleItems = strongSelf.containerView.visibleItems else { return }
+            guard let visibleItems = containerView.visibleItems else { return }
             let sectionsLastIndex = strongSelf.sections.count - 1
             let itemsLastIndex = lastSection.cells.count - 1
 
@@ -323,7 +319,7 @@ extension TimelineLoaderDecoratorSource {
 
       sections = updatedSections
       registerCellsForSections()
-      containerView.reloadData()
+      containerView?.reloadData()
     default:
       assertionFailure("Should not be called in other state than loading")
     }
