@@ -11,7 +11,7 @@ import UIKit
 open class TableView<T: ReusableSource>: UITableView, AccessorView where T.Container == UITableView {
 
   public typealias Source = T
-  open let source = T()
+  public let source = T()
 
   public required init() {
     super.init(frame: .zero, style: .plain)

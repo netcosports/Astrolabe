@@ -11,7 +11,7 @@ import UIKit
 open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView where T.Container == UICollectionView {
 
   public typealias Source = T
-  open let source = T()
+  public let source = T()
 
   public required init() {
     super.init(frame: .zero, collectionViewLayout: CollectionViewSource.defaultLayout)
