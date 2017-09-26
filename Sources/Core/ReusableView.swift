@@ -36,6 +36,7 @@ public protocol ContainerView: class {
   var visibleItems: [IndexPath]? { get }
 
   func reloadData()
+  var backgroundView: UIView? { get set }
 }
 
 extension UICollectionView: ContainerView {
