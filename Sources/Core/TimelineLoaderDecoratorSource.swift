@@ -15,7 +15,12 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
 
   public typealias Container = DecoratedSource.Container
 
-  public var containerView: Container! {
+  public required init() {
+    self.source = DecoratedSource()
+    internalInit()
+  }
+
+  public var containerView: Container? {
     get {
       return source.containerView
     }
@@ -60,16 +65,15 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 
+  public weak var loader: Loader?
+
   fileprivate var source: DecoratedSource
-  fileprivate var loaderDisposeBag: DisposeBag!
+  fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
   fileprivate var lastRequestedPage = 0
-  fileprivate weak var loader: Loader?
 
-  public init(source: DecoratedSource, loader: Loader?) {
-    self.loader = loader
-    self.source = source
+  fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
@@ -82,6 +86,10 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
 
   public func pullToRefresh() {
     load(.pullToRefresh)
+  }
+
+  public func forceLoadNextPage() {
+    load(.page(page: nextPage()))
   }
 
   public func appear() {
@@ -105,7 +113,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   }
 
   public func reloadDataWithEmptyDataSet() {
-    containerView.reloadData()
+    containerView?.reloadData()
     updateEmptyView?(state)
   }
 
@@ -173,7 +181,7 @@ extension TimelineLoaderDecoratorSource {
     let cellsCountBeforeLoad = cellsCount
     startProgress?(intent)
     state = .loading(intent: intent)
-    loaderDisposeBag = DisposeBag()
+    let loaderDisposeBag = DisposeBag()
     sectionObservable.map({ [weak self] sections -> [Sectionable]? in
       return self?.merge(incomming: sections, for: intent)
     }).observeOn(MainScheduler.instance)
@@ -213,9 +221,11 @@ extension TimelineLoaderDecoratorSource {
             strongSelf.state = .empty
             strongSelf.reloadDataWithEmptyDataSet()
           } else {
+            guard let containerView = strongSelf.containerView else { return }
+
             strongSelf.state = .hasData
             guard let lastSection = strongSelf.sections.last else { return }
-            guard let visibleItems = strongSelf.containerView.visibleItems else { return }
+            guard let visibleItems = containerView.visibleItems else { return }
             let sectionsLastIndex = strongSelf.sections.count - 1
             let itemsLastIndex = lastSection.cells.count - 1
 
@@ -224,7 +234,7 @@ extension TimelineLoaderDecoratorSource {
             }
           }
       }).addDisposableTo(loaderDisposeBag)
-
+    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
 
@@ -310,7 +320,7 @@ extension TimelineLoaderDecoratorSource {
 
       sections = updatedSections
       registerCellsForSections()
-      containerView.reloadData()
+      containerView?.reloadData()
     default:
       assertionFailure("Should not be called in other state than loading")
     }

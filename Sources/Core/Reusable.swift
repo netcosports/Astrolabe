@@ -19,9 +19,12 @@ public enum SelectionBehavior {
 }
 
 public protocol ReusableSource: class {
+
+  init()
+	
   associatedtype Container: ContainerView
 
-  var containerView: Container! { get set }
+  var containerView: Container? { get set }
   var hostViewController: UIViewController? { get set }
   var sections: [Sectionable] { get set }
   var selectedCellIds: Set<String> { get set }
@@ -50,6 +53,9 @@ extension ReusableSource {
 }
 
 public protocol LoaderReusableSource: ReusableSource {
+
+  weak var loader: Loader? { get set }
+
   var startProgress: ProgressClosure? { get set }
   var stopProgress: ProgressClosure? { get set }
   var updateEmptyView: EmptyViewClosure? { get set }
@@ -57,6 +63,7 @@ public protocol LoaderReusableSource: ReusableSource {
   var loadingBehavior: LoadingBehavior { get set }
 
   func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
+  func forceLoadNextPage()
   func pullToRefresh()
   func appear()
   func disappear()

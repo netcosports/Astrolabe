@@ -21,22 +21,13 @@ enum LoaderResult {
   case errorPage4
 }
 
-class BaseViewController<T: ReusableSource>: UIViewController, Accessor {
+class BaseViewController<T: UIView>: UIViewController, Accessor where T: AccessorView {
 
-  typealias Source = T
-  var source: Source!
+  let containerView = T()
 
   override func loadView() {
     super.loadView()
-    source = createSource()
-  }
-
-  func createSource() -> Source? {
-    return nil
-  }
-
-  func container() -> UIView? {
-    return nil
+    source.hostViewController = self
   }
 
   override func viewDidLoad() {
@@ -45,8 +36,8 @@ class BaseViewController<T: ReusableSource>: UIViewController, Accessor {
     title = "\(type(of: self))"
 
     view.backgroundColor = .white
-    view.addSubview(container()!)
-    container()!.snp.remakeConstraints { make in
+    view.addSubview(containerView)
+    containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()
     }
 
@@ -68,14 +59,14 @@ class BaseViewController<T: ReusableSource>: UIViewController, Accessor {
   }
 }
 
-class BaseTableViewController<T: TableViewSource>: BaseViewController<T> {
+class BaseTableViewController<T: TableViewSource>: BaseViewController<TableView<T>> { }
 
-  override func container() -> UIView? {
-    return source.containerView
+class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<CollectionView<T>> {
+
+  override func loadView() {
+    super.loadView()
+    containerView.collectionViewLayout = collectionViewLayout()
   }
-}
-
-class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<T> {
 
   func collectionViewLayout() -> UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
@@ -84,13 +75,9 @@ class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<
     layout.sectionInset = UIEdgeInsets(top: 30.0, left: 0.0, bottom: 30, right: 0.0)
     return layout
   }
-
-  override func container() -> UIView? {
-    return source.containerView
-  }
 }
 
-class BaseLoaderViewController<T: ReusableSource>: BaseViewController<T>, Loader {
+class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T: AccessorView, T.Source: LoaderReusableSource {
 
   convenience init(type: LoaderResult) {
     self.init()
@@ -125,23 +112,20 @@ class BaseLoaderViewController<T: ReusableSource>: BaseViewController<T>, Loader
     return label
   }()
 
-  typealias LoaderSource = LoaderDecoratorSource<T>
-
-  var loaderSource: LoaderSource!
-
   override func loadView() {
     super.loadView()
-    loaderSource = LoaderSource(source: source, loader: self)
 
-    loaderSource.loadingBehavior = [.initial, .paging]
-    loaderSource.startProgress = { [weak self] _ in
+    containerView.source.loader = self
+
+    containerView.source.loadingBehavior = [.initial, .paging]
+    containerView.source.startProgress = { [weak self] _ in
       self?.activityIndicator.startAnimating()
     }
-    loaderSource.stopProgress = { [weak self] _ in
+    containerView.source.stopProgress = { [weak self] _ in
       self?.activityIndicator.stopAnimating()
     }
 
-    loaderSource.updateEmptyView = { [weak self] state in
+    containerView.source.updateEmptyView = { [weak self] state in
       guard let strongSelf = self else { return }
 
       switch state {
@@ -174,13 +158,13 @@ class BaseLoaderViewController<T: ReusableSource>: BaseViewController<T>, Loader
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    loaderSource.appear()
+    containerView.source.appear()
   }
 
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
 
-    loaderSource.disappear()
+    containerView.source.disappear()
   }
 
   func performLoading(intent: LoaderIntent) -> SectionObservable? {
@@ -225,14 +209,14 @@ class BaseLoaderViewController<T: ReusableSource>: BaseViewController<T>, Loader
   }
 }
 
-class BaseLoaderTableViewController<T: TableViewSource>: BaseLoaderViewController<T> {
+class BaseLoaderTableViewController<T: LoaderReusableSource>: BaseLoaderViewController<TableView<T>> where T.Container == UITableView { }
 
-  override func container() -> UIView? {
-    return source.containerView
+class BaseLoaderCollectionViewController<T: LoaderReusableSource>: BaseLoaderViewController<CollectionView<T>> where T.Container == UICollectionView {
+
+  override func loadView() {
+    super.loadView()
+    containerView.collectionViewLayout = collectionViewLayout()
   }
-}
-
-class BaseLoaderCollectionViewController<T: CollectionViewSource>: BaseLoaderViewController<T> {
 
   func collectionViewLayout() -> UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
@@ -240,9 +224,5 @@ class BaseLoaderCollectionViewController<T: CollectionViewSource>: BaseLoaderVie
     layout.minimumInteritemSpacing = 0
     layout.sectionInset = UIEdgeInsets(top: 30.0, left: 0.0, bottom: 30, right: 0.0)
     return layout
-  }
-
-  override func container() -> UIView? {
-    return source.containerView
   }
 }

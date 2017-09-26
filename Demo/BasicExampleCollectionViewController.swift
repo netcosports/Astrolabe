@@ -13,16 +13,15 @@ import SnapKit
 class BasicExampleCollectionViewController: UIViewController {
 
   typealias Cell = CollectionCell<TestCollectionCell>
-
-  var source: CollectionViewSource?
+  let containerView = CollectionView<CollectionViewSource>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    let source = CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-    view.addSubview(source.containerView)
-    source.containerView.snp.remakeConstraints { make in
+    containerView.collectionViewLayout = collectionViewLayout()
+    view.addSubview(containerView)
+    containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()
     }
 
@@ -35,7 +34,7 @@ class BasicExampleCollectionViewController: UIViewController {
       TestViewModel("Test title 6")
     ]
 
-    source.sections = [
+    containerView.source.sections = [
       Section(cells: models.enumerated().map { index, data in
         Cell(data: data, id: "0-\(index)")
       }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
@@ -46,9 +45,7 @@ class BasicExampleCollectionViewController: UIViewController {
         Cell(data: data, id: "2-\(index)")
       }, minimumInteritemSpacing: 44.0)
     ]
-    source.containerView.reloadData()
-
-    self.source = source
+    containerView.reloadData()
   }
 
   func collectionViewLayout() -> UICollectionViewFlowLayout {

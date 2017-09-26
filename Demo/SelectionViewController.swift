@@ -25,12 +25,10 @@ class SelectionCollectionViewController: BasicExampleCollectionViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    guard let source = source else {
-      return
-    }
-    source.selectionBehavior = selectionBehavior
-    source.selectedCellIds = initialSelectedIds
-    source.selectionManagement = .automatic
+
+    containerView.source.selectionBehavior = selectionBehavior
+    containerView.source.selectedCellIds = initialSelectedIds
+    containerView.source.selectionManagement = .automatic
   }
 
 }

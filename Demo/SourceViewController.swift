@@ -11,12 +11,6 @@ import Astrolabe
 
 class TableSourceViewController: BaseTableViewController<TableViewSource> {
 
-  override func createSource() -> Source? {
-    let source = TableViewSource(hostViewController: self)
-    source.selectionManagement = .automatic
-    return source
-  }
-
   override func sections() -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let wrappergen = TableGenerator<TestWrapperTableCell, TestTableHeader>()
@@ -32,10 +26,6 @@ class TableSourceViewController: BaseTableViewController<TableViewSource> {
 }
 
 class CollectionSourceViewController: BaseCollectionViewController<CollectionViewSource> {
-
-  override func createSource() -> Source? {
-    return CollectionViewSource(hostViewController: self, layout: collectionViewLayout())
-  }
 
   override func sections() -> [Sectionable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()

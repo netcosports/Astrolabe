@@ -9,14 +9,11 @@
 import UIKit
 import Astrolabe
 
-class PagerViewController: UIViewController, Accessor, CollectionViewPager {
-  typealias Source = CollectionViewPagerSource
-  var source: Source!
+class PagerViewController: BaseCollectionViewController<CollectionViewPagerSource>, CollectionViewPager {
 
   override func loadView() {
     super.loadView()
-
-    source = Source(hostViewController: self, pager: self)
+    source.pager = self
   }
 
   override func viewDidLoad() {
@@ -35,6 +32,10 @@ class PagerViewController: UIViewController, Accessor, CollectionViewPager {
     }
 
     source.reloadData()
+  }
+
+  override func collectionViewLayout() -> UICollectionViewFlowLayout {
+    return CollectionViewPagerSource.defaultLayout
   }
 
   var pages: [Page] {

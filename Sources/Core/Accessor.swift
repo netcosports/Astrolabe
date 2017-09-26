@@ -8,16 +8,27 @@
 
 import UIKit
 
-public protocol Accessor: class {
+public protocol AccessorView: ContainerView {
   associatedtype Source: ReusableSource
-  typealias Container = Source.Container
+  var source: Source { get }
+}
 
-  var source: Source! { get set }
-  var sections: [Sectionable] { get set }
+public protocol Accessor: class {
+  associatedtype Container: AccessorView
+  typealias Source = Container.Source
+
+  var source: Source { get }
   var containerView: Container { get }
+  var sections: [Sectionable] { get set }
 }
 
 public extension Accessor where Self: UIViewController {
+
+  var source: Source {
+    get {
+      return containerView.source
+    }
+  }
 
   var sections: [Sectionable] {
     get {
@@ -27,9 +38,5 @@ public extension Accessor where Self: UIViewController {
     set (newValue) {
       source.sections = newValue
     }
-  }
-
-  var containerView: Container {
-    return source.containerView
   }
 }
