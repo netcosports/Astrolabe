@@ -20,19 +20,27 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
 
   // swiftlint:disable:next function_body_length
   override func sections() -> [Sectionable]? {
-    let tableCells: [Cellable] = [
+    var tableCells: [Cellable] = [
       Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
         self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
       },
       Item(data: TestViewModel("Styled Source"), id: "Table Styled Source") { [weak self] in
         self?.navigationController?.pushViewController(TableStyledSourceViewController(), animated: true)
-      },
+      }
+    ]
+
+#if !os(tvOS)
+    tableCells.append(contentsOf: [
       Item(data: TestViewModel("Singe Selection Example"), id: "Singe Selection Example") { [weak self] in
         self?.navigationController?.pushViewController(SelectionTableViewController(with: .single, ids: []), animated: true)
       },
       Item(data: TestViewModel("Multiple Selection Example"), id: "Singe Selection Example") { [weak self] in
         self?.navigationController?.pushViewController(SelectionTableViewController(with: .multiple, ids: []), animated: true)
-      },
+      }
+    ])
+#endif
+
+    tableCells.append(contentsOf: [
       Item(data: TestViewModel("Loader Source infinite pageing"),
            id: "Table Loader Source infinite paging") { [weak self] in
             self?.navigationController?.pushViewController(TableLoaderSourceViewController(type: .infinitePaging),
@@ -57,7 +65,7 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       Item(data: TestViewModel("Expandable Source"), id: "Table Expandable Source") { [weak self] in
         self?.navigationController?.pushViewController(ExpandableTableViewController(), animated: true)
       }
-    ]
+    ])
 
     var collectionCells: [Cellable] = [
       Item(data: TestViewModel("Basic Collection Example"), id: "Basic Collection Source") { [weak self] in
@@ -65,13 +73,21 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       },
       Item(data: TestViewModel("Basic Data Collection Example"), id: "Basic Data Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicDataExampleCollectionViewController(), animated: true)
-      },
+      }
+    ]
+
+#if !os(tvOS)
+    collectionCells.append(contentsOf: [
       Item(data: TestViewModel("Singe Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
         self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .single, ids: []), animated: true)
       },
       Item(data: TestViewModel("Multiple Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
         self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .multiple, ids: []), animated: true)
-      },
+      }
+    ])
+#endif
+
+    collectionCells.append(contentsOf: [
       Item(data: TestViewModel("Basic Timeline Collection Example"), id: "Basic Timeline Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicTimelineExampleCollectionViewController(), animated: true)
       },
@@ -107,18 +123,18 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       Item(data: TestViewModel("Loader Source Expandable"), id: "Collection Loader Source Expandable") { [weak self] in
         self?.navigationController?.pushViewController(ExpandableCollectionViewController(), animated: true)
       }
-    ]
-    #if !os(tvOS)
-      let pagerCells: [Cellable] = [
-        Item(data: TestViewModel("Pager"), id: "Collection Pager") { [weak self] in
-          self?.navigationController?.pushViewController(PagerViewController(), animated: true)
-        },
-        Item(data: TestViewModel("Reuse Pager"), id: "Collection Reuse Pager") { [weak self] in
-          self?.navigationController?.pushViewController(ReusePagerViewController(), animated: true)
-        }
-      ]
-      collectionCells.append(contentsOf: pagerCells)
-    #endif
+    ])
+
+#if !os(tvOS)
+    collectionCells.append(contentsOf: [
+      Item(data: TestViewModel("Pager"), id: "Collection Pager") { [weak self] in
+        self?.navigationController?.pushViewController(PagerViewController(), animated: true)
+      },
+      Item(data: TestViewModel("Reuse Pager"), id: "Collection Reuse Pager") { [weak self] in
+        self?.navigationController?.pushViewController(ReusePagerViewController(), animated: true)
+      }
+    ])
+#endif
 
     return [
       Header(cells: tableCells, headerData: TestViewModel("Table View:"), page: 0) { [weak self] in
