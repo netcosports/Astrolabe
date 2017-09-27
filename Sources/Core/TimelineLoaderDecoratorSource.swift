@@ -21,33 +21,18 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   }
 
   public var containerView: Container? {
-    get {
-      return source.containerView
-    }
-
-    set(newValue) {
-      source.containerView = newValue
-    }
+    get { return source.containerView }
+    set { source.containerView = newValue }
   }
 
   public var hostViewController: UIViewController? {
-    get {
-      return source.hostViewController
-    }
-
-    set(newValue) {
-      source.hostViewController = newValue
-    }
+    get { return source.hostViewController }
+    set { source.hostViewController = newValue }
   }
 
   public var sections: [Sectionable] {
-    get {
-      return source.sections
-    }
-
-    set(newValue) {
-      source.sections = newValue
-    }
+    get { return source.sections }
+    set { source.sections = newValue }
   }
 
   public func registerCellsForSections() {
@@ -61,9 +46,18 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource>: Loade
   public var loadingBehavior = LoadingBehavior.initial
 
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCellIds: Set<String> = []
-  public var selectionBehavior: SelectionBehavior = .single
-  public var selectionManagement: SelectionManagement = .none
+  public var selectedCellIds: Set<String> {
+    get { return source.selectedCellIds }
+    set { source.selectedCellIds = newValue }
+  }
+  public var selectionBehavior: SelectionBehavior {
+    get { return source.selectionBehavior }
+    set { source.selectionBehavior = newValue }
+  }
+  public var selectionManagement: SelectionManagement {
+    get { return source.selectionManagement }
+    set { source.selectionManagement = newValue }
+  }
 
   public weak var loader: Loader?
 

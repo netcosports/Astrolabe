@@ -15,37 +15,35 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   public required init() {
     self.source = DecoratedSource()
+    internalInit()
   }
 
   public var containerView: Container? {
-    get {
-      return source.containerView
-    }
-
-    set(newValue) {
-      source.containerView = newValue
-      internalInit()
-    }
+    get { return source.containerView }
+    set { source.containerView = newValue }
   }
 
   public var hostViewController: UIViewController? {
-    get {
-      return source.hostViewController
-    }
-
-    set(newValue) {
-      source.hostViewController = newValue
-    }
+    get { return source.hostViewController }
+    set { source.hostViewController = newValue }
   }
 
   public var sections: [Sectionable] {
-    get {
-      return source.sections
-    }
+    get { return source.sections }
+    set { source.sections = newValue }
+  }
 
-    set(newValue) {
-      source.sections = newValue
-    }
+  public var selectedCellIds: Set<String> {
+    get { return source.selectedCellIds }
+    set { source.selectedCellIds = newValue }
+  }
+  public var selectionBehavior: SelectionBehavior {
+    get { return source.selectionBehavior }
+    set { source.selectionBehavior = newValue }
+  }
+  public var selectionManagement: SelectionManagement {
+    get { return source.selectionManagement }
+    set { source.selectionManagement = newValue }
   }
 
   public func registerCellsForSections() {
@@ -58,9 +56,6 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var autoupdatePeriod = defaultReloadInterval
   public var loadingBehavior = LoadingBehavior.initial
   public var lastCellDisplayed: VoidClosure?
-  public var selectedCellIds: Set<String> = []
-  public var selectionBehavior: SelectionBehavior = .single
-  public var selectionManagement: SelectionManagement = .none
 
   fileprivate var source: DecoratedSource
   fileprivate var loaderDisposeBag: DisposeBag?
