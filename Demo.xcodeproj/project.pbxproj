@@ -35,7 +35,6 @@
 		B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF31F0CC54D005146DB /* HomeViewController.swift */; };
 		B5716F031F0CC54D005146DB /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF41F0CC54D005146DB /* Generator.swift */; };
 		B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF51F0CC54D005146DB /* BaseViewController.swift */; };
-		B5716F051F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF61F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift */; };
 		B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */; };
 		B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */; };
 		B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF91F0CC54D005146DB /* ReusePagerViewController.swift */; };
@@ -52,7 +51,6 @@
 		B5716F251F0CC6E9005146DB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF51F0CC54D005146DB /* BaseViewController.swift */; };
 		B5716F261F0CC6E9005146DB /* BasicDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */; };
 		B5716F271F0CC6E9005146DB /* BasicExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */; };
-		B5716F281F0CC6E9005146DB /* BasicTimelineExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF61F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift */; };
 		B5716F291F0CC6E9005146DB /* ExpandableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */; };
 		B5716F2A1F0CC6E9005146DB /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF41F0CC54D005146DB /* Generator.swift */; };
 		B5716F2B1F0CC6E9005146DB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF31F0CC54D005146DB /* HomeViewController.swift */; };
@@ -122,7 +120,6 @@
 		B5716EF31F0CC54D005146DB /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		B5716EF41F0CC54D005146DB /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		B5716EF51F0CC54D005146DB /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		B5716EF61F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicTimelineExampleCollectionViewController.swift; sourceTree = "<group>"; };
 		B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicDataExampleCollectionViewController.swift; sourceTree = "<group>"; };
 		B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableViewController.swift; sourceTree = "<group>"; };
 		B5716EF91F0CC54D005146DB /* ReusePagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusePagerViewController.swift; sourceTree = "<group>"; };
@@ -230,7 +227,6 @@
 				B5716EF51F0CC54D005146DB /* BaseViewController.swift */,
 				B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */,
 				B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */,
-				B5716EF61F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift */,
 				B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */,
 				B5716EF41F0CC54D005146DB /* Generator.swift */,
 				B5716EF31F0CC54D005146DB /* HomeViewController.swift */,
@@ -760,7 +756,6 @@
 				B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */,
 				B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */,
 				B5716F031F0CC54D005146DB /* Generator.swift in Sources */,
-				B5716F051F0CC54D005146DB /* BasicTimelineExampleCollectionViewController.swift in Sources */,
 				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
 				A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */,
@@ -817,7 +812,6 @@
 				B5716F271F0CC6E9005146DB /* BasicExampleCollectionViewController.swift in Sources */,
 				B5716F2A1F0CC6E9005146DB /* Generator.swift in Sources */,
 				B5716F251F0CC6E9005146DB /* BaseViewController.swift in Sources */,
-				B5716F281F0CC6E9005146DB /* BasicTimelineExampleCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

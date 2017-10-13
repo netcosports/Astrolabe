@@ -84,9 +84,6 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
 #endif
 
     collectionCells.append(contentsOf: [
-      Item(data: TestViewModel("Basic Timeline Collection Example"), id: "Basic Timeline Collection Source") { [weak self] in
-        self?.navigationController?.pushViewController(BasicTimelineExampleCollectionViewController(), animated: true)
-      },
       Item(data: TestViewModel("Source"), id: "Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(CollectionSourceViewController(), animated: true)
       },
