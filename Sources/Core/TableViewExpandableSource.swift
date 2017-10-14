@@ -272,7 +272,7 @@ open class TableViewExpandableSource: TableViewSource {
         onError: { [weak self] _ in
           self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
         }
-      ).addDisposableTo(disposeBag)
+      ).disposed(by: disposeBag)
     default: break
     }
   }

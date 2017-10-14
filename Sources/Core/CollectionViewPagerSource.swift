@@ -49,7 +49,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
 
         containerView.setContentOffset(offset, animated: true)
         containerView.isUserInteractionEnabled = false
-      }).addDisposableTo(disposeBag)
+      }).disposed(by: disposeBag)
   }
 
   typealias PageCell = CollectionCell<PagerCollectionViewCell>

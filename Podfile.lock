@@ -2,8 +2,8 @@ PODS:
   - Astrolabe (2.0.5):
     - Astrolabe/Core (= 2.0.5)
   - Astrolabe/Core (2.0.5):
-    - RxCocoa (= 4.0.0-beta.0)
-    - RxSwift (= 4.0.0-beta.0)
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
     - SnapKit (~> 4.0)
   - Astrolabe/Loaders (2.0.5):
     - Astrolabe/Core
@@ -15,54 +15,48 @@ PODS:
     - Gnomon/JSON (= 2.1.2)
   - Gnomon/Core (2.1.2):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
-    - RxSwift (= 4.0.0-beta.0)
+    - RxSwift (~> 4.0)
   - Gnomon/JSON (2.1.2):
     - Gnomon/Core
-    - SwiftyJSON (= 4.0.0-alpha.1)
-  - Nimble (7.0.1)
-  - RxBlocking (4.0.0-beta.0):
-    - RxSwift (~> 4.0.0-beta.0)
-  - RxCocoa (4.0.0-beta.0):
-    - RxSwift (~> 4.0.0-beta.0)
-  - RxSwift (4.0.0-beta.0)
+    - SwiftyJSON (~> 3.0)
+  - Nimble (7.0.2)
+  - RxBlocking (4.0.0):
+    - RxSwift (~> 4.0)
+  - RxCocoa (4.0.0):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.0.0)
   - SnapKit (4.0.0)
-  - SwiftyJSON (4.0.0-alpha.1)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon (from `https://github.com/netcosports/Gnomon`, branch `swift4`)
-  - Nimble (from `https://github.com/Quick/Nimble.git`)
-  - RxBlocking (= 4.0.0-beta.0)
+  - Gnomon (from `https://github.com/netcosports/Gnomon`)
+  - Nimble (~> 7.0)
+  - RxBlocking (~> 4.0)
 
 EXTERNAL SOURCES:
   Astrolabe:
     :path: .
   Gnomon:
-    :branch: swift4
     :git: https://github.com/netcosports/Gnomon
-  Nimble:
-    :git: https://github.com/Quick/Nimble.git
 
 CHECKOUT OPTIONS:
   Gnomon:
-    :commit: 23104dab49daa8af1d40c5480ef3e8926253a55b
+    :commit: ff78b89b7debddf27fd136ba49c9ac722289fb55
     :git: https://github.com/netcosports/Gnomon
-  Nimble:
-    :commit: a63252b16eba6cdebec4e4936388c90552165a68
-    :git: https://github.com/Quick/Nimble.git
 
 SPEC CHECKSUMS:
-  Astrolabe: 20f113c7f8995947e5dfd82e0c0ff5b84f97b41f
+  Astrolabe: f3130c1f1441a8d742e674815fe5eb6177304e7e
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 4bcaf1af997aeb6679b70efc9d6181cf14ca1491
-  Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
-  RxBlocking: ff45a3e568ab4fd6999cf84bfb5e7692c9116675
-  RxCocoa: 8d809675f4e89c5c4c5a6900bbd11fe632ad5d86
-  RxSwift: e0899fae37065c16db976cc5e3c957e4e388869c
+  Gnomon: c224b847d266e038ee284c42452bd30676a80f21
+  Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
+  RxBlocking: 923c2c8106d80d7c2d6b276afd66ce3b10824836
+  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
+  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftyJSON: dc88934f85fb50b263b1632b9cbad3402505783e
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: c220daf9138f67ee811e3da86717c48252ca6459
+PODFILE CHECKSUM: 949627bb2e18b42db931e58e958dc8d384758ffd
 
 COCOAPODS: 1.3.1
