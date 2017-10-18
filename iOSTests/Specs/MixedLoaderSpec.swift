@@ -3,8 +3,8 @@
 // Copyright (c) 2017 CocoaPods. All rights reserved.
 //
 
-import XCTest
 import Astrolabe
+import XCTest
 import Gnomon
 import SwiftyJSON
 import RxBlocking
@@ -22,7 +22,7 @@ class MixedLoaderSpec: XCTestCase {
   func testPlainLoader() {
     do {
       let loader = TextMixedLoader()
-      let results = try load(pLoader: loader, intent: .initial).toBlocking().toArray()
+      let results: [[Sectionable]?] = try Astrolabe.load(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceivePlainCount) == 2
@@ -53,7 +53,7 @@ class MixedLoaderSpec: XCTestCase {
   func testMultipleLoader() {
     do {
       let loader = TextMixedLoader()
-      let results = try load(mLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try Astrolabe.load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveMultipleCount) == 2

@@ -258,14 +258,12 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     switch loaderExpandableCellable.state {
     case .notInitiated:
       loaderExpandableCellable.performLoading()?.observeOn(MainScheduler.instance).subscribe(
-        onNext: { [weak self] _ in
-          self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
-        },
-
-        onError: { [weak self] _ in
-          self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
-        }
-        ).addDisposableTo(disposeBag)
+      onNext: { [weak self] _ in
+        self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
+      },
+      onError: { [weak self] _ in
+        self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
+      }).disposed(by: disposeBag)
     default: break
     }
   }

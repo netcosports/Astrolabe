@@ -17,7 +17,7 @@ class MultipleLoaderSpec: XCTestCase {
   func testMultipleLoader() {
     do {
       let loader = TestML()
-      let results = try load(mLoader: loader, intent: .initial).toBlocking().toArray()
+      let results = try Astrolabe.load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveCount) == 2

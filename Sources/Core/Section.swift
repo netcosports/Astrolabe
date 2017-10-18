@@ -32,7 +32,7 @@ open class Section: Sectionable {
   }
 }
 
-open class HeaderSection<Container: ContainerView, CellView: ReusableView & Reusable>: Section
+open class HeaderSection<Container, CellView: ReusableView & Reusable>: Section
   where CellView.Container == Container {
 
   public typealias HeaderCell = Cell<Container, CellView>
@@ -115,7 +115,7 @@ open class TableHeaderSection<T: UITableViewHeaderFooterView>: HeaderSection<UIT
   }
 }
 
-open class FooterSection<Container: ContainerView, CellView: ReusableView & Reusable>: Section
+open class FooterSection<Container, CellView: ReusableView & Reusable>: Section
   where CellView.Container == Container {
 
   public typealias FooterCell = Cell<Container, CellView>
@@ -155,7 +155,7 @@ open class TableFooterSection<T: UITableViewHeaderFooterView>: FooterSection<UIT
   }
 }
 
-open class HeaderFooterSection<Container: ContainerView, HeaderView: ReusableView & Reusable,
+open class HeaderFooterSection<Container, HeaderView: ReusableView & Reusable,
                                FooterView: ReusableView & Reusable>: Section
   where HeaderView.Container == Container, FooterView.Container == Container {
 

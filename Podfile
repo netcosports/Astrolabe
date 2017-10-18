@@ -4,7 +4,7 @@ use_frameworks!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon/JSON', '~> 2.1'
+  pod 'Gnomon', :git => 'https://github.com/netcosports/Gnomon'
 
   target 'Demo' do
     platform :ios, '9.0'
@@ -17,8 +17,8 @@ abstract_target 'Astrolabe' do
   abstract_target 'Tests' do
     pod 'Astrolabe/Loaders', :path => '.'
 
-    pod 'Nimble'
-    pod 'RxBlocking'
+    pod 'Nimble', '~> 7.0'
+    pod 'RxBlocking', '~> 4.0'
 
     target 'iOSTests' do
       platform :ios, '9.0'

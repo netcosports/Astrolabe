@@ -35,7 +35,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
 
         containerView.isUserInteractionEnabled = false
         containerView.setContentOffset(offset, animated: true)
-      }).addDisposableTo(disposeBag)
+      }).disposed(by: disposeBag)
   }
 
   override public class var defaultLayout: UICollectionViewFlowLayout {

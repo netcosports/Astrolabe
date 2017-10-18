@@ -17,7 +17,7 @@ class Place1Then2LoaderSpec: XCTestCase {
   func testPlace1Then2Loader() {
     do {
       let loader = TestP1T2L()
-      let results = try load(p1t2Loader: loader, intent: .initial).toBlocking().toArray()
+      let results = try Astrolabe.load(p1t2Loader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
       expect(loader.didReceiveCount) == 2
@@ -56,7 +56,7 @@ class Place1Then2LoaderSpec: XCTestCase {
       _ = try Gnomon.models(for: request1).toBlocking().toArray()
       _ = try Gnomon.models(for: request2).toBlocking().toArray()
 
-      let results = try load(p1t2Loader: loader, intent: .initial).toBlocking().toArray()
+      let results = try Astrolabe.load(p1t2Loader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1

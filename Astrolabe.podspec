@@ -20,9 +20,9 @@ Pod::Spec.new do |s|
     sub.source_files = 'Sources/Core/*.swift'
     sub.tvos.exclude_files = 'Sources/Core/*PagerSource.swift'
 
-    sub.dependency 'RxSwift', '~> 3.3'
-    sub.dependency 'RxCocoa', '~> 3.3'
-    sub.dependency 'SnapKit', '~> 3.0'
+    sub.dependency 'RxSwift', '~> 4.0'
+    sub.dependency 'RxCocoa', '~> 4.0'
+    sub.dependency 'SnapKit', '~> 4.0'
   end
 
   s.subspec 'Loaders' do |sub|
@@ -30,5 +30,4 @@ Pod::Spec.new do |s|
     sub.dependency 'Gnomon/Core', '~> 2.1'
     sub.dependency 'Astrolabe/Core'
   end
-
 end
