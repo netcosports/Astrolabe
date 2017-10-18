@@ -35,7 +35,7 @@ class PagerViewController: BaseCollectionViewController<CollectionViewPagerSourc
   }
 
   override func collectionViewLayout() -> UICollectionViewFlowLayout {
-    return CollectionViewPagerSource.defaultLayout
+    return CollectionViewPagerSource.layout
   }
 
   var pages: [Page] {

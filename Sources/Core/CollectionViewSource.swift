@@ -235,7 +235,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-  public class var defaultLayout: UICollectionViewFlowLayout {
+  class var defaultLayout: UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
     layout.minimumLineSpacing = 0
     layout.minimumInteritemSpacing = 0

@@ -68,7 +68,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     containerView?.reloadData()
   }
 
-  open static func defaultLayout() -> UICollectionViewFlowLayout {
+  open class var layout: UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
     layout.minimumLineSpacing = 0
     layout.minimumInteritemSpacing = 0
