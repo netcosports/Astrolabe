@@ -4,7 +4,7 @@ PODS:
   - Astrolabe/Core (2.1.0):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-    - SnapKit (~> 3.0)
+    - SnapKit (~> 4.0)
   - Astrolabe/Loaders (2.1.0):
     - Astrolabe/Core
     - Gnomon/Core (~> 3.0)
@@ -25,7 +25,7 @@ PODS:
   - RxCocoa (4.0.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.0.0)
-  - SnapKit (3.2.0)
+  - SnapKit (4.0.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -47,14 +47,14 @@ CHECKOUT OPTIONS:
     :git: https://github.com/netcosports/Gnomon
 
 SPEC CHECKSUMS:
-  Astrolabe: 21da308e0a4135db258ee07a2a39c7295eba35e2
+  Astrolabe: e887f64c1a7b8ed9a13046b6a1b50e445539ae5f
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 48d9c43af5f2412208269c2ad6a07ff47d669504
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   RxBlocking: 923c2c8106d80d7c2d6b276afd66ce3b10824836
   RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
   RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
-  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: bb74b0ba886844b2a75eeab6c59b63e9f1812a0b

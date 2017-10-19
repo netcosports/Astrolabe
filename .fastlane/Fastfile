@@ -99,7 +99,8 @@ lane :lint do |options|
   pod_lib_lint(
     use_bundle_exec: true,
     verbose: true,
-    fail_fast: true
+    fail_fast: true,
+    allow_warnings: true
   )
 end
 
