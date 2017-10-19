@@ -155,6 +155,12 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   // swiftlint:disable function_body_length
   // swiftlint:disable:next cyclomatic_complexity
   fileprivate func load(_ intent: LoaderIntent) {
+    guard DispatchQueue.isMain else {
+      return DispatchQueue.main.async {
+        self.load(intent)
+      }
+    }
+
     if !needToHandleIntent(intent: intent) {
       return
     }

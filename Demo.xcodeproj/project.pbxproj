@@ -15,6 +15,7 @@
 		B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */; };
 		B50EFAD91F0CC27E00D31FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */; };
 		B50EFADC1F0CC27E00D31FD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B50EFADA1F0CC27E00D31FD6 /* LaunchScreen.storyboard */; };
+		B529147F1F90F61B00E02181 /* ThreadingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B529147E1F90F61B00E02181 /* ThreadingSpec.swift */; };
 		B5716ED01F0CC358005146DB /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5716EE31F0CC35D005146DB /* TestMultipleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ED21F0CC35D005146DB /* TestMultipleLoader.swift */; };
 		B5716EE41F0CC35D005146DB /* TestPlace1Then1Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ED31F0CC35D005146DB /* TestPlace1Then1Loader.swift */; };
@@ -98,6 +99,7 @@
 		B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B50EFADB1F0CC27E00D31FD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B50EFADD1F0CC27E00D31FD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B529147E1F90F61B00E02181 /* ThreadingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadingSpec.swift; sourceTree = "<group>"; };
 		B5716EC71F0CC307005146DB /* iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5716ECB1F0CC307005146DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5716ECF1F0CC358005146DB /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Common.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -284,6 +286,7 @@
 				B5716EE01F0CC35D005146DB /* Place2Then1LoaderSpec.swift */,
 				B5716EE11F0CC35D005146DB /* Place3LoaderSpec.swift */,
 				B5716EE21F0CC35D005146DB /* PlainLoaderSpec.swift */,
+				B529147E1F90F61B00E02181 /* ThreadingSpec.swift */,
 			);
 			path = Specs;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-tvOS/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-tvOS/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest-tvOS/RxTest.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -596,6 +600,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -678,6 +683,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-iOS/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-iOS/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest-iOS/RxTest.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -690,6 +696,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -781,6 +788,7 @@
 				B5716EE51F0CC35D005146DB /* TestPlace1Then2Loader.swift in Sources */,
 				B5716EEC1F0CC35D005146DB /* MultipleLoaderSpec.swift in Sources */,
 				B5716EEB1F0CC35D005146DB /* MixedLoaderSpec.swift in Sources */,
+				B529147F1F90F61B00E02181 /* ThreadingSpec.swift in Sources */,
 				B5716EE31F0CC35D005146DB /* TestMultipleLoader.swift in Sources */,
 				B5716EF21F0CC35D005146DB /* PlainLoaderSpec.swift in Sources */,
 				B5716ED01F0CC358005146DB /* Common.swift in Sources */,

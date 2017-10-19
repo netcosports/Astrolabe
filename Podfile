@@ -19,6 +19,7 @@ abstract_target 'Astrolabe' do
 
     pod 'Nimble', '~> 7.0'
     pod 'RxBlocking'
+    pod 'RxTest'
 
     target 'iOSTests' do
       platform :ios, '9.0'
