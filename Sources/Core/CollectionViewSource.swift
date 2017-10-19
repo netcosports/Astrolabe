@@ -211,6 +211,12 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
+  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  }
+
+  public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+  }
+
 #if os(tvOS)
 
   open func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {

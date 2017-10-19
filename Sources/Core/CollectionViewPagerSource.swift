@@ -77,7 +77,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     return layout
   }
 
-  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  public override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
 
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
@@ -85,7 +85,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     containerView.isUserInteractionEnabled = true
   }
 
-  public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+  public override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
     containerView.isUserInteractionEnabled = true
   }
