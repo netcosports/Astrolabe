@@ -53,7 +53,7 @@ lane :release do |options|
   message ||= ''
   tag(message: message)
   sh("git push origin master")
-  pod_push
+  pod_push(allow_warnings: true)
 end
 
 lane :patch do |options|

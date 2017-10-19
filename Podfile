@@ -18,7 +18,7 @@ abstract_target 'Astrolabe' do
     pod 'Astrolabe/Loaders', :path => '.'
 
     pod 'Nimble', '~> 7.0'
-    pod 'RxBlocking', '~> 4.0'
+    pod 'RxBlocking'
 
     target 'iOSTests' do
       platform :ios, '9.0'

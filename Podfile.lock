@@ -4,19 +4,19 @@ PODS:
   - Astrolabe/Core (2.0.5):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-    - SnapKit (~> 4.0)
+    - SnapKit (~> 3.0)
   - Astrolabe/Loaders (2.0.5):
     - Astrolabe/Core
-    - Gnomon/Core (~> 2.1)
+    - Gnomon/Core (~> 3.0)
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (2.1.2):
-    - Gnomon/JSON (= 2.1.2)
-  - Gnomon/Core (2.1.2):
+  - Gnomon (3.0.0):
+    - Gnomon/JSON (= 3.0.0)
+  - Gnomon/Core (3.0.0):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/JSON (2.1.2):
+  - Gnomon/JSON (3.0.0):
     - Gnomon/Core
     - SwiftyJSON (~> 3.0)
   - Nimble (7.0.2)
@@ -25,7 +25,7 @@ PODS:
   - RxCocoa (4.0.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.0.0)
-  - SnapKit (4.0.0)
+  - SnapKit (3.2.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -33,7 +33,7 @@ DEPENDENCIES:
   - Astrolabe/Loaders (from `.`)
   - Gnomon (from `https://github.com/netcosports/Gnomon`)
   - Nimble (~> 7.0)
-  - RxBlocking (~> 4.0)
+  - RxBlocking
 
 EXTERNAL SOURCES:
   Astrolabe:
@@ -43,20 +43,20 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Gnomon:
-    :commit: ff78b89b7debddf27fd136ba49c9ac722289fb55
+    :commit: 074e4687ebe6d9c8e1632ebe79cf030ae261dad5
     :git: https://github.com/netcosports/Gnomon
 
 SPEC CHECKSUMS:
-  Astrolabe: f3130c1f1441a8d742e674815fe5eb6177304e7e
+  Astrolabe: f1218f1939ff4441b2f9672843bd9f544db4aa9d
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: c224b847d266e038ee284c42452bd30676a80f21
+  Gnomon: 48d9c43af5f2412208269c2ad6a07ff47d669504
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   RxBlocking: 923c2c8106d80d7c2d6b276afd66ce3b10824836
   RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
   RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 949627bb2e18b42db931e58e958dc8d384758ffd
+PODFILE CHECKSUM: bb74b0ba886844b2a75eeab6c59b63e9f1812a0b
 
 COCOAPODS: 1.3.1
