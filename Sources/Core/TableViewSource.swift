@@ -35,7 +35,6 @@ open class TableViewSource: NSObject, ReusableSource {
   public var displaySectionIndex = false
   fileprivate var sectionIndexTitles: [String]?
 
-
   fileprivate func internalInit() {
     containerView?.delegate = self
     containerView?.dataSource = self

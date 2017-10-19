@@ -21,7 +21,7 @@ public enum SelectionBehavior {
 public protocol ReusableSource: class {
 
   init()
-	
+
   associatedtype Container: ContainerView
 
   var containerView: Container? { get set }

@@ -74,7 +74,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public func forceReloadData(keepCurrentDataBeforeUpdate: Bool) {
     load(.force(keepData: keepCurrentDataBeforeUpdate))
   }
-  
+
   public func forceLoadNextPage() {
     load(.page(page: nextPage()))
   }

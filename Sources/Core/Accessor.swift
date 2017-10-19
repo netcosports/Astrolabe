@@ -25,9 +25,7 @@ public protocol Accessor: class {
 public extension Accessor where Self: UIViewController {
 
   var source: Source {
-    get {
-      return containerView.source
-    }
+    return containerView.source
   }
 
   var sections: [Sectionable] {
