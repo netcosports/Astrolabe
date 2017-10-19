@@ -4,6 +4,12 @@
 
 ## Installation
 
+## Swift 3.2
 ```ruby
-pod 'Astrolabe', '~> 2.0'
+pod 'Astrolabe', '~> 2.1'
+```
+
+## Swift 4.0
+```ruby
+pod 'Astrolabe', '~> 3.0'
 ```
