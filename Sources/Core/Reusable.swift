@@ -18,6 +18,10 @@ public enum SelectionBehavior {
   case single, multiple
 }
 
+public struct ExpandableBehavior {
+  public var collapseDisabled: Bool
+}
+
 public protocol ReusableSource: class {
 
   init()

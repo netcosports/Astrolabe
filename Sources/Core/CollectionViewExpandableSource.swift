@@ -14,6 +14,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
   let disposeBag = DisposeBag()
 
+  public var expandableBehavior = ExpandableBehavior(collapseDisabled: false)
+
   open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     var section = sections[indexPath.section]
     var sectionCells = section.cells
@@ -32,6 +34,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     }
 
     if expandableCell.expanded {
+      if expandableBehavior.collapseDisabled { return }
+
       collapseItemInSection(section: &section,
                             expandableCell: &expandableCell,
                             sectionCells: &sectionCells,

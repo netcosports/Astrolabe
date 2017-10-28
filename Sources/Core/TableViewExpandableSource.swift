@@ -13,6 +13,7 @@ import RxSwift
 open class TableViewExpandableSource: TableViewSource {
 
   let disposeBag = DisposeBag()
+  public var expandableBehavior = ExpandableBehavior(collapseDisabled: false)
 
   open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     var section = sections[indexPath.section]
@@ -31,6 +32,7 @@ open class TableViewExpandableSource: TableViewSource {
     }
 
     if expandableCell.expanded {
+      if expandableBehavior.collapseDisabled { return }
       collapseItemInSection(section: &section,
                             expandableCell: &expandableCell,
                             sectionCells: &sectionCells,

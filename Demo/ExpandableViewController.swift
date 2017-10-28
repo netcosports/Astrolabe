@@ -12,6 +12,10 @@ import RxSwift
 
 class ExpandableTableViewController: BaseTableViewController<TableViewExpandableSource> {
 
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    source.expandableBehavior.collapseDisabled = true
+  }
   override func sections() -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let cells1: [Cellable] = [
