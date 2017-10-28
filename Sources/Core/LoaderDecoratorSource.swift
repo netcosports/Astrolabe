@@ -14,7 +14,6 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public typealias Container = DecoratedSource.Container
 
   public required init() {
-    self.source = DecoratedSource()
     internalInit()
   }
 
@@ -57,7 +56,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var loadingBehavior = LoadingBehavior.initial
   public var lastCellDisplayed: VoidClosure?
 
-  fileprivate var source: DecoratedSource
+  public let source = DecoratedSource()
   fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
