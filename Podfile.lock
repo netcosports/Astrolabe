@@ -1,11 +1,11 @@
 PODS:
-  - Astrolabe (3.0.2):
-    - Astrolabe/Core (= 3.0.2)
-  - Astrolabe/Core (3.0.2):
+  - Astrolabe (3.0.3):
+    - Astrolabe/Core (= 3.0.3)
+  - Astrolabe/Core (3.0.3):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
     - SnapKit (~> 4.0)
-  - Astrolabe/Loaders (3.0.2):
+  - Astrolabe/Loaders (3.0.3):
     - Astrolabe/Core
     - Gnomon/Core (~> 3.0)
   - FormatterKit/Resources (1.8.2)
@@ -50,7 +50,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/netcosports/Gnomon
 
 SPEC CHECKSUMS:
-  Astrolabe: 2f346ddb09d502973b2ff807a0e2bd89ea451061
+  Astrolabe: 97e48d06138f1703cf47ef5aa7cd51d595474f23
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 48d9c43af5f2412208269c2ad6a07ff47d669504
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2

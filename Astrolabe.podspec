@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Astrolabe'
-  s.version = '3.0.2'
+  s.version = '3.0.3'
   s.summary = 'Cells management library'
 
   s.homepage = 'https://github.com/netcosports/Astrolabe'
