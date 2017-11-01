@@ -11,12 +11,12 @@ PODS:
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (3.0.0):
-    - Gnomon/JSON (= 3.0.0)
-  - Gnomon/Core (3.0.0):
+  - Gnomon (3.0.3):
+    - Gnomon/JSON (= 3.0.3)
+  - Gnomon/Core (3.0.3):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/JSON (3.0.0):
+  - Gnomon/JSON (3.0.3):
     - Gnomon/Core
     - SwiftyJSON (~> 3.0)
   - Nimble (7.0.2)
@@ -46,13 +46,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Gnomon:
-    :commit: 074e4687ebe6d9c8e1632ebe79cf030ae261dad5
+    :commit: 2783ed4591d3ea113265feec438cd6d46727fd0e
     :git: https://github.com/netcosports/Gnomon
 
 SPEC CHECKSUMS:
   Astrolabe: 97e48d06138f1703cf47ef5aa7cd51d595474f23
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 48d9c43af5f2412208269c2ad6a07ff47d669504
+  Gnomon: af3f34fe38baed086074c14059ec3cc2ca05aff7
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   RxBlocking: 923c2c8106d80d7c2d6b276afd66ce3b10824836
   RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e

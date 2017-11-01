@@ -51,7 +51,7 @@ open class TableViewSource: NSObject, ReusableSource {
     sections.forEach { section in
       if let header = section.supplementary(for: .header) {
         header.register(in: containerView)
-        if header.id.characters.count == 1 && displaySectionIndex {
+        if header.id.count == 1 && displaySectionIndex {
           indexTitles.append(header.id)
         }
       }
