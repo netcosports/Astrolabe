@@ -124,7 +124,7 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
       }
     }, onError: { [weak self] error in
       guard let strongSelf = self else { return }
-      strongSelf.state = .error
+      strongSelf.state = .error(error)
     })
   }
 

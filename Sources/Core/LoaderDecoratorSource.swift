@@ -193,7 +193,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
         default:
           ()
         }
-        strongSelf.state = .error
+        strongSelf.state = .error(error)
         strongSelf.reloadDataWithEmptyDataSet()
       }, onCompleted: { [weak self] in
         guard let strongSelf = self else { return }

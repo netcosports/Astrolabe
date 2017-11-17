@@ -14,7 +14,7 @@ public enum LoaderState {
   case initiated
   case loading(intent: LoaderIntent)
   case hasData
-  case error
+  case error(Error)
   case empty
 }
 
