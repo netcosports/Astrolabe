@@ -22,6 +22,15 @@ public struct Page {
 
 public protocol CollectionViewPager: class {
   var pages: [Page] { get }
+  func section(with cells: [Cellable]) -> Sectionable
+}
+
+public extension CollectionViewPager {
+
+  func section(with cells: [Cellable]) -> Sectionable {
+    return Section(cells: cells)
+  }
+
 }
 
 open class CollectionViewPagerSource: CollectionViewSource {
@@ -64,7 +73,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     let cells: [Cellable] = pager.pages.map {
       PageCell(data: PagerViewModel(viewController: $0.controller, cellId: $0.id))
     }
-    sections = [Section(cells: cells)]
+    sections = [pager.section(with: cells)]
     containerView?.reloadData()
   }
 
