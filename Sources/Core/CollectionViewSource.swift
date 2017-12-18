@@ -18,7 +18,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     super.init()
   }
 
-  public weak var containerView: Container? {
+  open weak var containerView: Container? {
     didSet {
       internalInit()
     }
@@ -154,7 +154,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     return header.size(with: collectionView)
   }
 
-  open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+  public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
     if indexPath.section == collectionView.numberOfSections - 1
          && indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
@@ -164,7 +164,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     (cell as? CellView)?.willDisplay()
   }
 
-  open func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+  public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
     (cell as? CellView)?.endDisplay()
   }
@@ -211,10 +211,10 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
   }
 
-  public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+  open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
   }
 
 #if os(tvOS)

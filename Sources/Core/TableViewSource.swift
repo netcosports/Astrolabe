@@ -16,7 +16,7 @@ open class TableViewSource: NSObject, ReusableSource {
     super.init()
   }
 
-  public var containerView: Container? {
+  open var containerView: Container? {
     didSet {
       internalInit()
     }

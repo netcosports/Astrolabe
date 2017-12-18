@@ -35,7 +35,7 @@ public extension CollectionViewPager {
 
 open class CollectionViewPagerSource: CollectionViewSource {
 
-  override public var containerView: UICollectionView? {
+  override open var containerView: UICollectionView? {
     didSet {
       internalInit()
     }
@@ -86,7 +86,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     return layout
   }
 
-  public override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  open override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
 
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
@@ -94,7 +94,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
     containerView.isUserInteractionEnabled = true
   }
 
-  public override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+  open override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
     containerView.isUserInteractionEnabled = true
   }

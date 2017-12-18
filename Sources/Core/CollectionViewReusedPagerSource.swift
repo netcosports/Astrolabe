@@ -12,7 +12,7 @@ import RxCocoa
 
 open class CollectionViewReusedPagerSource: CollectionViewSource {
 
-  override public var containerView: UICollectionView? {
+  override open var containerView: UICollectionView? {
     didSet {
       internalInit()
     }
@@ -50,7 +50,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   let disposeBag = DisposeBag()
   fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
 
-  public override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  open override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
 
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
@@ -58,7 +58,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
     containerView.isUserInteractionEnabled = true
   }
 
-  public override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+  open override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
     containerView.isUserInteractionEnabled = true
   }
