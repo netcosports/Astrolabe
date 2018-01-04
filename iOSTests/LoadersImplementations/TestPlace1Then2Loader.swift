@@ -12,6 +12,8 @@ import Nimble
 
 class TestP1T2L: P1T2Loader {
 
+  var throwOnCache = false
+
   typealias P1T2LFirstResult = SingleOptionalResult<TestModel1>
   typealias P1T2LSecondResult1 = SingleOptionalResult<TestModel2>
   typealias P1T2LSecondResult2 = SingleOptionalResult<TestModel3>
@@ -23,6 +25,10 @@ class TestP1T2L: P1T2Loader {
 
   func requests(for loadingIntent: LoaderIntent,
                 from result: TestP1T2L.P1T2LFirstResult) throws -> TestP1T2L.P1T2LSecondRequests {
+    if throwOnCache {
+      throwOnCache = false
+      throw "should throw second requests, sorry"
+    }
     return (
       try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
         .setXPath("args").build(),

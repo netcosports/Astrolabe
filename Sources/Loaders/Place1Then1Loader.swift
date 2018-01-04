@@ -25,25 +25,28 @@ public func load<T: P1T1Loader>(p1t1Loader loader: T, intent: LoaderIntent) -> S
     let request = try loader.request(for: intent)
 
     let cached = Gnomon.cachedModels(for: request).flatMap { [weak loader] res1 -> SectionObservable in
-      guard let request = try loader?.request(for: intent, from: res1.result) else { return .just(nil) }
+      guard let loader = loader else { return .just(nil) }
+      guard let request = try? loader.request(for: intent, from: res1.result) else { return .just(nil) }
       return Gnomon.cachedModels(for: request).flatMap { [weak loader] res2 -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         let results = (res1.result, res2.result)
-        return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+        return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
           loader?.didReceive(results: results, loadingIntent: intent)
         }).subscribeOn(MainScheduler.instance)
       }
     }
 
     let http = Gnomon.models(for: request).flatMap { [weak loader] res1 -> SectionObservable in
-      guard let request = try loader?.request(for: intent, from: res1.result) else {
-        throw "loader is equal to nil"
-      }
+      guard let loader = loader else { return .just(nil) }
+      let request = try loader.request(for: intent, from: res1.result)
+
       return Gnomon.models(for: request).flatMap { [weak loader] res2 -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         if res1.responseType == .httpCache && res2.responseType == .httpCache {
           return .empty()
         } else {
           let results = (res1.result, res2.result)
-          return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+          return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
             loader?.didReceive(results: results, loadingIntent: intent)
           }).subscribeOn(MainScheduler.instance)
         }

@@ -25,35 +25,38 @@ public func load<T: P1T2Loader>(p1t2Loader loader: T, intent: LoaderIntent) -> S
     let request = try loader.request(for: intent)
 
     let cached = Gnomon.cachedModels(for: request).flatMap { [weak loader] response -> SectionObservable in
-      guard let (request1, request2) = try loader?.requests(for: intent, from: response.result) else {
+      guard let loader = loader else { return .just(nil) }
+      guard let (request1, request2) = try? loader.requests(for: intent, from: response.result) else {
         return .just(nil)
       }
       let observable1 = Gnomon.cachedModels(for: request1)
       let observable2 = Gnomon.cachedModels(for: request2)
 
       return Observable.zip(observable1, observable2).flatMap { [weak loader] res1, res2 -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         let results = (response.result, res1.result, res2.result)
-        return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+        return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
           loader?.didReceive(results: results, loadingIntent: intent)
         }).subscribeOn(MainScheduler.instance)
       }
     }
 
     let http = Gnomon.models(for: request).flatMap { [weak loader] response -> SectionObservable in
-      guard let (request1, request2) = try loader?.requests(for: intent, from: response.result) else {
-        throw "loader is equal to nil"
-      }
+      guard let loader = loader else { return .just(nil) }
+      let (request1, request2) = try loader.requests(for: intent, from: response.result)
+
       let observable1 = Gnomon.models(for: request1)
       let observable2 = Gnomon.models(for: request2)
 
       let zip = Observable.zip(observable1, observable2)
 
       return zip.flatMap { [weak loader] res1, res2 -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         if response.responseType == .httpCache && res1.responseType == .httpCache && res2.responseType == .httpCache {
           return .empty()
         } else {
           let results = (response.result, res1.result, res2.result)
-          return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+          return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
             loader?.didReceive(results: results, loadingIntent: intent)
           }).subscribeOn(MainScheduler.instance)
         }

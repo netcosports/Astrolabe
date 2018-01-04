@@ -28,11 +28,13 @@ public func load<T: P2T1Loader>(p2t1Loader loader: T, intent: LoaderIntent) -> S
 
     let cachedZip = Observable.zip(Gnomon.cachedModels(for: request1), Gnomon.cachedModels(for: request2))
     let cached = cachedZip.flatMap { [weak loader] res1, res2 -> SectionObservable in
-      guard let request = try loader?.request(for: intent, from: (res1.result, res2.result)) else { return .just(nil) }
-      let observable = Gnomon.cachedModels(for: request)
-      return observable.flatMap { [weak loader] res -> SectionObservable in
+      guard let loader = loader else { return .just(nil) }
+
+      guard let request = try? loader.request(for: intent, from: (res1.result, res2.result)) else { return .just(nil) }
+      return Gnomon.cachedModels(for: request).flatMap { [weak loader] res -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         let results = (res1.result, res2.result, res.result)
-        return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+        return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
           loader?.didReceive(results: results, loadingIntent: intent)
         }).subscribeOn(MainScheduler.instance)
       }
@@ -40,14 +42,16 @@ public func load<T: P2T1Loader>(p2t1Loader loader: T, intent: LoaderIntent) -> S
 
     let httpZip = Observable.zip(Gnomon.models(for: request1), Gnomon.models(for: request2))
     let http = httpZip.flatMap { [weak loader] res1, res2 -> SectionObservable in
-      guard let request = try loader?.request(for: intent, from: (res1.result, res2.result)) else { return .just(nil) }
-      let observable = Gnomon.models(for: request)
-      return observable.flatMap { [weak loader] res -> SectionObservable in
+      guard let loader = loader else { return .just(nil) }
+
+      let request = try loader.request(for: intent, from: (res1.result, res2.result))
+      return Gnomon.models(for: request).flatMap { [weak loader] res -> SectionObservable in
+        guard let loader = loader else { return .just(nil) }
         if res.responseType == .httpCache {
           return .empty()
         } else {
           let results = (res1.result, res2.result, res.result)
-          return Observable.just(loader?.sections(from: results, loadingIntent: intent)).do(onNext: { _ in
+          return Observable.just(loader.sections(from: results, loadingIntent: intent)).do(onNext: { [weak loader] _ in
             loader?.didReceive(results: results, loadingIntent: intent)
           }).subscribeOn(MainScheduler.instance)
         }

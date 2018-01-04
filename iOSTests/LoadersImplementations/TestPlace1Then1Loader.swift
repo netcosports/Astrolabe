@@ -15,6 +15,8 @@ class TestP1T1L: P1T1Loader {
   typealias P1T1LFirstResult = SingleOptionalResult<TestModel1>
   typealias P1T1LSecondResult = SingleOptionalResult<TestModel2>
 
+  var throwOnCache = false
+
   func request(for loadingIntent: LoaderIntent) throws -> TestP1T1L.P1T1LFirstRequest {
     return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id1": "123"])
       .setXPath("args").build()
@@ -22,6 +24,10 @@ class TestP1T1L: P1T1Loader {
 
   func request(for loadingIntent: LoaderIntent,
                from result: TestP1T1L.P1T1LFirstResult) throws -> TestP1T1L.P1T1LSecondRequest {
+    if throwOnCache {
+      throwOnCache = false
+      throw "should throw second request, sorry"
+    }
     return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
       .setXPath("args").build()
   }
