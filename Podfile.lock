@@ -11,29 +11,29 @@ PODS:
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (3.0.3):
-    - Gnomon/JSON (= 3.0.3)
-  - Gnomon/Core (3.0.3):
+  - Gnomon (3.1.1):
+    - Gnomon/JSON (= 3.1.1)
+  - Gnomon/Core (3.1.1):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/JSON (3.0.3):
+  - Gnomon/JSON (3.1.1):
     - Gnomon/Core
-    - SwiftyJSON (~> 3.0)
-  - Nimble (7.0.2)
-  - RxBlocking (4.0.0):
+    - SwiftyJSON (~> 4.0)
+  - Nimble (7.0.3)
+  - RxBlocking (4.1.0):
     - RxSwift (~> 4.0)
-  - RxCocoa (4.0.0):
+  - RxCocoa (4.1.0):
     - RxSwift (~> 4.0)
-  - RxSwift (4.0.0)
-  - RxTest (4.0.0):
+  - RxSwift (4.1.0)
+  - RxTest (4.1.0):
     - RxSwift (~> 4.0)
   - SnapKit (4.0.0)
-  - SwiftyJSON (3.1.4)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon (from `https://github.com/netcosports/Gnomon`)
+  - Gnomon
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
@@ -41,26 +41,19 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: .
-  Gnomon:
-    :git: https://github.com/netcosports/Gnomon
-
-CHECKOUT OPTIONS:
-  Gnomon:
-    :commit: 2783ed4591d3ea113265feec438cd6d46727fd0e
-    :git: https://github.com/netcosports/Gnomon
 
 SPEC CHECKSUMS:
   Astrolabe: 2a6dc0bacbaa4e2931a81063b046deb045ed7ab2
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: af3f34fe38baed086074c14059ec3cc2ca05aff7
-  Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
-  RxBlocking: 923c2c8106d80d7c2d6b276afd66ce3b10824836
-  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
-  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
-  RxTest: 0041e792cede35e53e4749f378d21482af0e9d12
+  Gnomon: 05a0b538c8043f149c798a78605461ee5583c38d
+  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
+  RxBlocking: 193d33fad26f00a4e60831481938486deaaaa200
+  RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
+  RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
+  RxTest: cc62dd7e02049f21dfc910d0c4ca8fee1ecd4f74
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: df128edb1e7f571a867666cae18e834eacd5732b
+PODFILE CHECKSUM: 0a3c77e18272fc55f512f629fb44d9a6e40e8f3c
 
 COCOAPODS: 1.3.1
