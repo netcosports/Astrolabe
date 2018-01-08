@@ -18,7 +18,7 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: 
   where Controller: ReusedPageData {
 
   public typealias Data = Controller.PageData
-  var viewController = Controller()
+  public var viewController = Controller()
 
   public func setup(with data: Data) {
     containerViewController?.addChildViewController(viewController)
