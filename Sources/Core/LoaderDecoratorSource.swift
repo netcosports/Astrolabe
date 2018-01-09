@@ -82,7 +82,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     load(.pullToRefresh)
   }
 
-  public func appear() {
+  open func appear() {
     switch state {
     case .notInitiated:
       state = .initiated
@@ -98,7 +98,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     }
   }
 
-  public func disappear() {
+  open func disappear() {
     if !loadingBehavior.contains(.autoupdateBackground) {
       timerDisposeBag = nil
     }
