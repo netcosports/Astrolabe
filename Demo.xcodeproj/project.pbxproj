@@ -16,6 +16,8 @@
 		B50EFAD91F0CC27E00D31FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */; };
 		B50EFADC1F0CC27E00D31FD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B50EFADA1F0CC27E00D31FD6 /* LaunchScreen.storyboard */; };
 		B529147F1F90F61B00E02181 /* ThreadingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B529147E1F90F61B00E02181 /* ThreadingSpec.swift */; };
+		B5484EF220079FF5005245F0 /* TestContextPlainLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5484EF120079FF5005245F0 /* TestContextPlainLoader.swift */; };
+		B5484EF320079FF5005245F0 /* TestContextPlainLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5484EF120079FF5005245F0 /* TestContextPlainLoader.swift */; };
 		B5716ED01F0CC358005146DB /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5716EE31F0CC35D005146DB /* TestMultipleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ED21F0CC35D005146DB /* TestMultipleLoader.swift */; };
 		B5716EE41F0CC35D005146DB /* TestPlace1Then1Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ED31F0CC35D005146DB /* TestPlace1Then1Loader.swift */; };
@@ -100,6 +102,7 @@
 		B50EFADB1F0CC27E00D31FD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B50EFADD1F0CC27E00D31FD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B529147E1F90F61B00E02181 /* ThreadingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadingSpec.swift; sourceTree = "<group>"; };
+		B5484EF120079FF5005245F0 /* TestContextPlainLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContextPlainLoader.swift; sourceTree = "<group>"; };
 		B5716EC71F0CC307005146DB /* iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5716ECB1F0CC307005146DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5716ECF1F0CC358005146DB /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Common.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -263,6 +266,7 @@
 		B5716ED11F0CC35D005146DB /* LoadersImplementations */ = {
 			isa = PBXGroup;
 			children = (
+				B5484EF120079FF5005245F0 /* TestContextPlainLoader.swift */,
 				B5716ED21F0CC35D005146DB /* TestMultipleLoader.swift */,
 				B5716ED31F0CC35D005146DB /* TestPlace1Then1Loader.swift */,
 				B5716ED41F0CC35D005146DB /* TestPlace1Then2Loader.swift */,
@@ -785,6 +789,7 @@
 				B529147F1F90F61B00E02181 /* ThreadingSpec.swift in Sources */,
 				B5716EE31F0CC35D005146DB /* TestMultipleLoader.swift in Sources */,
 				B5716EF21F0CC35D005146DB /* PlainLoaderSpec.swift in Sources */,
+				B5484EF220079FF5005245F0 /* TestContextPlainLoader.swift in Sources */,
 				B5716ED01F0CC358005146DB /* Common.swift in Sources */,
 				B5716EE91F0CC35D005146DB /* TestPlainLoader.swift in Sources */,
 				B5716EEA1F0CC35D005146DB /* TextMixedLoader.swift in Sources */,
@@ -841,6 +846,7 @@
 				B5775C9F1F16A7E400E484A6 /* TestPlace3Loader.swift in Sources */,
 				B5775C9E1F16A7E400E484A6 /* TestPlace2Then1Loader.swift in Sources */,
 				B5775CA41F16A7E900E484A6 /* Place1Then1LoaderSpec.swift in Sources */,
+				B5484EF320079FF5005245F0 /* TestContextPlainLoader.swift in Sources */,
 				B5775C9D1F16A7E400E484A6 /* TestPlace2Loader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
