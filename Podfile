@@ -8,6 +8,7 @@ abstract_target 'Astrolabe' do
 
   target 'Demo' do
     platform :ios, '9.0'
+    pod 'SnapKit'
   end
 
   target 'DemoTV' do

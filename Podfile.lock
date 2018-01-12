@@ -4,7 +4,6 @@ PODS:
   - Astrolabe/Core (3.0.7):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-    - SnapKit (~> 4.0)
   - Astrolabe/Loaders (3.0.7):
     - Astrolabe/Core
     - Gnomon/Core (~> 3.0)
@@ -37,13 +36,14 @@ DEPENDENCIES:
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
+  - SnapKit
 
 EXTERNAL SOURCES:
   Astrolabe:
     :path: .
 
 SPEC CHECKSUMS:
-  Astrolabe: 2a6dc0bacbaa4e2931a81063b046deb045ed7ab2
+  Astrolabe: 995e6de7a743908cb32121e9693ebae49fe382a8
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 05a0b538c8043f149c798a78605461ee5583c38d
   Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
@@ -54,6 +54,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 0a3c77e18272fc55f512f629fb44d9a6e40e8f3c
+PODFILE CHECKSUM: 60898b567b89dd1cdd7faa43646317cd362a350f
 
 COCOAPODS: 1.3.1

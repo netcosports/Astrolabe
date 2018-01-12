@@ -22,7 +22,6 @@ Pod::Spec.new do |s|
 
     sub.dependency 'RxSwift', '~> 4.0'
     sub.dependency 'RxCocoa', '~> 4.0'
-    sub.dependency 'SnapKit', '~> 4.0'
   end
 
   s.subspec 'Loaders' do |sub|

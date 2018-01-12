@@ -8,7 +8,6 @@
 
 import UIKit
 import Astrolabe
-import SnapKit
 
 class SelectionCollectionViewController: BasicExampleCollectionViewController {
 

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 struct PagerViewModel {
   let viewController: UIViewController
@@ -22,7 +21,12 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
     self.data = data
     containerViewController?.addChildViewController(data.viewController)
     contentView.addSubview(data.viewController.view)
-    data.viewController.view.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+    data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
+                                                              views: ["content": data.viewController.view]))
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
+                                                              views: ["content": data.viewController.view]))
   }
 
   static func size(for data: PagerViewModel, containerSize: CGSize) -> CGSize {

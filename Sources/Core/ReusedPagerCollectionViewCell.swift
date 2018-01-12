@@ -23,7 +23,12 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: 
   public func setup(with data: Data) {
     containerViewController?.addChildViewController(viewController)
     contentView.addSubview(viewController.view)
-    viewController.view.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+    viewController.view.translatesAutoresizingMaskIntoConstraints = false
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
+                                                              views: ["content": viewController.view]))
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
+                                                              views: ["content": viewController.view]))
     contentView.layoutIfNeeded()
 
     if viewController.data != data {
