@@ -171,15 +171,13 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     (view as? TableViewHeaderFooter)?.endDisplay()
   }
 
-  private func supplementary(_ tableView: UITableView, header: Bool, at section: Int) -> TableViewHeaderFooter {
+  private func supplementary(_ tableView: UITableView, header: Bool, at section: Int) -> TableViewHeaderFooter? {
     let section = sections[section]
     var type = CellType.header
     if !header {
       type = .footer
     }
-    guard let supplementary = section.supplementary(for: type) else {
-      fatalError("Section does not have supplementary view")
-    }
+    guard let supplementary = section.supplementary(for: type) else { return nil }
     let supplementaryView: TableViewHeaderFooter = supplementary.instance(for: tableView, index: IndexPath())
     setupCell(headerView: supplementaryView, cell: supplementary)
     supplementary.setup(with: supplementaryView)
