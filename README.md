@@ -20,7 +20,7 @@ pod 'Astrolabe', '~> 3.0'
 
 ## 1. Getting started
 
-Each cell in Astrolabe should be configured with viewModel. For example:
+Each cell in Astrolabe should be configured with ViewModel. For example:
 
 ```swift
 struct TestViewModel {
@@ -29,7 +29,7 @@ struct TestViewModel {
 }
 ```
 
-To use cell in Astrolabe dataSource your cell should be inherited from base Astrolabe cell. To make initial cell configuration you could use setup() method:
+To use cell in Astrolabe your cell should be inherited from base Astrolabe cell. To make initial cell configuration you should use ```setup()``` method:
 
 ```swift
 class TestCollectionCell: CollectionViewCell {
@@ -51,7 +51,7 @@ class TestCollectionCell: CollectionViewCell {
 }
 ```
 
-To let library reuse your cell, it should be conform to Reusable protocol:
+To let library reuse your cell, it must conform to ```Reusable``` protocol:
 
 ```swift
 extension TestCollectionCell: Reusable {
@@ -66,7 +66,7 @@ extension TestCollectionCell: Reusable {
 }
 ```
 
-Also, Reusable protocol has method to provide reuse id which used for cell class registration id. But by default class name is used for this:
+Also, ```Reusable``` protocol has method to provide reuse id, which is used for cell class registration. But by default class name is used for this:
 
 ```swift
 public extension Reusable {
@@ -76,7 +76,7 @@ public extension Reusable {
 }
 ```
 
-Now your cell is able to be used in Astrolabe dataSource. Library has different types of sources for different purposes(explained below). So, your recycle container(UITableView or UICollectionView) can be configured with different types of sources. For example basic collection view source for static cells setup:
+Now your cell is able to be used in Astrolabe DataSource. Library has different types of sources for different purposes(explained below). So, your recycle container(```UITableView``` or ```UICollectionView```) can be configured with different types of sources. For example basic collection view source for static cells setup:
 
 ```swift
 let containerView = CollectionView<CollectionViewSource>()
@@ -84,7 +84,7 @@ let containerView = CollectionView<CollectionViewSource>()
 
 ## 1. Static usage
 
-To connect viewmodel with reusable cells you should define container which conforms to ```Cellable ``` protocol:
+To connect ViewModel with reusable cells you should define container which conforms to ```Cellable ``` protocol:
 
 ```swift
 typealias Cell = CollectionCell<TestCollectionCell>
@@ -100,7 +100,7 @@ let cell: Cellable = Cell(data: TestViewModel("Test1"))
 
 ### 1.2 Sectionable
 
-All UI sections represents to Sectionable protocol here. Here is few examples of Sectionable implementations:
+All UI sections represents to ```Sectionable``` protocol here. Here are few examples of ```Sectionable``` implementations:
 
 ```swift
 class Section: Sectionable {}
@@ -140,11 +140,11 @@ public enum SelectionBehavior {
 
 **TODO: image result**
 
-Traditional selection management(using IndexPath) can not always be applied, in case of async loading content for example.
+Traditional selection management(using ```IndexPath```) can not always be applied, in case of async loading content for example.
 
 ### 1.5 Custom base UICollectionView cell usage
 
-Sometimes you need to use your custom UICollectionViewCell(from some libraries for example). And it's also possible with Astrolabe. You only need to define GenericCollectionViewSource with you custom cell:
+Sometimes you need to use your custom ```UICollectionViewCell```(from some libraries for example). And it's also possible with Astrolabe. You only need to define ```GenericCollectionViewSource``` with you custom cell:
 
 ```swift
 typealias CustomSource = GenericCollectionViewSource<MyCustomCollectionViewCell>
@@ -159,7 +159,7 @@ Since each cell has unique identifier we could build expandable source on top of
 let containerView = TableView<TableViewExpandableSource>()
 ```
 
-To configure set of child cells you should use special expandable cells which, for sure, conforms to cellable protocol and can be used as child cell:
+To configure set of child cells you should use special expandable cells which, for sure, conforms to ```Cellable``` protocol and can be used as child cell:
 
 ```swift
 typealias Expandable = ExpandableCollectionViewCell<TestCollectionCell>
@@ -216,7 +216,7 @@ Dynamic count of cells with embeded view controllers which can be reused. It's a
 let containerView = CollectionView<CollectionViewReusedPagerSource>()
 ```
 
-Item ViewController should be conforms to ```ReusedPageData``` protocol:
+Item ViewController must conform to ```ReusedPageData``` protocol:
 
 ```swift
 class ExampleReusePagerItemViewController: UIViewController, ReusedPageData {
@@ -229,7 +229,7 @@ class ExampleReusePagerItemViewController: UIViewController, ReusedPageData {
 }
 ```
 
-Just provide set of cells over section variable in source:
+Just provide a set of cells over section variable in source:
 
 ```swift
 typealias CellView = ReusedPagerCollectionViewCell<ExampleReusePagerItemViewController>
@@ -241,14 +241,14 @@ source.sections = [Section(cells: cells)]
 
 ## 4. Loader decorator
 
-Astrolabe provides great way to load async content into recycle container. Since your content can be used with different dataSources, we provided ```LoaderDecoratorSource``` which wraps target dataSource and provide same interface. For example:
+Astrolabe provides great way to load async content into recycle container. Since your content can be used with different DataSources, we provided ```LoaderDecoratorSource``` which wraps target DataSource and provide same interface. For example:
 
 ```swift
 let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
 ```
 
 To integrate loader into your code you only need:
-1. implement Loader protocol:
+1. implement ```Loader``` protocol:
 
 ```swift
 extension BasicDataExampleCollectionViewController: Loader {
@@ -261,7 +261,7 @@ extension BasicDataExampleCollectionViewController: Loader {
 }
 ```
 
-Where based on LoaderIntent you can return necessary observable. Here is the list of supported intents:
+Where based on ```LoaderIntent``` you can return necessary observable. Here is the list of supported intents:
 
 ```swift
 public enum LoaderIntent {
@@ -328,7 +328,7 @@ public protocol PLoader: class {
 }
 ```
 
-And then in LoaderProtocol implementation just return:
+And then in ```LoaderProtocol``` implementation just return:
 
 ```swift
   func performLoading(intent: LoaderIntent) -> SectionObservable? {
