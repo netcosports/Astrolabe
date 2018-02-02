@@ -211,6 +211,12 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
+  open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+  }
+
+  open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+  }
+
   open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
   }
 

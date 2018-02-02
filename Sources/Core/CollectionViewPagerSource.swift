@@ -50,12 +50,13 @@ open class CollectionViewPagerSource: CollectionViewSource {
 
     selectedItem.asObservable().skip(1).observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] index in
-        guard let strongSelf = self else { return }
-        guard let containerView = strongSelf.containerView else { return }
+        guard let `self` = self else { return }
+        guard let containerView = self.containerView else { return }
 
         let offset = CGPoint(x: CGFloat(index) * containerView.frame.width, y: 0)
         if offset == containerView.contentOffset { return }
 
+        self.beginAppearanceTransition()
         containerView.setContentOffset(offset, animated: true)
         containerView.isUserInteractionEnabled = false
       }).disposed(by: disposeBag)
@@ -86,16 +87,88 @@ open class CollectionViewPagerSource: CollectionViewSource {
     return layout
   }
 
-  open override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  private weak var appearing: PagerCollectionViewCell?
+  private weak var disappearing: PagerCollectionViewCell?
+
+  open override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    beginAppearanceTransition()
+  }
+
+  open override func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
 
-    let page = Int(containerView.contentOffset.x / containerView.frame.width)
-    selectedItem.onNext(page)
-    containerView.isUserInteractionEnabled = true
+    let visibleCells = containerView.visibleCells
+
+    if let disappearing = disappearing, visibleCells.count == 2 {
+      if let appearing = appearing {
+        let newCells = visibleCells.filter { $0 != disappearing && $0 != appearing }
+
+        guard newCells.count == 1 else { return }
+
+        disappearing.didDisappear()
+        appearing.willDisappear()
+
+        self.disappearing = appearing
+        self.appearing = newCells[0] as? PagerCollectionViewCell
+
+        self.appearing?.willAppear()
+      } else {
+        let newIndexPaths = visibleCells.filter { $0 != disappearing }
+
+        guard newIndexPaths.count == 1 else { return assertionFailure() }
+        appearing = newIndexPaths[0] as? PagerCollectionViewCell
+
+        disappearing.willDisappear()
+        appearing?.willAppear()
+      }
+    }
+  }
+
+  open override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    finishAppearanceTransition()
   }
 
   open override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    finishAppearanceTransition()
+  }
+
+  private func beginAppearanceTransition() {
     guard let containerView = containerView else { return }
+
+    let visibleCells = containerView.visibleCells
+    guard !visibleCells.isEmpty else { return }
+
+    disappearing = visibleCells[0] as? PagerCollectionViewCell
+  }
+
+  private func finishAppearanceTransition() {
+    guard let containerView = containerView else { return }
+
+    if let visible = containerView.visibleCells.first(where: { $0.frame.origin.x == containerView.contentOffset.x }) {
+      if visible == appearing {
+        disappearing?.didDisappear()
+        disappearing = nil
+
+        appearing?.didAppear()
+        appearing = nil
+      } else if visible == disappearing {
+        appearing?.willDisappear()
+        appearing?.didDisappear()
+        appearing = nil
+
+        disappearing?.willAppear(isCancelled: true)
+        disappearing?.didAppear()
+        disappearing = nil
+      } else {
+        print("WAT")
+      }
+    } else {
+      print("WAT")
+    }
+
+    let page = Int(containerView.contentOffset.x / containerView.frame.width)
+
+    selectedItem.onNext(page)
     containerView.isUserInteractionEnabled = true
   }
 }

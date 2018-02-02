@@ -19,15 +19,25 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
 
   func setup(with data: PagerViewModel) {
     self.data = data
-    containerViewController?.addChildViewController(data.viewController)
-    contentView.addSubview(data.viewController.view)
 
-    data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
-    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
-                                                              views: ["content": data.viewController.view]))
-    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
-                                                              views: ["content": data.viewController.view]))
+    if data.viewController.view.superview != contentView {
+      data.viewController.beginAppearanceTransition(true, animated: true)
+
+      containerViewController?.addChildViewController(data.viewController)
+      contentView.addSubview(data.viewController.view)
+
+      data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
+      contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
+                                                                views: ["content": data.viewController.view]))
+      contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
+                                                                views: ["content": data.viewController.view]))
+      shouldCallWillAppear = false
+    } else {
+      shouldCallWillAppear = true
+    }
   }
+
+  private var shouldCallWillAppear = false
 
   static func size(for data: PagerViewModel, containerSize: CGSize) -> CGSize {
     return containerSize
@@ -37,20 +47,31 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
     return data.cellId
   }
 
-  open override func willDisplay() {
-    super.willDisplay()
-    if let data = data {
-      guard let containerViewController = containerViewController else { return }
-      data.viewController.didMove(toParentViewController: containerViewController)
-    }
+  func willAppear(isCancelled: Bool = false) {
+    guard shouldCallWillAppear || isCancelled else { return }
+    data?.viewController.beginAppearanceTransition(true, animated: true)
   }
 
-  open override func endDisplay() {
-    super.endDisplay()
-    if let data = data {
-      data.viewController.willMove(toParentViewController: nil)
-      data.viewController.view.removeFromSuperview()
-      data.viewController.removeFromParentViewController()
-    }
+  func didAppear() {
+    data?.viewController.endAppearanceTransition()
+
+    guard let containerViewController = containerViewController else { return }
+    data?.viewController.didMove(toParentViewController: containerViewController)
   }
+
+  func willDisappear() {
+    guard let data = data else { return }
+    data.viewController.beginAppearanceTransition(false, animated: true)
+  }
+
+  func didDisappear() {
+    guard let data = data else { return }
+    data.viewController.endAppearanceTransition()
+  }
+
+  override var debugDescription: String {
+    guard let data = data else { return super.debugDescription }
+    return super.debugDescription + " " + data.cellId
+  }
+
 }
