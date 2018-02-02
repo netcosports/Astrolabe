@@ -76,7 +76,7 @@ public extension Reusable {
 }
 ```
 
-Now your cell is able to be used in Astrolabe dataSource. Library has different types of sources for different purposes(explained below). So, your recycle container(UITableView or UICollectionView) can be configured with different types of sources. Foe example basic collection view source for static cells setup:
+Now your cell is able to be used in Astrolabe dataSource. Library has different types of sources for different purposes(explained below). So, your recycle container(UITableView or UICollectionView) can be configured with different types of sources. For example basic collection view source for static cells setup:
 
 ```swift
 let containerView = CollectionView<CollectionViewSource>()
@@ -103,17 +103,17 @@ let cell: Cellable = Cell(data: TestViewModel("Test1"))
 All UI sections represents to Sectionable protocol here. Here is few examples of Sectionable implementations:
 
 ```swift
-class Section: Sectionable
-class HeaderSection<Container, CellView: ReusableView & Reusable>: Section
-class CustomHeaderSection<CellView: ReusableView & Reusable>: Section
-class FooterSection<Container, CellView: ReusableView & Reusable>: Section
+class Section: Sectionable {}
+class HeaderSection<Container, CellView: ReusableView & Reusable>: Section {}
+class CustomHeaderSection<CellView: ReusableView & Reusable>: Section {}
+class FooterSection<Container, CellView: ReusableView & Reusable>: Section {}
 ```
 
 Section can contain header, footer(or both of them) or custom supplementary view. All sections store array of cells represented items inside this section.
 
 ### 1.3 Data source setup
 
-Configured cells should be pack cells into sections and provided inside data source:
+Configured cells should be packed into sections and provided inside data source:
 
 ```swift
 let section: Sectionable = Section(cells: [cell])
@@ -140,14 +140,15 @@ public enum SelectionBehavior {
 
 **TODO: image result**
 
-Traditional selection management can not always be applied, because of, for example, async loading content.
+Traditional selection management(using IndexPath) can not always be applied, in case of async loading content for example.
 
 ### 1.5 Custom base UICollectionView cell usage
 
-Sometimes you need to use your custom UICollectionViewCell(some libraries implementation for example). And it's also possible with Astrolabe. You only need to define GenericCollectionViewSource with you custom cell:
+Sometimes you need to use your custom UICollectionViewCell(from some libraries for example). And it's also possible with Astrolabe. You only need to define GenericCollectionViewSource with you custom cell:
 
 ```swift
 typealias CustomSource = GenericCollectionViewSource<MyCustomCollectionViewCell>
+let containerView = CollectionView<CustomSource>()
 ```
 
 ## 2. Expandable data source
@@ -158,7 +159,7 @@ Since each cell has unique identifier we could build expandable source on top of
 let containerView = TableView<TableViewExpandableSource>()
 ```
 
-To configure set of child cells you should use special expandable cells which, off course, conforms to cellable protocol and can be used as child cell:
+To configure set of child cells you should use special expandable cells which, for sure, conforms to cellable protocol and can be used as child cell:
 
 ```swift
 typealias Expandable = ExpandableCollectionViewCell<TestCollectionCell>
@@ -175,7 +176,7 @@ let expandable = Expandable(data: TestViewModel("root cell"), expandableCells: c
 
 ## 3. Pager
 
-Another two source types can be used for paging navigation between pages. Astrolabe provide two types of them:
+Another two source types can be used for navigation between pages. Astrolabe provide two types of them:
 
 ### 3.1 Static pager
 
@@ -205,11 +206,11 @@ class PagerViewController: UIViewController, CollectionViewPager {
 }
 ```
 
-All cells will be created automatically and all lifecycle methods of child view controllers will be called in correct order.
+All cells will be created automatically by dataSource and all lifecycle methods of child view controllers will be called in correct order.
 
 ### 3.2 Reused cells pager
 
-Dynamic count of cells with embeded view controllers which can be reused. It's also very easy to use this actually:
+Dynamic count of cells with embeded view controllers which can be reused. It's also very easy to use actually:
 
 ```swift
 let containerView = CollectionView<CollectionViewReusedPagerSource>()
@@ -240,7 +241,7 @@ source.sections = [Section(cells: cells)]
 
 ## 4. Loader decorator
 
-Astrolabe provides great way to load async content into recycle container. Since your content can be used with different dataSources, we provided Loader decorator which wraps target dataSource and provide same interface. For example:
+Astrolabe provides great way to load async content into recycle container. Since your content can be used with different dataSources, we provided ```LoaderDecoratorSource``` which wraps target dataSource and provide same interface. For example:
 
 ```swift
 let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
