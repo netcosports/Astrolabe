@@ -43,6 +43,17 @@ struct TestModel3: JSONModel {
 
 }
 
+struct TestModel4: JSONModel {
+
+  let id: String
+
+  init(_ json: JSON) throws {
+    guard let _id = json["id3"].string else { throw "can't parse id" }
+    id = _id
+  }
+
+}
+
 class TestViewCell: CollectionViewCell, Reusable {
 
   struct ViewModel {
@@ -58,6 +69,10 @@ class TestViewCell: CollectionViewCell, Reusable {
 
     init(_ model: TestModel3) {
       id = model.id
+    }
+
+    init(_ model: TestModel4, context: String) {
+      id = context + model.id
     }
   }
 
