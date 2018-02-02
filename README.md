@@ -120,7 +120,9 @@ let section: Sectionable = Section(cells: [cell])
 containerView.source.sections = [section]
 ```
 
-**TODO: image result**
+<p align="center">
+  <img src="docs/collectionview.png" width="320"/>
+</p>
 
 ### 1.4 Selection
 
@@ -138,7 +140,9 @@ public enum SelectionBehavior {
 }
 ```
 
-**TODO: image result**
+<p align="center">
+  <img src="docs/selection.gif" width="320"/>
+</p>
 
 Traditional selection management(using ```IndexPath```) can not always be applied, in case of async loading content for example.
 
@@ -172,7 +176,9 @@ let cells: [Cellable] = [subCell1, subCell2, subCell3]
 let expandable = Expandable(data: TestViewModel("root cell"), expandableCells: cells)
 ```
 
-**TODO: image result. gif???**
+<p align="center">
+  <img src="docs/expandable.gif" width="320"/>
+</p>
 
 ## 3. Pager
 
@@ -306,7 +312,9 @@ containerView.source.updateEmptyView = {
 }
 ```
 
-**TODO: image result. gif???**
+<p align="center">
+  <img src="docs/loader.gif" width="320"/>
+</p>
 
 ## 5. Loaders
 
