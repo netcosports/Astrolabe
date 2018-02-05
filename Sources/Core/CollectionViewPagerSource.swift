@@ -144,7 +144,9 @@ open class CollectionViewPagerSource: CollectionViewSource {
   private func finishAppearanceTransition() {
     guard let containerView = containerView else { return }
 
-    if let visible = containerView.visibleCells.first(where: { $0.frame.origin.x == containerView.contentOffset.x }) {
+    if let visible = containerView.visibleCells.min(by: {
+      abs($0.frame.origin.x - containerView.contentOffset.x) < abs($1.frame.origin.x - containerView.contentOffset.x)
+    }) {
       if visible == appearing {
         disappearing?.didDisappear()
         disappearing = nil
