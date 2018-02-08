@@ -349,3 +349,7 @@ And then in ```LoaderProtocol``` implementation just return:
 
 1. Automatic diff calculation
 2. Timeline loader source(two way paging source)
+
+<p align="center">
+  <img src="docs/diagram.svg"/>
+</p>
