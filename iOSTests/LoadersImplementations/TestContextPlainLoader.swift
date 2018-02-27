@@ -10,7 +10,7 @@ import Astrolabe
 import Gnomon
 import Nimble
 
-class TestContextPlainLoader: PLoader {
+class TestContextPlainLoader: PContextLoader {
 
   var didReceiveCount = 0
 
@@ -27,7 +27,7 @@ class TestContextPlainLoader: PLoader {
   func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
     return [Section(cells: [result.model].flatMap { $0 }.map {
-      Cell(data: TestViewCell.ViewModel($0, context: ""))
+      Cell(data: TestViewCell.ViewModel($0, context: context))
     })]
   }
 

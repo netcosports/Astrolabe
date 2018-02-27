@@ -51,7 +51,7 @@ class PlainLoaderSpec: XCTestCase {
   func testPlainLoaderInitialHttpCache() {
     do {
       let loader = TestPL()
-      _ = try Gnomon.models(for: loader.request(for: .initial, context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: .initial)).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(1))
@@ -116,7 +116,7 @@ extension PlainLoaderSpec {
   func testPlainLoaderPagingHttpCache() {
     do {
       let loader = TestPL()
-      _ = try Gnomon.models(for: loader.request(for: .page(page: 2), context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: .page(page: 2))).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: .page(page: 2)).toBlocking().toArray()
       expect(results).to(haveCount(1))
@@ -182,7 +182,7 @@ extension PlainLoaderSpec {
     do {
       let loader = TestPL()
 
-      _ = try Gnomon.models(for: loader.request(for: .autoupdate, context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: .autoupdate)).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: .autoupdate).toBlocking().toArray()
       expect(results).to(haveCount(1))
@@ -248,7 +248,7 @@ extension PlainLoaderSpec {
     do {
       let loader = TestPL()
 
-      _ = try Gnomon.models(for: loader.request(for: .pullToRefresh, context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: .pullToRefresh)).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: .pullToRefresh).toBlocking().toArray()
       expect(results).to(haveCount(1))
@@ -324,7 +324,7 @@ extension PlainLoaderSpec {
 
       let intent: LoaderIntent = .force(keepData: false)
 
-      _ = try Gnomon.models(for: loader.request(for: intent, context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
@@ -393,7 +393,7 @@ extension PlainLoaderSpec {
 
       let intent: LoaderIntent = .force(keepData: true)
 
-      _ = try Gnomon.models(for: loader.request(for: intent, context: ())).toBlocking().toArray()
+      _ = try Gnomon.models(for: loader.request(for: intent)).toBlocking().toArray()
 
       let results = try Astrolabe.load(pLoader: loader, intent: intent).toBlocking().toArray()
       expect(results).to(haveCount(1))
