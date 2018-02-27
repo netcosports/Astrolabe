@@ -53,7 +53,13 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var stopProgress: ProgressClosure?
   public var updateEmptyView: EmptyViewClosure?
   public var autoupdatePeriod = defaultReloadInterval
-  public var loadingBehavior = LoadingBehavior.initial
+  public var loadingBehavior = LoadingBehavior.initial {
+    didSet {
+      if !loadingBehavior.contains(.autoupdate) {
+        timerDisposeBag = nil
+      }
+    }
+  }
   public var lastCellDisplayed: VoidClosure?
 
   public let source = DecoratedSource()
