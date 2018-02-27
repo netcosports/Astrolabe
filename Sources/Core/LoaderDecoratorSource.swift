@@ -55,7 +55,12 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   public var autoupdatePeriod = defaultReloadInterval
   public var loadingBehavior = LoadingBehavior.initial {
     didSet {
-      if !loadingBehavior.contains(.autoupdate) {
+      if loadingBehavior.contains(.autoupdate) {
+        switch state {
+        case .notInitiated: break
+        default: startAutoupdateIfNeeded()
+        }
+      } else {
         timerDisposeBag = nil
       }
     }
