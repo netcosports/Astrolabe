@@ -188,51 +188,40 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
     sectionObservable.observeOn(MainScheduler.instance)
-      .subscribe(
-        onNext: { [weak self] sections in
-          self?.updateSections(newSections: sections)
-        }, onError: { [weak self] error in
-        guard let strongSelf = self else { return }
-        strongSelf.stopProgress?(intent)
+      .subscribe(onNext: { [weak self] sections in
+        self?.updateSections(newSections: sections)
+      }, onError: { [weak self] error in
+        guard let `self` = self else { return }
+        self.stopProgress?(intent)
 
-        switch intent {
-        case .page:
-          if strongSelf.cellsCount > 0 {
-            strongSelf.state = .hasData
-            return
-          }
-        default:
-          ()
-        }
-        strongSelf.state = .error(error)
-        strongSelf.reloadDataWithEmptyDataSet()
+        self.state = self.cellsCount > 0 ? .hasData : .error(error)
+        self.reloadDataWithEmptyDataSet()
       }, onCompleted: { [weak self] in
-        guard let strongSelf = self else { return }
-        strongSelf.stopProgress?(intent)
-        let cellsCountAfterLoad = strongSelf.cellsCount
+        guard let `self` = self else { return }
+        self.stopProgress?(intent)
+        let cellsCountAfterLoad = self.cellsCount
 
         switch intent {
         case .page:
           if cellsCountAfterLoad == cellsCountBeforeLoad {
-            strongSelf.state = .hasData
+            self.state = .hasData
             return
           }
-        default:
-          ()
+        default: break
         }
-        guard let containerView = strongSelf.containerView else { return }
+        guard let containerView = self.containerView else { return }
         if cellsCountAfterLoad == 0 {
-          strongSelf.state = .empty
-          strongSelf.reloadDataWithEmptyDataSet()
+          self.state = .empty
+          self.reloadDataWithEmptyDataSet()
         } else {
-          strongSelf.state = .hasData
-          guard let lastSection = strongSelf.sections.last else { return }
+          self.state = .hasData
+          guard let lastSection = self.sections.last else { return }
           guard let visibleItems = containerView.visibleItems else { return }
-          let sectionsLastIndex = strongSelf.sections.count - 1
+          let sectionsLastIndex = self.sections.count - 1
           let itemsLastIndex = lastSection.cells.count - 1
 
           if visibleItems.contains(where: { $0.section == sectionsLastIndex && $0.item == itemsLastIndex }) {
-            strongSelf.handleLastCellDisplayed()
+            self.handleLastCellDisplayed()
           }
         }
       }).disposed(by: loaderDisposeBag)
