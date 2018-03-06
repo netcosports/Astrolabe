@@ -21,16 +21,7 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
     self.data = data
 
     if data.viewController.view.superview != contentView {
-      data.viewController.beginAppearanceTransition(true, animated: true)
-
-      containerViewController?.addChildViewController(data.viewController)
-      contentView.addSubview(data.viewController.view)
-
-      data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
-      contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
-                                                                views: ["content": data.viewController.view]))
-      contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
-                                                                views: ["content": data.viewController.view]))
+      setupChildView(data)
       shouldCallWillAppear = false
     } else {
       shouldCallWillAppear = true
@@ -47,9 +38,24 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
     return data.cellId
   }
 
+  private func setupChildView(_ data: PagerViewModel) {
+    data.viewController.beginAppearanceTransition(true, animated: true)
+
+    containerViewController?.addChildViewController(data.viewController)
+    contentView.addSubview(data.viewController.view)
+
+    data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
+                                                              views: ["content": data.viewController.view]))
+    contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
+                                                              views: ["content": data.viewController.view]))
+  }
+
   func willAppear(isCancelled: Bool = false) {
     guard shouldCallWillAppear || isCancelled else { return }
-    data?.viewController.beginAppearanceTransition(true, animated: true)
+    guard let data = data else { return }
+
+    setupChildView(data)
   }
 
   func didAppear() {
@@ -66,6 +72,11 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
 
   func didDisappear() {
     guard let data = data else { return }
+
+    data.viewController.willMove(toParentViewController: nil)
+    data.viewController.removeFromParentViewController()
+    data.viewController.view.removeFromSuperview()
+
     data.viewController.endAppearanceTransition()
   }
 
