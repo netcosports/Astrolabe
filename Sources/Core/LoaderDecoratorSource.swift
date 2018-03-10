@@ -171,9 +171,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
       }
     }
 
-    if !needToHandleIntent(intent: intent) {
-      return
-    }
+    guard needToHandleIntent(intent: intent) else { return }
 
     if intent == .force(keepData: false) {
       sections = []
@@ -249,22 +247,23 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
       default:
         // NOTE: the following checking is very important for paging logic,
         // without this logic we will have infinit reloading in case of last page;
-        if updatedSections.count == 0 {
-          return
-        }
-        if updatedSections.count == 1 && updatedSections.first?.cells.count == 0 {
-          return
-        }
-        for updatedSection in updatedSections {
-          let index = sections.index { section in
-            return updatedSection.page == section.page
-          }
-          if let indexToReplace = index {
-            sections[indexToReplace] = updatedSection
+        let hasCells = updatedSections.count != 0 &&
+          !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
+        guard hasCells else { return }
+
+        let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
+        for sectionsByPage in sectionByPages {
+          if let indexToReplace = sections.index(where: { sectionsByPage.key == $0.page }) {
+            sections = sections.filter { $0.page != sectionsByPage.key }
+            let updatedSectionsForPage = sectionsByPage.value.reversed()
+            updatedSectionsForPage.forEach {
+              sections.insert($0, at: indexToReplace)
+            }
           } else {
-            sections.append(updatedSection)
+            sections.append(contentsOf: sectionsByPage.value)
           }
         }
+        sections.sort(by: { $0.page < $1.page })
         registerCellsForSections()
       }
       containerView?.reloadData()
