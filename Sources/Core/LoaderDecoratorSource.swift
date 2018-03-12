@@ -9,6 +9,25 @@
 import UIKit
 import RxSwift
 
+extension Array {
+
+  /// this use a stable sort algorithm
+  ///
+  /// - Parameter areInIncreasingOrder: return nil when two element are equal
+  /// - Returns: the sorted collection
+  public mutating func stableSorted(by areInIncreasingOrder: (Iterator.Element, Iterator.Element) -> Bool?) {
+
+    let sorted = self.enumerated().sorted { (one, another) -> Bool in
+      if let result = areInIncreasingOrder(one.element, another.element) {
+        return result
+      } else {
+        return one.offset < another.offset
+      }
+    }
+    self = sorted.map{ $0.element }
+  }
+}
+
 open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusableSource {
 
   public typealias Container = DecoratedSource.Container
@@ -263,7 +282,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
             sections.append(contentsOf: sectionsByPage.value)
           }
         }
-        sections.sort(by: { $0.page < $1.page })
+        sections.stableSorted(by: {
+          guard $0.page != $1.page else { return nil }
+          return $0.page < $1.page
+        })
         registerCellsForSections()
       }
       containerView?.reloadData()
