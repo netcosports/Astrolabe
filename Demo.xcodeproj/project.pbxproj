@@ -11,6 +11,7 @@
 		75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */; };
 		A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */; };
 		A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5532A9B1F615C4600186A9F /* SelectionViewController.swift */; };
+		AA83646E2056523600883494 /* TimelineLoaderDecoratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA83646D2056523600883494 /* TimelineLoaderDecoratorSpec.swift */; };
 		AAB8C76920516E2A00E91771 /* LoaderDecoratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */; };
 		B47ECCCCF35AD03E59C7F676 /* Pods_Astrolabe_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */; };
 		B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */; };
@@ -97,6 +98,7 @@
 		737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
+		AA83646D2056523600883494 /* TimelineLoaderDecoratorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLoaderDecoratorSpec.swift; sourceTree = "<group>"; };
 		AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderDecoratorSpec.swift; sourceTree = "<group>"; };
 		B50EFACE1F0CC27E00D31FD6 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */,
+				AA83646D2056523600883494 /* TimelineLoaderDecoratorSpec.swift */,
 				B5716EDB1F0CC35D005146DB /* MixedLoaderSpec.swift */,
 				B5716EDC1F0CC35D005146DB /* MultipleLoaderSpec.swift */,
 				B5716EDD1F0CC35D005146DB /* Place1Then1LoaderSpec.swift */,
@@ -791,6 +794,7 @@
 				B5716EEB1F0CC35D005146DB /* MixedLoaderSpec.swift in Sources */,
 				B529147F1F90F61B00E02181 /* ThreadingSpec.swift in Sources */,
 				B5716EE31F0CC35D005146DB /* TestMultipleLoader.swift in Sources */,
+				AA83646E2056523600883494 /* TimelineLoaderDecoratorSpec.swift in Sources */,
 				B5716EF21F0CC35D005146DB /* PlainLoaderSpec.swift in Sources */,
 				B5484EF220079FF5005245F0 /* TestContextPlainLoader.swift in Sources */,
 				B5716ED01F0CC358005146DB /* Common.swift in Sources */,
