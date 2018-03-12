@@ -32,8 +32,6 @@ public typealias ObservableClosure = () -> SectionObservable?
 
 public enum LoaderIntent {
   case initial
-  @available(*, unavailable, renamed: "appearance")
-  case appereance
   case appearance
   case force(keepData: Bool)
   case pullToRefresh
@@ -51,10 +49,10 @@ public func == (lhs: LoaderIntent, rhs: LoaderIntent) -> Bool {
   case (.initial, .initial):
     return true
 
-  case (.appereance, .appereance):
+  case (.pullToRefresh, .pullToRefresh):
     return true
 
-  case (.pullToRefresh, .pullToRefresh):
+  case (.appearance, .appearance):
     return true
 
   case (.autoupdate, .autoupdate):

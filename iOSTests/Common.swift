@@ -59,6 +59,10 @@ class TestViewCell: CollectionViewCell, Reusable {
   struct ViewModel {
     let id: String
 
+    init(_ id: String) {
+      self.id = id
+    }
+
     init(_ model: TestModel1) {
       id = model.id
     }
