@@ -15,7 +15,7 @@ extension Array {
   ///
   /// - Parameter areInIncreasingOrder: return nil when two element are equal
   /// - Returns: the sorted collection
-  public mutating func stableSorted(by areInIncreasingOrder: (Iterator.Element, Iterator.Element) -> Bool?) {
+  public mutating func stableSort(by areInIncreasingOrder: (Iterator.Element, Iterator.Element) -> Bool?) {
 
     let sorted = self.enumerated().sorted { (one, another) -> Bool in
       if let result = areInIncreasingOrder(one.element, another.element) {
@@ -282,7 +282,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
             sections.append(contentsOf: sectionsByPage.value)
           }
         }
-        sections.stableSorted(by: {
+        sections.stableSort(by: {
           guard $0.page != $1.page else { return nil }
           return $0.page < $1.page
         })
