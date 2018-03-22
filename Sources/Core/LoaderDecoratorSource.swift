@@ -134,6 +134,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     }
   }
 
+  open func cancelLoading() {
+    loaderDisposeBag = nil
+  }
+
   public func reloadDataWithEmptyDataSet() {
     containerView?.reloadData()
     updateEmptyView?(state)
@@ -166,7 +170,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     switch state {
     case .loading(let currentIntent):
       if intent == .force(keepData: false) || intent == .pullToRefresh {
-        loaderDisposeBag = nil
+        cancelLoading()
         return true
       } else if currentIntent == intent {
         return false
