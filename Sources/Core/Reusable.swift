@@ -71,6 +71,7 @@ public protocol LoaderReusableSource: ReusableSource {
   func pullToRefresh()
   func appear()
   func disappear()
+  func cancelLoading()
   func reloadDataWithEmptyDataSet()
 }
 
