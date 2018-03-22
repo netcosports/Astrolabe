@@ -136,6 +136,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   open func cancelLoading() {
     loaderDisposeBag = nil
+    state = .initiated
   }
 
   public func reloadDataWithEmptyDataSet() {
