@@ -3,6 +3,7 @@
 Type-safe approach to manage UITableView and UICollectionView cells. Supports expandable, pager and async loaded sources.
 
 [![Build Status](https://travis-ci.org/netcosports/Astrolabe.svg?branch=master)](https://travis-ci.org/netcosports/Astrolabe)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Astrolabe.svg)](http://cocoapods.org/pods/Astrolabe)
 
 # Installation
 
