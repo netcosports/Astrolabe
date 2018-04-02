@@ -3,6 +3,7 @@
 Type-safe approach to manage UITableView and UICollectionView cells. Supports expandable, pager and async loaded sources.
 
 [![Build Status](https://travis-ci.org/netcosports/Astrolabe.svg?branch=master)](https://travis-ci.org/netcosports/Astrolabe)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Astrolabe.svg)](http://cocoapods.org/pods/Astrolabe)
 
 # Installation
 
@@ -318,7 +319,7 @@ containerView.source.updateEmptyView = {
 
 ## 5. Loaders
 
-Astrolabe is the best friend of Gnomon - https://github.com/netcosports/Gnomon :)
+Astrolabe is the best friend of [Gnomon](https://github.com/netcosports/Gnomon) :)
 
 To make loading content easier over REST API using Gnomon we provide special classes called ```Loader``` which connect Astrolabe decorator and Gnomon request. Let's check for example simple plain loader protocol: 
 

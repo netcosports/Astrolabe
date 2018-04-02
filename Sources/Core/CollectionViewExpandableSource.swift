@@ -28,7 +28,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     }
 
     guard let expandableCells = expandableCell.expandableCells else {
-      expandableCell.expanded = !expandableCell.expanded
+      let expanded = !expandableCell.expanded
+      expandableCell.expanded = expanded
       containerView?.reloadData()
       return
     }
@@ -98,7 +99,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     registerCellsForSections()
     containerView?.insertItems(at: indexes)
 
-    expandableCell.expanded = !expandableCell.expanded
+    let expanded = !expandableCell.expanded
+    expandableCell.expanded = expanded
     if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
       containerView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
     }
@@ -145,7 +147,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     registerCellsForSections()
     containerView?.deleteItems(at: indexes)
 
-    expandableCell.expanded = !expandableCell.expanded
+    let expanded = !expandableCell.expanded
+    expandableCell.expanded = expanded
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
   }
 
@@ -192,8 +195,11 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
     registerCellsForSections()
 
-    expandableCell.expanded = !expandableCell.expanded
-    collapseableCell.expanded = !collapseableCell.expanded
+    let expandableExpanded = !expandableCell.expanded
+    expandableCell.expanded = expandableExpanded
+
+    let collapseableExpanded = !collapseableCell.expanded
+    collapseableCell.expanded = collapseableExpanded
 
     let letSection = section
     let letExpandableCell = expandableCell
@@ -262,11 +268,11 @@ open class CollectionViewExpandableSource: CollectionViewSource {
     switch loaderExpandableCellable.state {
     case .notInitiated:
       loaderExpandableCellable.performLoading()?.observeOn(MainScheduler.instance).subscribe(
-      onNext: { [weak self] _ in
-        self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
-      },
-      onError: { [weak self] _ in
-        self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
+        onNext: { [weak self] _ in
+          self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
+        },
+        onError: { [weak self] _ in
+          self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
       }).disposed(by: disposeBag)
     default: break
     }
@@ -274,7 +280,8 @@ open class CollectionViewExpandableSource: CollectionViewSource {
 
   private func updateLoaderCell(loaderExpandableCell: inout LoaderExpandableCellable, indexPath: IndexPath) {
     if !loaderExpandableCell.expanded {
-      loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
+      let cells = loaderExpandableCell.loadedCells
+      loaderExpandableCell.expandableCells = cells
       return
     }
 
@@ -300,12 +307,14 @@ open class CollectionViewExpandableSource: CollectionViewSource {
             section.cells = sectionCells
             self.registerCellsForSections()
             self.containerView?.insertItems(at: indexes)
-            expandableCell.expandableCells = expandableCell.loadedCells
+            let cells = expandableCell.loadedCells
+            expandableCell.expandableCells = cells
           }
         }, completion: nil)
       } else {
         if loaderExpandableCell.expandableCells != nil {
-          loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
+          let cells = loaderExpandableCell.loadedCells
+          loaderExpandableCell.expandableCells = cells
           var expandableCell: ExpandableCellable = loaderExpandableCell
           TableViewExpandableSource.cellAllData(cell: &expandableCell).forEach { id in
             guard let index = sectionCells.index(where: { $0.id == id }) else { return }

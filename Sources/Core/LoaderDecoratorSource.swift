@@ -15,7 +15,7 @@ extension Array {
   ///
   /// - Parameter areInIncreasingOrder: return nil when two element are equal
   /// - Returns: the sorted collection
-  public mutating func stableSorted(by areInIncreasingOrder: (Iterator.Element, Iterator.Element) -> Bool?) {
+  public mutating func stableSort(by areInIncreasingOrder: (Iterator.Element, Iterator.Element) -> Bool?) {
 
     let sorted = self.enumerated().sorted { (one, another) -> Bool in
       if let result = areInIncreasingOrder(one.element, another.element) {
@@ -134,6 +134,11 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     }
   }
 
+  open func cancelLoading() {
+    loaderDisposeBag = nil
+    state = .initiated
+  }
+
   public func reloadDataWithEmptyDataSet() {
     containerView?.reloadData()
     updateEmptyView?(state)
@@ -166,7 +171,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     switch state {
     case .loading(let currentIntent):
       if intent == .force(keepData: false) || intent == .pullToRefresh {
-        loaderDisposeBag = nil
+        cancelLoading()
         return true
       } else if currentIntent == intent {
         return false
@@ -204,18 +209,16 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     startProgress?(intent)
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
+    self.loaderDisposeBag = loaderDisposeBag
     sectionObservable.observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] sections in
         self?.updateSections(newSections: sections)
       }, onError: { [weak self] error in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
-
         self.state = self.cellsCount > 0 ? .hasData : .error(error)
         self.reloadDataWithEmptyDataSet()
       }, onCompleted: { [weak self] in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
         let cellsCountAfterLoad = self.cellsCount
 
         switch intent {
@@ -241,9 +244,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
             self.handleLastCellDisplayed()
           }
         }
+      }, onDisposed: { [weak self] in
+        self?.stopProgress?(intent)
       }).disposed(by: loaderDisposeBag)
 
-    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
 
@@ -282,7 +286,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
             sections.append(contentsOf: sectionsByPage.value)
           }
         }
-        sections.stableSorted(by: {
+        sections.stableSort(by: {
           guard $0.page != $1.page else { return nil }
           return $0.page < $1.page
         })
