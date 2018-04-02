@@ -171,6 +171,28 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     (view as? TableViewHeaderFooter)?.endDisplay()
   }
 
+  open func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    let section = sections[indexPath.section]
+    let cell = section.cells[indexPath.item]
+    return cell.size(with: tableView).height
+  }
+
+  open func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+    let section = sections[section]
+    guard let header = section.supplementary(for: .header) else {
+      return 0.0
+    }
+    return header.size(with: tableView).height
+  }
+
+  open func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+    let section = sections[section]
+    guard let header = section.supplementary(for: .footer) else {
+      return 0.0
+    }
+    return header.size(with: tableView).height
+  }
+
   private func supplementary(_ tableView: UITableView, header: Bool, at section: Int) -> TableViewHeaderFooter? {
     let section = sections[section]
     var type = CellType.header
