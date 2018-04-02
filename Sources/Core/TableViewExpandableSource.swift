@@ -93,7 +93,7 @@ open class TableViewExpandableSource: TableViewSource {
                               sectionCells: &sectionCells,
                               sectionIndex: sectionIndex)
     registerCellsForSections()
-    containerView?.insertRows(at: indexes, with: .top)
+    containerView?.insertRows(at: indexes, with: .automatic)
 
     expandableCell.expanded = !expandableCell.expanded
     if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
@@ -140,7 +140,7 @@ open class TableViewExpandableSource: TableViewSource {
                                 sectionCells: &sectionCells,
                                 sectionIndex: sectionIndex)
     registerCellsForSections()
-    containerView?.deleteRows(at: indexes, with: .top)
+    containerView?.deleteRows(at: indexes, with: .automatic)
 
     expandableCell.expanded = !expandableCell.expanded
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
@@ -205,8 +205,8 @@ open class TableViewExpandableSource: TableViewSource {
 
     containerView?.beginUpdates()
 
-    containerView?.deleteRows(at: collapseIndexes, with: .top)
-    containerView?.insertRows(at: expandIndexes, with: .top)
+    containerView?.deleteRows(at: collapseIndexes, with: .automatic)
+    containerView?.insertRows(at: expandIndexes, with: .automatic)
 
     containerView?.endUpdates()
 
@@ -228,7 +228,7 @@ open class TableViewExpandableSource: TableViewSource {
       cell.setup(with: cellView)
     } else {
       UIView.performWithoutAnimation {
-        self.containerView?.reloadRows(at: [indexPath], with: .top)
+        self.containerView?.reloadRows(at: [indexPath], with: .automatic)
       }
     }
 
@@ -296,7 +296,7 @@ open class TableViewExpandableSource: TableViewSource {
         containerView?.beginUpdates()
         targetIndex = loaderIndex
         sectionCells.remove(at: loaderIndex)
-        containerView?.deleteRows(at: [IndexPath(row: loaderIndex, section: indexPath.section)], with: .top)
+        containerView?.deleteRows(at: [IndexPath(row: loaderIndex, section: indexPath.section)], with: .automatic)
         if let loadedCells = loaderExpandableCell.loadedCells {
           var indexes: [IndexPath] = []
           (0..<loadedCells.count).forEach {
@@ -305,7 +305,7 @@ open class TableViewExpandableSource: TableViewSource {
           sectionCells.insert(contentsOf: loadedCells, at: targetIndex)
           section.cells = sectionCells
           registerCellsForSections()
-          containerView?.insertRows(at: indexes, with: .top)
+          containerView?.insertRows(at: indexes, with: .automatic)
           loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
         }
         containerView?.endUpdates()
