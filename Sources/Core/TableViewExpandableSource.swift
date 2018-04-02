@@ -26,7 +26,8 @@ open class TableViewExpandableSource: TableViewSource {
     }
 
     guard let expandableCells = expandableCell.expandableCells else {
-      expandableCell.expanded = !expandableCell.expanded
+      let expanded = !expandableCell.expanded
+      expandableCell.expanded = expanded
       tableView.reloadData()
       return
     }
@@ -95,7 +96,8 @@ open class TableViewExpandableSource: TableViewSource {
     registerCellsForSections()
     containerView?.insertRows(at: indexes, with: .automatic)
 
-    expandableCell.expanded = !expandableCell.expanded
+    let expanded = !expandableCell.expanded
+    expandableCell.expanded = expanded
     if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
       containerView?.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
@@ -142,7 +144,8 @@ open class TableViewExpandableSource: TableViewSource {
     registerCellsForSections()
     containerView?.deleteRows(at: indexes, with: .automatic)
 
-    expandableCell.expanded = !expandableCell.expanded
+    let expanded = !expandableCell.expanded
+    expandableCell.expanded = expanded
     _ = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
   }
 
@@ -191,8 +194,11 @@ open class TableViewExpandableSource: TableViewSource {
 
     CATransaction.begin()
 
-    expandableCell.expanded = !expandableCell.expanded
-    collapseableCell.expanded = !collapseableCell.expanded
+    let expandableExpanded = !expandableCell.expanded
+    expandableCell.expanded = expandableExpanded
+
+    let collapseableExpanded = !collapseableCell.expanded
+    collapseableCell.expanded = collapseableExpanded
 
     let letSection = section
     let letExpandableCell = expandableCell
@@ -274,14 +280,15 @@ open class TableViewExpandableSource: TableViewSource {
         onError: { [weak self] _ in
           self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
         }
-      ).disposed(by: disposeBag)
+        ).disposed(by: disposeBag)
     default: break
     }
   }
 
   private func updateLoaderCell(loaderExpandableCell: inout LoaderExpandableCellable, indexPath: IndexPath) {
     if !loaderExpandableCell.expanded {
-      loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
+      let cells = loaderExpandableCell.loadedCells
+      loaderExpandableCell.expandableCells = cells
       return
     }
 
@@ -306,12 +313,14 @@ open class TableViewExpandableSource: TableViewSource {
           section.cells = sectionCells
           registerCellsForSections()
           containerView?.insertRows(at: indexes, with: .automatic)
-          loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
+          let cells = loaderExpandableCell.loadedCells
+          loaderExpandableCell.expandableCells = cells
         }
         containerView?.endUpdates()
       } else {
         if loaderExpandableCell.expandableCells != nil {
-          loaderExpandableCell.expandableCells = loaderExpandableCell.loadedCells
+          let cells = loaderExpandableCell.loadedCells
+          loaderExpandableCell.expandableCells = cells
           var expandableCell: ExpandableCellable = loaderExpandableCell
           TableViewExpandableSource.cellAllData(cell: &expandableCell).forEach { id in
             guard let index = sectionCells.index(where: { $0.id == id }) else { return }

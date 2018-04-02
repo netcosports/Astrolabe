@@ -105,13 +105,22 @@ open class CollectionViewPagerSource: CollectionViewSource {
 
         guard newCells.count == 1 else { return }
 
-        disappearing.didDisappear()
-        appearing.willDisappear()
+        if visibleCells.contains(appearing) {
+          disappearing.didDisappear()
+          appearing.willDisappear()
 
-        self.disappearing = appearing
-        self.appearing = newCells[0] as? PagerCollectionViewCell
+          self.disappearing = appearing
+          self.appearing = newCells[0] as? PagerCollectionViewCell
+          self.appearing?.willAppear()
+        } else if visibleCells.contains(disappearing) {
+          appearing.willDisappear()
+          appearing.didDisappear()
 
-        self.appearing?.willAppear()
+          self.appearing = newCells[0] as? PagerCollectionViewCell
+          self.appearing?.willAppear()
+        } else {
+          print("\(#file) \(#line) WAT")
+        }
       } else {
         let newIndexPaths = visibleCells.filter { $0 != disappearing }
 
@@ -162,10 +171,10 @@ open class CollectionViewPagerSource: CollectionViewSource {
         disappearing?.didAppear()
         disappearing = nil
       } else {
-        print("WAT")
+        print("\(#file) \(#line) WAT")
       }
     } else {
-      print("WAT")
+      print("\(#file) \(#line) WAT")
     }
 
     let page = Int(containerView.contentOffset.x / containerView.frame.width)

@@ -136,6 +136,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   open func cancelLoading() {
     loaderDisposeBag = nil
+    state = .initiated
   }
 
   public func reloadDataWithEmptyDataSet() {
@@ -208,18 +209,16 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     startProgress?(intent)
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
+    self.loaderDisposeBag = loaderDisposeBag
     sectionObservable.observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] sections in
         self?.updateSections(newSections: sections)
       }, onError: { [weak self] error in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
-
         self.state = self.cellsCount > 0 ? .hasData : .error(error)
         self.reloadDataWithEmptyDataSet()
       }, onCompleted: { [weak self] in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
         let cellsCountAfterLoad = self.cellsCount
 
         switch intent {
@@ -245,9 +244,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
             self.handleLastCellDisplayed()
           }
         }
+      }, onDisposed: { [weak self] in
+        self?.stopProgress?(intent)
       }).disposed(by: loaderDisposeBag)
 
-    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
 

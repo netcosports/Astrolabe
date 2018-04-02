@@ -4,7 +4,9 @@ import RxSwift
 public protocol PLoader: class {
   associatedtype PLResult: OptionalResult
 
-  func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult>
+  typealias PLRequest = Request<PLResult>
+  
+  func request(for loadingIntent: LoaderIntent) throws -> PLRequest
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]?
   func didReceive(result: PLResult, loadingIntent: LoaderIntent)
 }
@@ -17,7 +19,9 @@ public protocol PContextLoader: class {
   associatedtype PLResult: OptionalResult
   associatedtype Context
 
-  func request(for loadingIntent: LoaderIntent, context: Context) throws -> Request<PLResult>
+  typealias PLRequest = Request<PLResult>
+
+  func request(for loadingIntent: LoaderIntent, context: Context) throws -> PLRequest
   func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> [Sectionable]?
   func didReceive(result: PLResult, loadingIntent: LoaderIntent, context: Context)
 }
