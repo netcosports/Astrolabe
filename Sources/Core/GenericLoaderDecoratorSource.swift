@@ -1,37 +1,42 @@
 //
-//  TimelineLoaderDecoratorSource.swift
+//  GenericLoaderDecoratorSource.swift
 //  Astrolabe
 //
-//  Created by Sergei Mikhan on 3/11/18.
+//  Created by Sergei Mikhan on 2/4/18.
+//  Copyright © 2018 Netcosports. All rights reserved.
 //
 
 import UIKit
 import RxSwift
 
-open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader: TimelineLoader>: TimelineLoaderReusableSource {
+public protocol Mergeable: class {
+  init()
+
+  associatedtype Item
+  func loadItems(for intent: LoaderIntent) -> Observable<[Item]?>?
+  func merge<Source: ReusableSource>(newItems: [Item]?, into source: Source, for intent: LoaderIntent)
+}
+
+open class GenericLoaderDecoratorSource<DecoratedSource: ReusableSource, Merger: Mergeable>: LoaderReusableSource {
 
   public typealias Container = DecoratedSource.Container
-  public typealias Item      = Loader.Item
+  public typealias Item = Merger.Item
 
   public required init() {
     internalInit()
   }
-
   public var containerView: Container? {
     get { return source.containerView }
     set { source.containerView = newValue }
   }
-
   public var hostViewController: UIViewController? {
     get { return source.hostViewController }
     set { source.hostViewController = newValue }
   }
-
   public var sections: [Sectionable] {
     get { return source.sections }
     set { source.sections = newValue }
   }
-
   public var selectedCellIds: Set<String> {
     get { return source.selectedCellIds }
     set { source.selectedCellIds = newValue }
@@ -66,13 +71,12 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
     }
   }
   public var lastCellDisplayed: VoidClosure?
-  public var items: [Item] = []
+
   public let source = DecoratedSource()
   fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
-
-  public weak var loader: Loader?
+  public let merger = Merger()
 
   fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
@@ -86,7 +90,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
   }
 
   public func forceLoadNextPage() {
-    load(.page(page: nextPage()))
+    load(.page(page: nextPage))
   }
 
   public func pullToRefresh() {
@@ -115,6 +119,11 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
     }
   }
 
+  open func cancelLoading() {
+    loaderDisposeBag = nil
+    state = .initiated
+  }
+
   public func reloadDataWithEmptyDataSet() {
     containerView?.reloadData()
     updateEmptyView?(state)
@@ -127,7 +136,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
 
     switch state {
     case .hasData:
-      load(.page(page: nextPage()))
+      load(.page(page: nextPage))
     default:
       dump(state)
       print("Not ready for paging")
@@ -147,7 +156,7 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
     switch state {
     case .loading(let currentIntent):
       if intent == .force(keepData: false) || intent == .pullToRefresh {
-        loaderDisposeBag = nil
+        cancelLoading()
         return true
       } else if currentIntent == intent {
         return false
@@ -159,28 +168,6 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
       }
     default:
       return true
-    }
-  }
-
-  fileprivate func nextPage() -> Int {
-    return sections.reduce(0, { $0 + $1.cells.count }) + 1
-  }
-
-  fileprivate func update(with items: [Item]?) {
-    switch state {
-    case .loading:
-      guard let items = items else { return }
-      guard let loader = loader else { return }
-
-      var mergedItems = self.items.filter { !items.contains($0) }
-      mergedItems.append(contentsOf: items)
-      mergedItems.sort()
-      self.items = mergedItems
-      sections = loader.sections(for: loader.cells(for: mergedItems))
-      registerCellsForSections()
-      containerView?.reloadData()
-    default:
-      assertionFailure("Should not be called in other state than loading")
     }
   }
 
@@ -199,25 +186,27 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
       sections = []
       reloadDataWithEmptyDataSet()
     }
-
-    guard let itemsObservable = loader?.performLoading(intent: intent) else { return }
+    guard let observable = merger.loadItems(for: intent) else { return }
     let cellsCountBeforeLoad = cellsCount
     startProgress?(intent)
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
-    itemsObservable
-      .observeOn(MainScheduler.instance)
+    self.loaderDisposeBag = loaderDisposeBag
+    observable.observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] items in
-        self?.update(with: items)
+        guard let `self` = self else { return }
+        switch self.state {
+        case .loading:
+          self.merger.merge(newItems: items, into: self.source, for: intent)
+        default:
+          assertionFailure("Should not be called in other state than loading")
+        }
       }, onError: { [weak self] error in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
-
         self.state = self.cellsCount > 0 ? .hasData : .error(error)
         self.reloadDataWithEmptyDataSet()
       }, onCompleted: { [weak self] in
         guard let `self` = self else { return }
-        self.stopProgress?(intent)
         let cellsCountAfterLoad = self.cellsCount
 
         switch intent {
@@ -243,14 +232,19 @@ open class TimelineLoaderDecoratorSource<DecoratedSource: ReusableSource, Loader
             self.handleLastCellDisplayed()
           }
         }
+      }, onDisposed: { [weak self] in
+        self?.stopProgress?(intent)
       }).disposed(by: loaderDisposeBag)
 
-    self.loaderDisposeBag = loaderDisposeBag
     updateEmptyView?(state)
   }
-  // swiftlint:enable function_body_length
 
   fileprivate var cellsCount: Int {
     return sections.reduce(0, { $0 + $1.cells.count })
+  }
+
+  fileprivate var nextPage: Int {
+    let maxPage = sections.map({ $0.page }).max()
+    return (maxPage ?? 0) + 1
   }
 }

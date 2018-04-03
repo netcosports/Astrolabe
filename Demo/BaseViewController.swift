@@ -115,8 +115,6 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T
   override func loadView() {
     super.loadView()
 
-    containerView.source.loader = self
-
     containerView.source.loadingBehavior = [.initial, .paging]
     containerView.source.startProgress = { [weak self] _ in
       self?.activityIndicator.startAnimating()

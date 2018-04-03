@@ -8,9 +8,11 @@
 
 import XCTest
 import Astrolabe
+import RxSwift
 import Nimble
 
 private class ConfigurableLoader: Astrolabe.TimelineLoader {
+
   typealias Item = String
   typealias Cell = CollectionCell<TestViewCell>
   typealias Configuration = [LoaderIntent: [Item]]
@@ -29,8 +31,12 @@ private class ConfigurableLoader: Astrolabe.TimelineLoader {
     }
   }
 
-  func cells(for items: [Item]) -> [Cellable] {
+  func cells(for items: [Item], intent: LoaderIntent) -> [Cellable] {
     return items.map { Cell(data: TestViewCell.ViewModel($0), id: $0) }
+  }
+
+  func section(for cells: [Cellable], intent: LoaderIntent) -> Sectionable {
+    return Section(cells: cells, page: intent.page)
   }
 }
 
@@ -47,6 +53,8 @@ extension ReusableSource {
 
 class TimelineLoaderDecoratorSpec: XCTestCase {
 
+  private typealias TimelineDecorator = TimelineLoaderDecorator<CollectionViewSource, ConfigurableLoader>
+
   func testAutoUpdate() {
     let initialPages    = ["A", "B", "C", "D", "E"]
     let autoupdatePages = ["A", "B", "C", "D", "E", "F", "H", "J"]
@@ -55,12 +63,12 @@ class TimelineLoaderDecoratorSpec: XCTestCase {
       .initial: initialPages,
       .autoupdate: autoupdatePages
     ]
-    let containerView = CollectionView<TimelineLoaderDecoratorSource<CollectionViewSource, ConfigurableLoader>>()
+    let containerView = CollectionView<TimelineDecorator>()
     let source = containerView.source
     source.loadingBehavior = [.autoupdate]
     source.autoupdatePeriod = TimeInterval(0.5)
     let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    source.merger.loader = loader
 
     waitUntil { done in
       source.stopProgress = {
@@ -86,11 +94,11 @@ class TimelineLoaderDecoratorSpec: XCTestCase {
       .initial: initialPages,
       .appearance: appearancePages
     ]
-    let containerView = CollectionView<TimelineLoaderDecoratorSource<CollectionViewSource, ConfigurableLoader>>()
+    let containerView = CollectionView<TimelineDecorator>()
     let source = containerView.source
     source.loadingBehavior = [.appearance]
     let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    source.merger.loader = loader
 
     waitUntil { done in
       source.stopProgress = {
@@ -122,14 +130,14 @@ class TimelineLoaderDecoratorSpec: XCTestCase {
 
     let configuration: ConfigurableLoader.Configuration = [
       .initial: initialPages,
-      .page(page: 4): secondPages,
-      .page(page: 6): thirdPages,
+      .page(page: 1): secondPages,
+      .page(page: 2): thirdPages,
       ]
-    let containerView = CollectionView<TimelineLoaderDecoratorSource<CollectionViewSource, ConfigurableLoader>>()
+    let containerView = CollectionView<TimelineDecorator>()
     let source = containerView.source
     source.loadingBehavior = [.paging]
     let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    source.merger.loader = loader
 
     waitUntil { done in
       source.stopProgress = {
@@ -138,8 +146,8 @@ class TimelineLoaderDecoratorSpec: XCTestCase {
           expect(source.allItems).to(equal(initialPages))
         case .page(let page):
           switch page {
-          case 4: expect(source.allItems).to(equal(expectedSecondPages))
-          case 6: expect(source.allItems).to(equal(expectedThirdPages))
+          case 1: expect(source.allItems).to(equal(expectedSecondPages))
+          case 2: expect(source.allItems).to(equal(expectedThirdPages))
           done()
           default: fail("Unexpected page number")
           }

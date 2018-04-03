@@ -54,62 +54,6 @@ extension ReusableSource {
       }
     }
   }
-
-}
-
-public protocol LoaderReusableSource: ReusableSource {
-
-  weak var loader: Loader? { get set }
-
-  var startProgress: ProgressClosure? { get set }
-  var stopProgress: ProgressClosure? { get set }
-  var updateEmptyView: EmptyViewClosure? { get set }
-  var autoupdatePeriod: TimeInterval { get set }
-  var loadingBehavior: LoadingBehavior { get set }
-
-  func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
-  func forceLoadNextPage()
-  func pullToRefresh()
-  func appear()
-  func disappear()
-  func cancelLoading()
-  func reloadDataWithEmptyDataSet()
-}
-
-public protocol TimelineLoader: class {
-  associatedtype Item: Comparable
-  typealias ItemsObservable = Observable<[Item]?>
-
-  func performLoading(intent: LoaderIntent) -> ItemsObservable?
-  func cells(for items: [Item]) -> [Cellable]
-  func sections(for cells: [Cellable]) -> [Sectionable]
-}
-
-public extension TimelineLoader {
-
-  func sections(for cells: [Cellable]) -> [Sectionable] {
-    return [Section(cells: cells)]
-  }
-}
-
-public protocol TimelineLoaderReusableSource: ReusableSource {
-
-  associatedtype Loader: TimelineLoader
-
-  weak var loader: Loader? { get set }
-
-  var startProgress: ProgressClosure? { get set }
-  var stopProgress: ProgressClosure? { get set }
-  var updateEmptyView: EmptyViewClosure? { get set }
-  var autoupdatePeriod: TimeInterval { get set }
-  var loadingBehavior: LoadingBehavior { get set }
-
-  func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
-  func forceLoadNextPage()
-  func pullToRefresh()
-  func appear()
-  func disappear()
-  func reloadDataWithEmptyDataSet()
 }
 
 public protocol Reusable {

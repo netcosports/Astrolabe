@@ -22,14 +22,6 @@ let defaultReloadInterval: TimeInterval = 30
 public typealias ProgressClosure = (LoaderIntent) -> Void
 public typealias EmptyViewClosure = (LoaderState) -> Void
 
-public typealias SectionObservable = Observable<[Sectionable]?>
-
-public protocol Loader: class {
-  func performLoading(intent: LoaderIntent) -> SectionObservable?
-}
-
-public typealias ObservableClosure = () -> SectionObservable?
-
 public enum LoaderIntent {
   case initial
   case appearance
@@ -41,6 +33,23 @@ public enum LoaderIntent {
 
 extension LoaderIntent: Equatable {
 
+}
+
+public protocol Pagable {
+  var page: Int { get }
+}
+
+extension LoaderIntent: Pagable {
+  public var page: Int {
+    var page = 0
+    switch self {
+    case .page(let index):
+      page = index
+    default:
+      break
+    }
+    return page
+  }
 }
 
 public func == (lhs: LoaderIntent, rhs: LoaderIntent) -> Bool {
@@ -79,4 +88,20 @@ public struct LoadingBehavior: OptionSet {
   public static let autoupdate = LoadingBehavior(rawValue: 1 << 2)
   public static let autoupdateBackground = LoadingBehavior(rawValue: 3 << 2)
   public static let paging = LoadingBehavior(rawValue: 1 << 5)
+}
+
+public protocol LoaderReusableSource: ReusableSource {
+    var startProgress: ProgressClosure? { get set }
+    var stopProgress: ProgressClosure? { get set }
+    var updateEmptyView: EmptyViewClosure? { get set }
+    var autoupdatePeriod: TimeInterval { get set }
+    var loadingBehavior: LoadingBehavior { get set }
+
+    func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
+    func forceLoadNextPage()
+    func pullToRefresh()
+    func appear()
+    func disappear()
+    func cancelLoading()
+    func reloadDataWithEmptyDataSet()
 }
