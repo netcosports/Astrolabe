@@ -11,7 +11,7 @@ import Astrolabe
 import SnapKit
 import RxSwift
 
-class BasicDataExampleCollectionViewController: UIViewController {
+class BasicDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
 
   typealias Cell = CollectionCell<TestCollectionCell>
 
@@ -41,7 +41,7 @@ class BasicDataExampleCollectionViewController: UIViewController {
     return label
   }()
 
-  let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
+  let containerView = CollectionView<GenericLoaderDecoratorSource2<CollectionViewSource, BasicDataExampleCollectionViewController>>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -106,11 +106,9 @@ class BasicDataExampleCollectionViewController: UIViewController {
 
     containerView.source.disappear()
   }
-}
 
-extension BasicDataExampleCollectionViewController: Loader {
-
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  typealias Item = Sectionable
+  func load(for intent: LoaderIntent) -> Observable<[Sectionable]?>? {
 
     var result: [Sectionable]? = nil
     switch intent {
