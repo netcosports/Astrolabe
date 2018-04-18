@@ -338,7 +338,6 @@
 				B50EFACB1F0CC27E00D31FD6 /* Frameworks */,
 				B50EFACC1F0CC27E00D31FD6 /* Resources */,
 				5A7482A8EA00EEE1FC7475CB /* [CP] Embed Pods Frameworks */,
-				1CEEA02AF064784DD7EAFADD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,7 +357,6 @@
 				B5716EC41F0CC307005146DB /* Frameworks */,
 				B5716EC51F0CC307005146DB /* Resources */,
 				A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */,
-				E6A082632FF23056AEBFC922 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -378,7 +376,6 @@
 				B5716F121F0CC5E2005146DB /* Frameworks */,
 				B5716F131F0CC5E2005146DB /* Resources */,
 				808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */,
-				73257A1B8ECBD540FA0BD70A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -398,7 +395,6 @@
 				B5775C8F1F16A7C700E484A6 /* Frameworks */,
 				B5775C901F16A7C700E484A6 /* Resources */,
 				62731AFD36A4E713C7C32099 /* [CP] Embed Pods Frameworks */,
-				8620BDEF7CB06E304066195E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -497,21 +493,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1CEEA02AF064784DD7EAFADD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4CD0F5651D83CDB1A899407B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -612,21 +593,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		73257A1B8ECBD540FA0BD70A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -653,21 +619,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8620BDEF7CB06E304066195E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */ = {
@@ -738,21 +689,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E6A082632FF23056AEBFC922 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
