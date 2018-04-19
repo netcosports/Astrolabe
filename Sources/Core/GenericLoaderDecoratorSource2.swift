@@ -19,7 +19,7 @@ public protocol Loadable: class {
   var all: [Item]? { get }
 }
 
-extension Loadable where Self: Accessor, Item == Sectionable {
+public extension Loadable where Self: Accessor, Item == Sectionable {
 
   func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
     guard let updatedSections = items else { return all }
