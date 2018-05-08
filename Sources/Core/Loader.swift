@@ -38,11 +38,11 @@ extension LoaderIntent: Equatable {
 
 }
 
-public protocol Pagable {
+public protocol Pageable {
   var page: Int { get }
 }
 
-extension LoaderIntent: Pagable {
+extension LoaderIntent: Pageable {
   public var page: Int {
     var page = 0
     switch self {
