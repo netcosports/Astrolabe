@@ -12,15 +12,11 @@ import Nimble
 import RxSwift
 
 private class Loader: Astrolabe.Loadable {
-
   typealias Item = String
-  func load(for intent: LoaderIntent) -> Observable<[Item]?>? {
-    return .just([])
-  }
 
-  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? { return [] }
-  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent) {}
-  var all: [Item]? = []
+  func load(for intent: LoaderIntent) -> Observable<[Item]?>? { return .just([]) }
+  func merge(items:[Item]?, for intent: LoaderIntent) -> [Item]? { return [] }
+  func apply(items:[Item]?, for intent: LoaderIntent) { }
 }
 
 class ThreadingSpec: XCTestCase {

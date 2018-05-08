@@ -113,10 +113,8 @@ public protocol Loadable: class {
   associatedtype Item
 
   func load(for intent: LoaderIntent) -> Observable<[Item]?>?
-  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]?
-  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent)
-
-  var all: [Item]? { get }
+  func merge(items: [Item]?, for intent: LoaderIntent) -> [Item]?
+  func apply(items:[Item]?, for intent: LoaderIntent)
 }
 
 public protocol LoaderMediatorProtocol: class {
@@ -136,21 +134,19 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
     guard let observable = loader.load(for: intent) else { return .empty() }
 
     return observable.map { [weak self] items -> [Item]? in
-        return self?.loader.merge(items:items, into: self?.loader.all, for: intent)
+        return self?.loader.merge(items:items, for: intent)
       }.observeOn(MainScheduler.instance)
       .do(onNext: { [weak self] mergedItems in
-        self?.loader.apply(mergedItems:mergedItems, into:self?.loader.all, for: intent)
+        self?.loader.apply(items:mergedItems, for: intent)
       }).map({ _ -> Void in () })
   }
 }
 
 public extension Loadable where Self: Accessor, Item == Sectionable {
 
-  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
-    guard let updatedSections = items else { return all }
-
-    var merged: [Item] = []
-    if let all = all { merged = all }
+  func merge(items:[Item]?, for intent: LoaderIntent) -> [Item]? {
+    guard let updatedSections = items else { return sections }
+    var merged: [Item] = sections
 
     switch intent {
     case .initial, .force, .pullToRefresh:
@@ -182,15 +178,11 @@ public extension Loadable where Self: Accessor, Item == Sectionable {
     }
   }
 
-  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent) {
-    guard let mergedItems = mergedItems else { return }
-    source.sections = mergedItems
+  func apply(items: [Item]?, for intent: LoaderIntent) {
+    guard let items = items else { return }
+    source.sections = items
     source.registerCellsForSections()
     source.containerView?.reloadData()
-  }
-
-  var all: [Item]? {
-    return sections
   }
 }
 
