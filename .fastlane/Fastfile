@@ -1,5 +1,5 @@
 lane :test do
-  xcversion(version: '~> 9.2')
+  xcversion(version: '~> 9.3')
   select_httpbin
   FileUtils.cd ".." do
     ["iOSTests", "tvOSTests"].each do |scheme|
@@ -12,8 +12,8 @@ lane :test do
 end
 
 lane :select_httpbin do
-  if Actions.sh('which pip2 || true').length > 0
-    Actions.sh('pip2 install httpbin gunicorn')
+  if Actions.sh('which pip || true').length > 0
+    Actions.sh('pip install httpbin gunicorn')
     Actions.sh('/usr/local/bin/gunicorn httpbin:app -D')
     local_httpbin
   else
