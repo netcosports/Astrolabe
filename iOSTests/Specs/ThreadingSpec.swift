@@ -11,12 +11,16 @@ import Astrolabe
 import Nimble
 import RxSwift
 
-private class Loader: Astrolabe.Loader {
+private class Loader: Astrolabe.Loadable {
 
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  typealias Item = String
+  func load(for intent: LoaderIntent) -> Observable<[Item]?>? {
     return .just([])
   }
 
+  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? { return [] }
+  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent) {}
+  var all: [Item]? = []
 }
 
 class ThreadingSpec: XCTestCase {
@@ -24,7 +28,7 @@ class ThreadingSpec: XCTestCase {
   func testStartProgress() {
     let source = LoaderDecoratorSource<CollectionViewSource>()
     let loader = Loader()
-    source.loader = loader
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.startProgress = { _ in
@@ -41,7 +45,7 @@ class ThreadingSpec: XCTestCase {
   func testStopProgress() {
     let source = LoaderDecoratorSource<CollectionViewSource>()
     let loader = Loader()
-    source.loader = loader
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.stopProgress = { _ in
@@ -58,7 +62,7 @@ class ThreadingSpec: XCTestCase {
   func testUpdateEmptyView() {
     let source = LoaderDecoratorSource<CollectionViewSource>()
     let loader = Loader()
-    source.loader = loader
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.updateEmptyView = { _ in

@@ -41,13 +41,13 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
     return label
   }()
 
-  let containerView = CollectionView<GenericLoaderDecoratorSource2<CollectionViewSource, BasicDataExampleCollectionViewController>>()
+  let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    containerView.source.loader = self
+    containerView.source.loader = LoaderMediator(loader: self)
     containerView.source.loadingBehavior = [.initial, .paging, .autoupdate]
     containerView.source.startProgress = { [weak self] _ in
       self?.activityIndicator.startAnimating()

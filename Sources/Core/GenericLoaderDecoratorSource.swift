@@ -1,5 +1,5 @@
 //
-//  GenericLoaderDecoratorSource.swift
+//  LoaderDecoratorSource.swift
 //  Astrolabe
 //
 //  Created by Sergei Mikhan on 2/4/18.
@@ -9,18 +9,9 @@
 import UIKit
 import RxSwift
 
-public protocol Mergeable: class {
-  init()
-
-  associatedtype Item
-  func loadItems(for intent: LoaderIntent) -> Observable<[Item]?>?
-  func merge<Source: ReusableSource>(newItems: [Item]?, into source: Source, for intent: LoaderIntent)
-}
-
-open class GenericLoaderDecoratorSource<DecoratedSource: ReusableSource, Merger: Mergeable>: LoaderReusableSource {
+open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusableSource {
 
   public typealias Container = DecoratedSource.Container
-  public typealias Item = Merger.Item
 
   public required init() {
     internalInit()
@@ -76,7 +67,7 @@ open class GenericLoaderDecoratorSource<DecoratedSource: ReusableSource, Merger:
   fileprivate var loaderDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   fileprivate var state = LoaderState.notInitiated
-  public let merger = Merger()
+  public var loader: LoaderMediatorProtocol?
 
   fileprivate func internalInit() {
     self.source.lastCellDisplayed = { [weak self] in
@@ -186,22 +177,15 @@ open class GenericLoaderDecoratorSource<DecoratedSource: ReusableSource, Merger:
       sections = []
       reloadDataWithEmptyDataSet()
     }
-    guard let observable = merger.loadItems(for: intent) else { return }
+    guard let observable = loader?.load(into: self, for: intent) else { return }
     let cellsCountBeforeLoad = cellsCount
     startProgress?(intent)
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
     self.loaderDisposeBag = loaderDisposeBag
-    observable.observeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak self] items in
-        guard let `self` = self else { return }
-        switch self.state {
-        case .loading:
-          self.merger.merge(newItems: items, into: self.source, for: intent)
-        default:
-          assertionFailure("Should not be called in other state than loading")
-        }
-      }, onError: { [weak self] error in
+    observable
+      .observeOn(MainScheduler.instance)
+      .subscribe(onError: { [weak self] error in
         guard let `self` = self else { return }
         self.state = self.cellsCount > 0 ? .hasData : .error(error)
         self.reloadDataWithEmptyDataSet()
@@ -237,10 +221,6 @@ open class GenericLoaderDecoratorSource<DecoratedSource: ReusableSource, Merger:
       }).disposed(by: loaderDisposeBag)
 
     updateEmptyView?(state)
-  }
-
-  fileprivate var cellsCount: Int {
-    return sections.reduce(0, { $0 + $1.cells.count })
   }
 
   fileprivate var nextPage: Int {

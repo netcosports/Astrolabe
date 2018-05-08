@@ -42,6 +42,10 @@ public protocol ReusableSource: class {
 
 extension ReusableSource {
 
+  public var cellsCount: Int {
+    return sections.reduce(0, { $0 + $1.cells.count })
+  }
+
   func processSelection(for cellId: String) {
     switch selectionBehavior {
     case .single:

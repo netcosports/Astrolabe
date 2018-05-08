@@ -13,7 +13,7 @@ class TableLoaderSourceViewController: BaseLoaderTableViewController<LoaderDecor
 
   override func loadView() {
     super.loadView()
-    source.loader = self
+    source.loader = LoaderMediator(loader: self)
   }
 
   override func sections(for page: Int) -> [Sectionable]? {
@@ -29,7 +29,7 @@ class CollectionLoaderSourceViewController: BaseLoaderCollectionViewController<L
 
   override func loadView() {
     super.loadView()
-    source.loader = self
+    source.loader = LoaderMediator(loader: self)
   }
 
   override func sections(for page: Int) -> [Sectionable]? {

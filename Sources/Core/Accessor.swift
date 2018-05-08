@@ -22,7 +22,7 @@ public protocol Accessor: class {
   var sections: [Sectionable] { get set }
 }
 
-public extension Accessor where Self: UIViewController {
+public extension Accessor {
 
   var source: Source {
     return containerView.source

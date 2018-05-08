@@ -9,6 +9,9 @@
 import UIKit
 import RxSwift
 
+public typealias SectionObservable = Observable<[Sectionable]?>
+public typealias ObservableClosure = () -> SectionObservable?
+
 public enum LoaderState {
   case notInitiated
   case initiated
@@ -104,4 +107,103 @@ public protocol LoaderReusableSource: ReusableSource {
     func disappear()
     func cancelLoading()
     func reloadDataWithEmptyDataSet()
+}
+
+public protocol Loadable: class {
+  associatedtype Item
+
+  func load(for intent: LoaderIntent) -> Observable<[Item]?>?
+  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]?
+  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent)
+
+  var all: [Item]? { get }
+}
+
+public protocol LoaderMediatorProtocol: class {
+  func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void>
+}
+
+public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
+
+  typealias Item = Loader.Item
+
+  let loader: Loader
+  public init(loader: Loader) {
+    self.loader = loader
+  }
+
+  public func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void> {
+    guard let observable = loader.load(for: intent) else { return .empty() }
+
+    return observable.map { [weak self] items -> [Item]? in
+        return self?.loader.merge(items:items, into: self?.loader.all, for: intent)
+      }.observeOn(MainScheduler.instance)
+      .do(onNext: { [weak self] mergedItems in
+        self?.loader.apply(mergedItems:mergedItems, into:self?.loader.all, for: intent)
+      }).map({ _ -> Void in () })
+  }
+}
+
+public extension Loadable where Self: Accessor, Item == Sectionable {
+
+  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
+    guard let updatedSections = items else { return all }
+
+    var merged: [Item] = []
+    if let all = all { merged = all }
+
+    switch intent {
+    case .initial, .force, .pullToRefresh:
+      return updatedSections
+    default:
+      // NOTE: the following checking is very important for paging logic,
+      // without this logic we will have infinit reloading in case of last page;
+      let hasCells = updatedSections.count != 0 &&
+        !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
+      guard hasCells else { return merged }
+
+      let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
+      for sectionsByPage in sectionByPages {
+        if let indexToReplace = merged.index(where: { sectionsByPage.key == $0.page }) {
+          merged = merged.filter { $0.page != sectionsByPage.key }
+          let updatedSectionsForPage = sectionsByPage.value.reversed()
+          updatedSectionsForPage.forEach {
+            merged.insert($0, at: indexToReplace)
+          }
+        } else {
+          merged.append(contentsOf: sectionsByPage.value)
+        }
+      }
+      merged.stableSort(by: {
+        guard $0.page != $1.page else { return nil }
+        return $0.page < $1.page
+      })
+      return merged
+    }
+  }
+
+  func apply(mergedItems:[Item]?, into currentItems:[Item]?, for intent: LoaderIntent) {
+    guard let mergedItems = mergedItems else { return }
+    source.sections = mergedItems
+    source.registerCellsForSections()
+    source.containerView?.reloadData()
+  }
+
+  var all: [Item]? {
+    return sections
+  }
+}
+
+public extension Loadable where Self: Accessor, Item: Comparable {
+
+  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
+    guard let items = items else { return nil }
+    if let all = all {
+      var mergedItems = all.filter { !items.contains($0) }
+      mergedItems.append(contentsOf: items)
+      mergedItems.sort()
+      return mergedItems
+    }
+    return items
+  }
 }
