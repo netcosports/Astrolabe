@@ -84,18 +84,3 @@ public protocol ReusableWrapper: class {
   init()
 }
 
-public protocol StyledData {
-  associatedtype Style
-
-  var style: Style { get }
-}
-
-public protocol StyledReusable: Reusable where Data: StyledData {
-  var style: Data.Style? { get set }
-}
-
-public extension StyledReusable {
-  static func identifier(for data: Data) -> String {
-    return "\(self)_\(data.style)"
-  }
-}

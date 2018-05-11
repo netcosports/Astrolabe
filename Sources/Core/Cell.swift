@@ -138,32 +138,3 @@ public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionVi
   where T.Container == UICollectionView
 public typealias TableCell<T:ReusableView & Reusable> = Cell<UITableView, T>
   where T.Container == UITableView
-
-open class StyledCell<Container, CellView: ReusableView & StyledReusable>: Cell<Container, CellView>
-  where CellView.Container == Container {
-
-  public typealias Style = CellView.Data.Style
-
-  let style: Style
-
-  public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(style: data.style, data: data, click: click, type: .cell, setup: nil)
-  }
-
-  public init(style: Style, data: Data, click: ClickClosure? = nil, type: CellType = .cell,
-              setup: SetupClosure<CellView>? = nil) {
-    self.style = style
-    super.init(data: data, click: click, type: type, setup: setup)
-  }
-
-  override internal func presetupCellView(with cellView: inout CellView) {
-    if cellView.style == nil {
-      cellView.style = style
-    }
-  }
-}
-
-public typealias StyledCollectionCell<T:ReusableView & StyledReusable> = StyledCell<UICollectionView, T>
-  where T.Container == UICollectionView
-public typealias StyledTableCell<T:ReusableView & StyledReusable> = StyledCell<UITableView, T>
-  where T.Container == UITableView

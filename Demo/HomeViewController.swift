@@ -19,9 +19,6 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
     var tableCells: [Cellable] = [
       Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
         self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
-      },
-      Item(data: TestViewModel("Styled Source"), id: "Table Styled Source") { [weak self] in
-        self?.navigationController?.pushViewController(TableStyledSourceViewController(), animated: true)
       }
     ]
 
@@ -86,9 +83,6 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
     collectionCells.append(contentsOf: [
       Item(data: TestViewModel("Source"), id: "Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(CollectionSourceViewController(), animated: true)
-      },
-      Item(data: TestViewModel("Styled Source"), id: "Collection Source") { [weak self] in
-        self?.navigationController?.pushViewController(CollectionStyledSourceViewController(), animated: true)
       },
       Item(data: TestViewModel("Loader Source infinite pageing"),
            id: "Collection Loader Source infinite paging") { [weak self] in

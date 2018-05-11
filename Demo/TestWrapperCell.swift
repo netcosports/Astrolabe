@@ -38,6 +38,3 @@ class TestWrapperCell: ReusableWrapper, Reusable {
     return CGSize(width: containerSize.width, height: 64.0)
   }
 }
-
-typealias TestWrapperTableCell = ReusableWrapperTableViewCell<TestWrapperCell>
-typealias TestWrapperCollectionCell = ReusableWrapperCollectionViewCell<TestWrapperCell>

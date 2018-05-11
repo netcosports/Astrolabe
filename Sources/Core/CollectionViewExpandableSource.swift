@@ -70,11 +70,11 @@ open class CollectionViewExpandableSource: CollectionViewSource {
   }
 
   private func expandedItemInSection(section: Sectionable, expandableCell: ExpandableCellable) -> ExpandableCellable? {
-    let allExpandedCells = section.cells.flatMap { $0 as? ExpandableCellable }.filter { $0.expanded }
+    let allExpandedCells = section.cells.compactMap { $0 as? ExpandableCellable }.filter { $0.expanded }
 
     for expandedCell in allExpandedCells {
       if expandedCell.expandableCells?.filter({$0.id == expandableCell.id }).first != nil {
-        let parentsCells = expandedCell.expandableCells?.flatMap { $0 as? ExpandableCellable }
+        let parentsCells = expandedCell.expandableCells?.compactMap { $0 as? ExpandableCellable }
         if let anotherExpandedCell = parentsCells?.filter({ $0.expanded }).first {
           return anotherExpandedCell
         } else {

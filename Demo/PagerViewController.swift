@@ -42,7 +42,7 @@ class PagerViewController: BaseCollectionViewController<CollectionViewPagerSourc
     return [
       Page(controller: TableSourceViewController(), id: "source"),
       Page(controller: TableLoaderSourceViewController(), id: "loader"),
-      Page(controller: TableStyledSourceViewController(), id: "styled")
+      Page(controller: CollectionLoaderSourceViewController(), id: "collection_loader")
     ]
   }
 }

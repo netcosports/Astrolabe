@@ -16,8 +16,8 @@ public protocol ReusableView: class {
   var contentView: UIView { get }
   var cell: Cellable? { get set }
 
-  weak var containerViewController: UIViewController? { get set }
-  weak var containerView: Container? { get set }
+  var containerViewController: UIViewController? { get set }
+  var containerView: Container? { get set }
   var indexPath: IndexPath? { get set }
 
   var selectedState: Bool { get set }
