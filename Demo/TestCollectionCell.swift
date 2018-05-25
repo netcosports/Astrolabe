@@ -9,7 +9,7 @@
 import UIKit
 import Astrolabe
 
-struct TestViewModel {
+struct TestViewModel: Comparable {
   let title: String
   let color: UIColor
 
@@ -25,6 +25,15 @@ struct TestViewModel {
     return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
   }
 }
+
+func < (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
+  return lhs.title < rhs.title
+}
+
+func == (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
+  return lhs.title == rhs.title
+}
+
 
 class TestCollectionCell: CollectionViewCell {
 

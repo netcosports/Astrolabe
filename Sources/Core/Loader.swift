@@ -185,17 +185,3 @@ public extension Loadable where Self: Accessor, Item == Sectionable {
     source.containerView?.reloadData()
   }
 }
-
-public extension Loadable where Self: Accessor, Item: Comparable {
-
-  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
-    guard let items = items else { return nil }
-    if let all = all {
-      var mergedItems = all.filter { !items.contains($0) }
-      mergedItems.append(contentsOf: items)
-      mergedItems.sort()
-      return mergedItems
-    }
-    return items
-  }
-}
