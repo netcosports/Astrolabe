@@ -113,7 +113,7 @@ public protocol Loadable: class {
   associatedtype Item
 
   func load(for intent: LoaderIntent) -> Observable<[Item]?>?
-  func merge(items: [Item]?, for intent: LoaderIntent) -> [Item]?
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<[Item]?>?
   func apply(items:[Item]?, for intent: LoaderIntent)
 }
 
@@ -133,10 +133,11 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
   public func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void> {
     guard let observable = loader.load(for: intent) else { return .empty() }
 
-    return observable.map { [weak self] items -> [Item]? in
-        return self?.loader.merge(items:items, for: intent)
-      }.observeOn(MainScheduler.instance)
-      .do(onNext: { [weak self] mergedItems in
+    return observable.flatMap { [weak self] items -> Observable<[Item]?> in
+      guard let merged = self?.loader.merge(items:items, for: intent) else { return .empty() }
+      return merged
+    }.observeOn(MainScheduler.instance)
+     .do(onNext: { [weak self] mergedItems in
         self?.loader.apply(items:mergedItems, for: intent)
       }).map({ _ -> Void in () })
   }
@@ -144,19 +145,19 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
 
 public extension Loadable where Self: Accessor, Item == Sectionable {
 
-  func merge(items:[Item]?, for intent: LoaderIntent) -> [Item]? {
-    guard let updatedSections = items else { return sections }
-    var merged: [Item] = sections
+  func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
+    guard let updatedSections = items else { return .just(source.sections) }
+    var merged: [Item] = source.sections
 
     switch intent {
     case .initial, .force, .pullToRefresh:
-      return updatedSections
+      return .just(updatedSections)
     default:
       // NOTE: the following checking is very important for paging logic,
       // without this logic we will have infinit reloading in case of last page;
       let hasCells = updatedSections.count != 0 &&
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
-      guard hasCells else { return merged }
+      guard hasCells else { return .just(merged) }
 
       let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
       for sectionsByPage in sectionByPages {
@@ -174,7 +175,7 @@ public extension Loadable where Self: Accessor, Item == Sectionable {
         guard $0.page != $1.page else { return nil }
         return $0.page < $1.page
       })
-      return merged
+      return .just(merged)
     }
   }
 

@@ -12,10 +12,11 @@ import Nimble
 import RxSwift
 
 private class Loader: Astrolabe.Loadable {
+
   typealias Item = String
 
   func load(for intent: LoaderIntent) -> Observable<[Item]?>? { return .just([]) }
-  func merge(items:[Item]?, for intent: LoaderIntent) -> [Item]? { return [] }
+  func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? { return .just([]) }
   func apply(items:[Item]?, for intent: LoaderIntent) { }
 }
 

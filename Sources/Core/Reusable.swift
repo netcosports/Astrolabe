@@ -77,10 +77,3 @@ public extension Reusable {
     return "\(self)"
   }
 }
-
-public protocol ReusableWrapper: class {
-  var contentView: UIView? { get set }
-  func setup<T: ReusableView>(with reusableView: T)
-  init()
-}
-

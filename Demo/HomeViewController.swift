@@ -69,6 +69,9 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       },
       Item(data: TestViewModel("Basic Timeline Collection Example"), id: "Basic Timeline Collection Example") { [weak self] in
         self?.navigationController?.pushViewController(BasicTimelineDataExampleCollectionViewController(), animated: true)
+      },
+      Item(data: TestViewModel("Basic ViewModel Timeline Collection Example"), id: "Basic ViewModel Timeline Collection Example") { [weak self] in
+        self?.navigationController?.pushViewController(BasicTestViewModelViewController(), animated: true)
       }
     ]
 
