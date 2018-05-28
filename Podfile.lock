@@ -1,10 +1,10 @@
 PODS:
-  - Astrolabe (3.1.0):
-    - Astrolabe/Core (= 3.1.0)
-  - Astrolabe/Core (3.1.0):
+  - Astrolabe (3.1.1):
+    - Astrolabe/Core (= 3.1.1)
+  - Astrolabe/Core (3.1.1):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-  - Astrolabe/Loaders (3.1.0):
+  - Astrolabe/Loaders (3.1.1):
     - Astrolabe/Core
     - Gnomon/Core (~> 3.0)
   - FormatterKit/Resources (1.8.2)
@@ -55,7 +55,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: 971400aebef6f70454ba50948af2628d02446a90
+  Astrolabe: c4512444adf33ea0c719caf1d26acb62eb267049
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 05a0b538c8043f149c798a78605461ee5583c38d
   Nimble: 391f07782af4b37914f9bd7b2ffbb952731b8202

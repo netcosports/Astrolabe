@@ -56,7 +56,6 @@ open class CollectionViewPagerSource: CollectionViewSource {
         let offset = CGPoint(x: CGFloat(index) * containerView.frame.width, y: 0)
         if offset == containerView.contentOffset { return }
 
-        self.beginAppearanceTransition()
         containerView.setContentOffset(offset, animated: true)
         containerView.isUserInteractionEnabled = false
       }).disposed(by: disposeBag)
@@ -96,10 +95,11 @@ open class CollectionViewPagerSource: CollectionViewSource {
 
   open override func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let containerView = containerView else { return }
+    guard let disappearing = disappearing else { return beginAppearanceTransition() }
 
     let visibleCells = containerView.visibleCells
 
-    if let disappearing = disappearing, visibleCells.count == 2 {
+    if visibleCells.count == 2 {
       if let appearing = appearing {
         let newCells = visibleCells.filter { $0 != disappearing && $0 != appearing }
 
@@ -119,7 +119,7 @@ open class CollectionViewPagerSource: CollectionViewSource {
           self.appearing = newCells[0] as? PagerCollectionViewCell
           self.appearing?.willAppear()
         } else {
-          print("\(#file) \(#line) WAT")
+          print("\(#file):\(#line) WAT")
         }
       } else {
         let newIndexPaths = visibleCells.filter { $0 != disappearing }
@@ -171,10 +171,10 @@ open class CollectionViewPagerSource: CollectionViewSource {
         disappearing?.didAppear()
         disappearing = nil
       } else {
-        print("\(#file) \(#line) WAT")
+        print("\(#file):\(#line) WAT")
       }
     } else {
-      print("\(#file) \(#line) WAT")
+      print("\(#file):\(#line) WAT")
     }
 
     let page = Int(containerView.contentOffset.x / containerView.frame.width)
