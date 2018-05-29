@@ -29,7 +29,6 @@ public protocol ReusableView: class {
 
 public protocol ContainerView: class {
   func register<T: ReusableView>(type: CellType, cellClass: T.Type, identifier: String)
-
   func instance<T: ReusableView>(type: CellType, index: IndexPath, identifier: String) -> T
 
   var size: CGSize { get }
@@ -37,6 +36,13 @@ public protocol ContainerView: class {
 
   func reloadData()
   var backgroundView: UIView? { get set }
+
+  func insert(at indexes: [IndexPath])
+  func delete(at indexes: [IndexPath])
+  func reload(at indexes: [IndexPath])
+
+  typealias CompletionClosure = (Bool) -> Void
+  func batchUpdate(block: VoidClosure, completion: CompletionClosure?)
 }
 
 extension UICollectionView: ContainerView {
@@ -97,6 +103,22 @@ extension UICollectionView: ContainerView {
       return supplementaryView
     }
   }
+
+  public func insert(at indexes: [IndexPath]) {
+    insertItems(at: indexes)
+  }
+
+  public func delete(at indexes: [IndexPath]) {
+    deleteItems(at: indexes)
+  }
+
+  public func reload(at indexes: [IndexPath]) {
+    reloadItems(at: indexes)
+  }
+
+  public func batchUpdate(block: VoidClosure, completion: CompletionClosure?) {
+    performBatchUpdates(block, completion: completion)
+  }
 }
 
 extension UITableView: ContainerView {
@@ -137,6 +159,34 @@ extension UITableView: ContainerView {
 
     case .custom:
       fatalError("Unsupported type for table view")
+    }
+  }
+
+  public func insert(at indexes: [IndexPath]) {
+    insertRows(at: indexes, with: .automatic)
+  }
+
+  public func delete(at indexes: [IndexPath]) {
+    deleteRows(at: indexes, with: .automatic)
+  }
+
+  public func reload(at indexes: [IndexPath]) {
+    reloadRows(at: indexes, with: .automatic)
+  }
+
+  public func batchUpdate(block: VoidClosure, completion: CompletionClosure? = nil) {
+    if #available(iOS 11.0, *) {
+      performBatchUpdates(block, completion: completion)
+    } else {
+      CATransaction.begin()
+      CATransaction.setCompletionBlock {
+        completion?(true)
+      }
+
+      beginUpdates()
+      block()
+      endUpdates()
+      CATransaction.commit()
     }
   }
 }

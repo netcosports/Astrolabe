@@ -10,38 +10,29 @@ import UIKit
 import Astrolabe
 import RxSwift
 
-class ExpandableTableViewController: BaseTableViewController<TableViewExpandableSource> {
+class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecoratorSource<TableViewExpandableSource>> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    source.expandableBehavior.collapseDisabled = true
+    source.loader = LoaderMediator(loader: self)
+    source.loadingBehavior = [.appearance, .autoupdate, .paging]
+    source.source.expandableBehavior.collapseDisabled = true
   }
-  override func sections() -> [Sectionable]? {
+
+  override func sections(for page: Int) -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let cells1: [Cellable] = [
-      gen.expandable(page: 1, cells: 1),
-      gen.expandable(page: 2, cells: 2),
-      gen.expandable(page: 3, cells: 3),
-      gen.expandable(page: 4, cells: 3),
-      gen.expandable(page: 5, cells: 4),
-      gen.expandable(page: 6, cells: 5),
-      gen.expandable(page: 7, cells: 6),
-      gen.expandable(page: 8, cells: 7)
+      gen.expandable(page: 10 * page + 1, cells: 1),
+      gen.expandable(page: 10 * page + 2, cells: 2),
+      gen.expandable(page: 10 * page + 3, cells: 3),
+      gen.expandable(page: 10 * page + 4, cells: 3),
+      gen.expandable(page: 10 * page + 5, cells: 4),
+      gen.expandable(page: 10 * page + 6, cells: 5),
+      gen.expandable(page: 10 * page + 7, cells: 6),
+      gen.expandable(page: 10 * page + 8, cells: 7)
     ]
 
-    let cells2: [Cellable] = [
-      loaderCell(),
-      gen.expandable(page: 9, cells: 1),
-      gen.expandable(page: 10, cells: 2),
-      gen.expandable(page: 11, cells: 3),
-      gen.expandable(page: 12, cells: 3),
-      gen.expandable(page: 13, cells: 4),
-      gen.expandable(page: 14, cells: 5),
-      gen.expandable(page: 15, cells: 6),
-      gen.expandable(page: 16, cells: 7)
-    ]
-
-    return [Section(cells: cells1), Section(cells: cells2)]
+    return [Section(cells: cells1, page: page)]
   }
 
   private func loaderCell() -> LoaderExpandableCellable {
@@ -58,21 +49,29 @@ class ExpandableTableViewController: BaseTableViewController<TableViewExpandable
   }
 }
 
-class ExpandableCollectionViewController: BaseCollectionViewController<CollectionViewExpandableSource> {
+class ExpandableCollectionViewController: BaseLoaderCollectionViewController<LoaderDecoratorSource<CollectionViewExpandableSource>> {
 
-  override func cells() -> [Cellable]? {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    source.loader = LoaderMediator(loader: self)
+    source.loadingBehavior = [.appearance, .autoupdate, .paging]
+    source.source.expandableBehavior.collapseDisabled = true
+  }
+
+  override func sections(for page: Int) -> [Sectionable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
-    return [
-      loaderCell(),
-      gen.expandable(page: 1, cells: 1),
-      gen.expandable(page: 2, cells: 2),
-      gen.expandable(page: 3, cells: 3),
-      gen.expandable(page: 4, cells: 3),
-      gen.expandable(page: 5, cells: 4),
-      gen.expandable(page: 6, cells: 5),
-      gen.expandable(page: 7, cells: 6),
-      gen.expandable(page: 8, cells: 7)
+    let cells1: [Cellable] = [
+      gen.expandable(page: 10 * page + 1, cells: 1),
+      gen.expandable(page: 10 * page + 2, cells: 2),
+      gen.expandable(page: 10 * page + 3, cells: 3),
+      gen.expandable(page: 10 * page + 4, cells: 3),
+      gen.expandable(page: 10 * page + 5, cells: 4),
+      gen.expandable(page: 10 * page + 6, cells: 5),
+      gen.expandable(page: 10 * page + 7, cells: 6),
+      gen.expandable(page: 10 * page + 8, cells: 7)
     ]
+
+    return [Section(cells: cells1, page: page)]
   }
 
   private func loaderCell() -> LoaderExpandableCellable {

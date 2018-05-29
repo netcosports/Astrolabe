@@ -81,7 +81,6 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
   ExpandableCellable where CellView.Container == Container {
 
   public var expandableCells: [Cellable]?
-  public var expanded: Bool = false
 
   public init(data: Data, expandableCells: [Cellable]?, click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {

@@ -34,7 +34,6 @@ public protocol Cellable {
 
 public protocol ExpandableCellable: Cellable {
   var expandableCells: [Cellable]? { get set }
-  var expanded: Bool { get set }
 }
 
 public protocol LoaderExpandableCellable: ExpandableCellable {
