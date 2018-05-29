@@ -26,7 +26,7 @@ class TestML: MLoader {
 
   func sections(from results: TestML.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: results.flatMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: results.compactMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   var didReceiveCount = 0

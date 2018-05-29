@@ -6,7 +6,7 @@
 enum Params {
 
   enum API {
-    static let baseURL = "http://httpbin.org"
+    static let baseURL = "http://localhost:8000"
   }
 
 }

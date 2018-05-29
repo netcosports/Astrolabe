@@ -54,7 +54,7 @@ private class ConfigurableLoader: Astrolabe.Loadable, Accessor {
 
   func load(for intent: LoaderIntent) -> SectionObservable? {
     if let pagesForIntent = configuration[intent] {
-      return .just(pagesForIntent.flatMap { ConfigurableLoader.section(with: $0) })
+      return .just(pagesForIntent.compactMap { ConfigurableLoader.section(with: $0) })
     } else {
       fail("Unexpected type of intent")
       return nil
