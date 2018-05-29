@@ -15,8 +15,8 @@ where CellView.Container == Container {
 
   let data: Data
   let setup: SetupClosure<CellView>?
-  let type: CellType
 
+  public let type: CellType
   public let click: ClickClosure?
   public let page: Int = 0
   public var id: String = ""

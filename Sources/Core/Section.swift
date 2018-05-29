@@ -32,6 +32,29 @@ open class Section: Sectionable {
   }
 }
 
+open class MultipleSupplementariesSection: Section {
+
+  let supplementaries: [Cellable]
+
+  public init(supplementaries: [Cellable],
+              cells: [Cellable],
+              page: Int = 0,
+              inset: UIEdgeInsets? = nil,
+              minimumLineSpacing: CGFloat? = nil,
+              minimumInteritemSpacing: CGFloat? = nil) {
+    self.supplementaries = supplementaries
+    super.init(cells: cells, page: page, inset: inset, minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
+  }
+
+  public override var supplementaryTypes: [CellType] {
+    return supplementaries.map { $0.type }
+  }
+
+  public override func supplementary(for type: CellType) -> Cellable? {
+    return supplementaries.first(where: { $0.type == type })
+  }
+}
+
 open class HeaderSection<Container, CellView: ReusableView & Reusable>: Section
   where CellView.Container == Container {
 

@@ -14,6 +14,7 @@ import RxSwift
 class BasicDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
 
   typealias Cell = CollectionCell<TestCollectionCell>
+  typealias Header = CollectionCell<TestCollectionHeaderCell>
 
   let activityIndicator: UIActivityIndicatorView = {
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -110,28 +111,27 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
   typealias Item = Sectionable
   func load(for intent: LoaderIntent) -> Observable<[Sectionable]?>? {
 
-    var result: [Sectionable]? = nil
+    let models: [TestViewModel]
     switch intent {
     case .page(let page):
-      let models = [
+      models = [
         TestViewModel("Test title \(page) - 1"),
         TestViewModel("Test title \(page) - 2"),
         TestViewModel("Test title \(page) - 3")
       ]
-      let cells = models.map { Cell(data: $0) }
-
-      result = [Section(cells: cells, page: page)]
     default:
-      let models = [
+      models = [
         TestViewModel("Test title initials - 1"),
         TestViewModel("Test title initials - 2"),
         TestViewModel("Test title initials - 3")
       ]
-      let cells = models.map { Cell(data: $0) }
-
-      result = [Section(cells: cells, page: 0)]
     }
 
-    return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
+    let cells = models.map { Cell(data: $0) }
+    let header: Cellable = Header(data: TestViewModel("Header"), type: CellType.header)
+    let footer: Cellable = Header(data: TestViewModel("Footer"), type: CellType.footer)
+    let section = MultipleSupplementariesSection(supplementaries: [header, footer], cells: cells, page: intent.page)
+
+    return SectionObservable.just([section]).delay(1.0, scheduler: MainScheduler.instance)
   }
 }

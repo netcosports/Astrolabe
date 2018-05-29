@@ -12,7 +12,7 @@ public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
 
-public enum CellType {
+public enum CellType: Hashable {
   case cell
   case header
   case footer
@@ -25,6 +25,7 @@ public protocol Cellable {
   func setup<T: ReusableView>(with cell: T)
   func size<T: ContainerView>(with container: T) -> CGSize
 
+  var type: CellType { get }
   var click: ClickClosure? { get }
   var page: Int { get }
 

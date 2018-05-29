@@ -35,7 +35,7 @@ func == (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
 }
 
 
-class TestCollectionCell: CollectionViewCell {
+class TestCollectionCell: CollectionViewCell, Reusable {
 
   let label: UILabel = {
     let label = UILabel()
@@ -54,9 +54,6 @@ class TestCollectionCell: CollectionViewCell {
       make.edges.equalToSuperview()
     }
   }
-}
-
-extension TestCollectionCell: Reusable {
 
   func setup(with data: TestViewModel) {
     label.text = data.title
@@ -67,7 +64,18 @@ extension TestCollectionCell: Reusable {
     }
   }
 
-  static func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
+  class func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
     return CGSize(width: 64.0, height: 64.0)
+  }
+}
+
+class TestCollectionHeaderCell: TestCollectionCell {
+
+  override func setup(with data: TestViewModel) {
+    super.setup(with: data)
+  }
+
+  override class func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
+    return CGSize(width: containerSize.width, height: 64)
   }
 }
