@@ -11,7 +11,7 @@ import Astrolabe
 import SnapKit
 import RxSwift
 
-class BasicDataExampleCollectionViewController: UIViewController {
+class BasicDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
 
   typealias Cell = CollectionCell<TestCollectionCell>
 
@@ -47,7 +47,7 @@ class BasicDataExampleCollectionViewController: UIViewController {
     super.viewDidLoad()
 
     view.backgroundColor = .white
-    containerView.source.loader = self
+    containerView.source.loader = LoaderMediator(loader: self)
     containerView.source.loadingBehavior = [.initial, .paging, .autoupdate]
     containerView.source.startProgress = { [weak self] _ in
       self?.activityIndicator.startAnimating()
@@ -106,11 +106,9 @@ class BasicDataExampleCollectionViewController: UIViewController {
 
     containerView.source.disappear()
   }
-}
 
-extension BasicDataExampleCollectionViewController: Loader {
-
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  typealias Item = Sectionable
+  func load(for intent: LoaderIntent) -> Observable<[Sectionable]?>? {
 
     var result: [Sectionable]? = nil
     switch intent {

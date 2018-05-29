@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 public enum SelectionManagement {
   case none
@@ -41,6 +42,10 @@ public protocol ReusableSource: class {
 
 extension ReusableSource {
 
+  public var cellsCount: Int {
+    return sections.reduce(0, { $0 + $1.cells.count })
+  }
+
   func processSelection(for cellId: String) {
     switch selectionBehavior {
     case .single:
@@ -53,26 +58,6 @@ extension ReusableSource {
       }
     }
   }
-
-}
-
-public protocol LoaderReusableSource: ReusableSource {
-
-  weak var loader: Loader? { get set }
-
-  var startProgress: ProgressClosure? { get set }
-  var stopProgress: ProgressClosure? { get set }
-  var updateEmptyView: EmptyViewClosure? { get set }
-  var autoupdatePeriod: TimeInterval { get set }
-  var loadingBehavior: LoadingBehavior { get set }
-
-  func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
-  func forceLoadNextPage()
-  func pullToRefresh()
-  func appear()
-  func disappear()
-  func cancelLoading()
-  func reloadDataWithEmptyDataSet()
 }
 
 public protocol Reusable {

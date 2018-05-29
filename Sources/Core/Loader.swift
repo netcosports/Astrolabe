@@ -9,6 +9,9 @@
 import UIKit
 import RxSwift
 
+public typealias SectionObservable = Observable<[Sectionable]?>
+public typealias ObservableClosure = () -> SectionObservable?
+
 public enum LoaderState {
   case notInitiated
   case initiated
@@ -22,14 +25,6 @@ let defaultReloadInterval: TimeInterval = 30
 public typealias ProgressClosure = (LoaderIntent) -> Void
 public typealias EmptyViewClosure = (LoaderState) -> Void
 
-public typealias SectionObservable = Observable<[Sectionable]?>
-
-public protocol Loader: class {
-  func performLoading(intent: LoaderIntent) -> SectionObservable?
-}
-
-public typealias ObservableClosure = () -> SectionObservable?
-
 public enum LoaderIntent {
   case initial
   case appearance
@@ -41,6 +36,23 @@ public enum LoaderIntent {
 
 extension LoaderIntent: Equatable {
 
+}
+
+public protocol Pageable {
+  var page: Int { get }
+}
+
+extension LoaderIntent: Pageable {
+  public var page: Int {
+    var page = 0
+    switch self {
+    case .page(let index):
+      page = index
+    default:
+      break
+    }
+    return page
+  }
 }
 
 public func == (lhs: LoaderIntent, rhs: LoaderIntent) -> Bool {
@@ -79,4 +91,111 @@ public struct LoadingBehavior: OptionSet {
   public static let autoupdate = LoadingBehavior(rawValue: 1 << 2)
   public static let autoupdateBackground = LoadingBehavior(rawValue: 3 << 2)
   public static let paging = LoadingBehavior(rawValue: 1 << 5)
+}
+
+public protocol LoaderReusableSource: ReusableSource {
+    var startProgress: ProgressClosure? { get set }
+    var stopProgress: ProgressClosure? { get set }
+    var updateEmptyView: EmptyViewClosure? { get set }
+    var autoupdatePeriod: TimeInterval { get set }
+    var loadingBehavior: LoadingBehavior { get set }
+
+    func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
+    func forceLoadNextPage()
+    func pullToRefresh()
+    func appear()
+    func disappear()
+    func cancelLoading()
+    func reloadDataWithEmptyDataSet()
+}
+
+public protocol Loadable: class {
+  associatedtype Item
+
+  func load(for intent: LoaderIntent) -> Observable<[Item]?>?
+  func merge(items: [Item]?, for intent: LoaderIntent) -> [Item]?
+  func apply(items:[Item]?, for intent: LoaderIntent)
+}
+
+public protocol LoaderMediatorProtocol: class {
+  func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void>
+}
+
+public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
+
+  typealias Item = Loader.Item
+
+  let loader: Loader
+  public init(loader: Loader) {
+    self.loader = loader
+  }
+
+  public func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void> {
+    guard let observable = loader.load(for: intent) else { return .empty() }
+
+    return observable.map { [weak self] items -> [Item]? in
+        return self?.loader.merge(items:items, for: intent)
+      }.observeOn(MainScheduler.instance)
+      .do(onNext: { [weak self] mergedItems in
+        self?.loader.apply(items:mergedItems, for: intent)
+      }).map({ _ -> Void in () })
+  }
+}
+
+public extension Loadable where Self: Accessor, Item == Sectionable {
+
+  func merge(items:[Item]?, for intent: LoaderIntent) -> [Item]? {
+    guard let updatedSections = items else { return sections }
+    var merged: [Item] = sections
+
+    switch intent {
+    case .initial, .force, .pullToRefresh:
+      return updatedSections
+    default:
+      // NOTE: the following checking is very important for paging logic,
+      // without this logic we will have infinit reloading in case of last page;
+      let hasCells = updatedSections.count != 0 &&
+        !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
+      guard hasCells else { return merged }
+
+      let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
+      for sectionsByPage in sectionByPages {
+        if let indexToReplace = merged.index(where: { sectionsByPage.key == $0.page }) {
+          merged = merged.filter { $0.page != sectionsByPage.key }
+          let updatedSectionsForPage = sectionsByPage.value.reversed()
+          updatedSectionsForPage.forEach {
+            merged.insert($0, at: indexToReplace)
+          }
+        } else {
+          merged.append(contentsOf: sectionsByPage.value)
+        }
+      }
+      merged.stableSort(by: {
+        guard $0.page != $1.page else { return nil }
+        return $0.page < $1.page
+      })
+      return merged
+    }
+  }
+
+  func apply(items: [Item]?, for intent: LoaderIntent) {
+    guard let items = items else { return }
+    source.sections = items
+    source.registerCellsForSections()
+    source.containerView?.reloadData()
+  }
+}
+
+public extension Loadable where Self: Accessor, Item: Comparable {
+
+  func merge(items:[Item]?, into all:[Item]?, for intent: LoaderIntent) -> [Item]? {
+    guard let items = items else { return nil }
+    if let all = all {
+      var mergedItems = all.filter { !items.contains($0) }
+      mergedItems.append(contentsOf: items)
+      mergedItems.sort()
+      return mergedItems
+    }
+    return items
+  }
 }
