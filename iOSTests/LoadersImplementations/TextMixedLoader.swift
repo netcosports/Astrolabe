@@ -30,7 +30,7 @@ extension TextMixedLoader: MLoader {
 
   func sections(from results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: results.flatMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: results.compactMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   func didReceive(results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) {
@@ -51,7 +51,7 @@ extension TextMixedLoader: PLoader {
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: [result.model].flatMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: [result.model].compactMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   func didReceive(result: PLResult, loadingIntent: LoaderIntent) {

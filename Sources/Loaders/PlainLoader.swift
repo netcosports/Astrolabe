@@ -3,11 +3,11 @@ import RxSwift
 
 public protocol PLoader: class {
   associatedtype PLResult: OptionalResult
-
+  associatedtype Output
   typealias PLRequest = Request<PLResult>
   
   func request(for loadingIntent: LoaderIntent) throws -> PLRequest
-  func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]?
+  func sections(from result: PLResult, loadingIntent: LoaderIntent) -> Output?
   func didReceive(result: PLResult, loadingIntent: LoaderIntent)
 }
 
@@ -17,12 +17,13 @@ public extension PLoader {
 
 public protocol PContextLoader: class {
   associatedtype PLResult: OptionalResult
+  associatedtype Output
   associatedtype Context
 
   typealias PLRequest = Request<PLResult>
 
   func request(for loadingIntent: LoaderIntent, context: Context) throws -> PLRequest
-  func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> [Sectionable]?
+  func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> Output?
   func didReceive(result: PLResult, loadingIntent: LoaderIntent, context: Context)
 }
 
@@ -30,7 +31,7 @@ public extension PContextLoader {
   func didReceive(result: PLResult, loadingIntent: LoaderIntent, context: Context) {}
 }
 
-public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> SectionObservable {
+public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> Observable<T.Output?> {
   do {
     let request = try loader.request(for: intent)
     let observable: Observable<Response<T.PLResult>>
@@ -42,7 +43,7 @@ public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> Section
     default:
       observable = Gnomon.cachedThenFetch(request)
     }
-    return observable.flatMap { [weak loader] response -> SectionObservable in
+    return observable.flatMap { [weak loader] response -> Observable<T.Output?> in
       switch (intent, response.responseType) {
       case (.page, _), (.autoupdate, _), (.pullToRefresh, _): break
       case (.force(let keepData), _) where keepData: break
@@ -60,7 +61,7 @@ public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> Section
 
 }
 
-public func load<T: PContextLoader>(pLoader loader: T, intent: LoaderIntent, context: T.Context) -> SectionObservable {
+public func load<T: PContextLoader>(pLoader loader: T, intent: LoaderIntent, context: T.Context) -> Observable<T.Output?> {
   do {
     let request = try loader.request(for: intent, context: context)
     let observable: Observable<Response<T.PLResult>>
@@ -72,7 +73,7 @@ public func load<T: PContextLoader>(pLoader loader: T, intent: LoaderIntent, con
     default:
       observable = Gnomon.cachedThenFetch(request)
     }
-    return observable.flatMap { [weak loader] response -> SectionObservable in
+    return observable.flatMap { [weak loader] response -> Observable<T.Output?> in
       switch (intent, response.responseType) {
       case (.page, _), (.autoupdate, _), (.pullToRefresh, _): break
       case (.force(let keepData), _) where keepData: break

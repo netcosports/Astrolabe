@@ -26,7 +26,7 @@ class TestContextPlainLoader: PContextLoader {
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: [result.model].flatMap { $0 }.map {
+    return [Section(cells: [result.model].compactMap { $0 }.map {
       Cell(data: TestViewCell.ViewModel($0, context: context))
     })]
   }

@@ -40,16 +40,21 @@ struct SectionDescriptor: Equatable {
 
 typealias SD = SectionDescriptor
 
-private class ConfigurableLoader: Astrolabe.Loader {
+private class ConfigurableLoader: Astrolabe.Loadable, Accessor {
+
   typealias Configuration = [LoaderIntent: [SD]]
+
   let configuration: Configuration
-  init(configuration: Configuration) {
+  let containerView: CollectionView<LoaderDecoratorSource<CollectionViewSource>>
+
+  init(configuration: Configuration, containerView: CollectionView<LoaderDecoratorSource<CollectionViewSource>>) {
     self.configuration = configuration
+    self.containerView = containerView
   }
 
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  func load(for intent: LoaderIntent) -> SectionObservable? {
     if let pagesForIntent = configuration[intent] {
-      return .just(pagesForIntent.flatMap { ConfigurableLoader.section(with: $0) })
+      return .just(pagesForIntent.compactMap { ConfigurableLoader.section(with: $0) })
     } else {
       fail("Unexpected type of intent")
       return nil
@@ -87,8 +92,8 @@ class LoaderDecoratorSpec: XCTestCase {
     let source = containerView.source
     source.loadingBehavior = [.autoupdate]
     source.autoupdatePeriod = TimeInterval(0.5)
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, containerView: containerView)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.stopProgress = {
@@ -117,8 +122,8 @@ class LoaderDecoratorSpec: XCTestCase {
     let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
     let source = containerView.source
     source.loadingBehavior = [.appearance]
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, containerView: containerView)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.stopProgress = {
@@ -156,18 +161,22 @@ class LoaderDecoratorSpec: XCTestCase {
     let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
     let source = containerView.source
     source.loadingBehavior = [.paging]
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, containerView: containerView)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
       source.stopProgress = {
         switch $0 {
         case .initial:
           expect(source.sectionDescriptors).to(equal(initialPages))
+          source.forceLoadNextPage()
         case .page(let page):
           switch page {
-          case 2: expect(source.sectionDescriptors).to(equal(expectedSecondPages))
-          case 5: expect(source.sectionDescriptors).to(equal(expectedThirdPages))
+          case 2:
+            expect(source.sectionDescriptors).to(equal(expectedSecondPages))
+            source.forceLoadNextPage()
+          case 5:
+            expect(source.sectionDescriptors).to(equal(expectedThirdPages))
             done()
           default: fail("Unexpected page number")
           }
@@ -176,8 +185,6 @@ class LoaderDecoratorSpec: XCTestCase {
         }
       }
       source.appear()
-      source.forceLoadNextPage()
-      source.forceLoadNextPage()
     }
   }
 }

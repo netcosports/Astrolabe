@@ -11,6 +11,11 @@ import Astrolabe
 
 class TableLoaderSourceViewController: BaseLoaderTableViewController<LoaderDecoratorSource<TableViewSource>> {
 
+  override func loadView() {
+    super.loadView()
+    source.loader = LoaderMediator(loader: self)
+  }
+
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     return [
@@ -21,6 +26,11 @@ class TableLoaderSourceViewController: BaseLoaderTableViewController<LoaderDecor
 }
 
 class CollectionLoaderSourceViewController: BaseLoaderCollectionViewController<LoaderDecoratorSource<CollectionViewSource>> {
+
+  override func loadView() {
+    super.loadView()
+    source.loader = LoaderMediator(loader: self)
+  }
 
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()

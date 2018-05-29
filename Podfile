@@ -13,6 +13,7 @@ abstract_target 'Astrolabe' do
 
   target 'DemoTV' do
     platform :tvos, '9.0'
+    pod 'SnapKit'
   end
 
   abstract_target 'Tests' do

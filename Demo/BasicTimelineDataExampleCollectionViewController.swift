@@ -1,9 +1,9 @@
 //
-//  BasicExampleViewController.swift
-//  Astrolabe
+//  BasicTimelineDataExampleCollectionViewController.swift
+//  Demo
 //
-//  Created by Sergei Mikhan on 3/23/17.
-//  Copyright © 2017 NetcoSports. All rights reserved.
+//  Created by Sergei Mikhan on 5/25/18.
+//  Copyright © 2018 NetcoSports. All rights reserved.
 //
 
 import UIKit
@@ -11,9 +11,7 @@ import Astrolabe
 import SnapKit
 import RxSwift
 
-class BasicDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
-
-  typealias Cell = CollectionCell<TestCollectionCell>
+class BasicTimelineDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
 
   let activityIndicator: UIActivityIndicatorView = {
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -107,31 +105,41 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
     containerView.source.disappear()
   }
 
-  typealias Item = Sectionable
-  func load(for intent: LoaderIntent) -> Observable<[Sectionable]?>? {
+  typealias Cell = CollectionCell<TestCollectionCell>
+  typealias Item = TestViewModel
+  var all: [Item] = []
+  func load(for intent: LoaderIntent) -> Observable<[Item]?>? {
 
-    var result: [Sectionable]? = nil
+    var result: [Item]? = nil
     switch intent {
     case .page(let page):
-      let models = [
+      result = [
         TestViewModel("Test title \(page) - 1"),
         TestViewModel("Test title \(page) - 2"),
         TestViewModel("Test title \(page) - 3")
       ]
-      let cells = models.map { Cell(data: $0) }
-
-      result = [Section(cells: cells, page: page)]
     default:
-      let models = [
+      result = [
         TestViewModel("Test title initials - 1"),
         TestViewModel("Test title initials - 2"),
         TestViewModel("Test title initials - 3")
       ]
-      let cells = models.map { Cell(data: $0) }
-
-      result = [Section(cells: cells, page: 0)]
     }
+    return Observable<[Item]?>.just(result).delay(1.0, scheduler: MainScheduler.instance)
+  }
 
-    return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
+  func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
+    guard let items = items else { return nil }
+    var mergedItems = all.filter { !items.contains($0) }
+    mergedItems.append(contentsOf: items)
+    mergedItems.sort()
+    all = mergedItems
+    return .just(mergedItems)
+  }
+
+  func apply(items:[Item]?, for intent: LoaderIntent) {
+    guard let cells = items?.map({ Cell(data: $0) }) else { return }
+    sections = [Section(cells: cells, page: intent.page)]
+    containerView.reloadData()
   }
 }
