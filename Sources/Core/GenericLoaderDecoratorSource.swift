@@ -179,10 +179,10 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     }
     guard let observable = loader?.load(into: self, for: intent) else { return }
     let cellsCountBeforeLoad = cellsCount
-    startProgress?(intent)
     state = .loading(intent: intent)
     let loaderDisposeBag = DisposeBag()
     self.loaderDisposeBag = loaderDisposeBag
+    startProgress?(intent)
     observable
       .observeOn(MainScheduler.instance)
       .subscribe(onError: { [weak self] error in
