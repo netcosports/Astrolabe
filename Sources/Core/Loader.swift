@@ -125,20 +125,20 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
 
   typealias Item = Loader.Item
 
-  let loader: Loader
+  weak var loader: Loader?
   public init(loader: Loader) {
     self.loader = loader
   }
 
   public func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void> {
-    guard let observable = loader.load(for: intent) else { return .empty() }
+    guard let observable = loader?.load(for: intent) else { return .empty() }
 
     return observable.flatMap { [weak self] items -> Observable<[Item]?> in
-      guard let merged = self?.loader.merge(items:items, for: intent) else { return .empty() }
+      guard let merged = self?.loader?.merge(items:items, for: intent) else { return .empty() }
       return merged
     }.observeOn(MainScheduler.instance)
      .do(onNext: { [weak self] mergedItems in
-        self?.loader.apply(items:mergedItems, for: intent)
+        self?.loader?.apply(items:mergedItems, for: intent)
       }).map({ _ -> Void in () })
   }
 }

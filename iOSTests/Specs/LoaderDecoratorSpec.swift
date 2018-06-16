@@ -96,7 +96,8 @@ class LoaderDecoratorSpec: XCTestCase {
     source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
           expect(source.sectionDescriptors).to(equal(initialPages))
@@ -126,7 +127,8 @@ class LoaderDecoratorSpec: XCTestCase {
     source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
           expect(source.sectionDescriptors).to(equal(initialPages))
@@ -165,7 +167,8 @@ class LoaderDecoratorSpec: XCTestCase {
     source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
           expect(source.sectionDescriptors).to(equal(initialPages))
