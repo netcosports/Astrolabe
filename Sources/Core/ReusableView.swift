@@ -175,7 +175,7 @@ extension UITableView: ContainerView {
   }
 
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure? = nil) {
-    if #available(iOS 11.0, *) {
+    if #available(iOS 11.0, tvOS 11.0, *) {
       performBatchUpdates(block, completion: completion)
     } else {
       CATransaction.begin()
