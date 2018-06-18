@@ -27,10 +27,8 @@ class Generator<Container,
 
   func expandable(page: Int, cells: Int) -> ExpandableCell<Container, CellView> {
     let cells: [Cell<Container, CellView>] = cellsViews(page: page, cells: cells)
-    let expandable = ExpandableCell<Container, CellView>(data: TestViewModel("root \(page)"),
-                                                         expandableCells: cells as [Cellable])
-    expandable.id = "root \(page)"
-    return expandable
+    return ExpandableCell<Container, CellView>(data: TestViewModel("root \(page)"), id: "root \(page)",
+      expandableCells: cells as [Cellable])
   }
 
   func section(page: Int, cells: Int) -> Section {

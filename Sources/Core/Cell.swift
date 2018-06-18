@@ -30,11 +30,12 @@ where CellView.Container == Container {
     self.id = id
   }
 
-  public init(data: Data, click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
     self.data = data
     self.type = type
     self.setup = setup
     self.click = click
+    self.id = id
   }
 
   public func register<T: ContainerView>(in container: T) {
@@ -82,10 +83,10 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
 
   public var expandableCells: [Cellable]?
 
-  public init(data: Data, expandableCells: [Cellable]?, click: ClickClosure? = nil,
+  public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, click: click, type: .cell, setup: setup)
+    super.init(data: data, id: id, click: click, type: .cell, setup: setup)
   }
 }
 
@@ -98,13 +99,14 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
   ExpandableCell<Container, CellView>, LoaderExpandableCellable where CellView.Container == Container {
 
   public init(data: Data,
+              id: String,
               loader: ObservableClosure? = nil,
               loaderCell: Cellable,
               click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
     self.loader = loader
     self.loaderCell = loaderCell
-    super.init(data: data, expandableCells: nil, click: click, setup: setup)
+    super.init(data: data, id: id, expandableCells: nil, click: click, setup: setup)
     self.expandableCells = [loaderCell]
   }
 

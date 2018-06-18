@@ -37,15 +37,13 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
 
   private func loaderCell() -> LoaderExpandableCellable {
     let loader = TableCell<TestTableCell>(data: TestViewModel("indicator"))
-    let cell = LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader"), loader: {
+    return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader"), id: "indicator", loader: {
       let gen = TableGenerator<TestTableCell, TestTableHeader>()
       return SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
         .delay(1.0, scheduler: MainScheduler.instance)
         .concat(SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
-                  .delay(2.0, scheduler: MainScheduler.instance))
+          .delay(2.0, scheduler: MainScheduler.instance))
     }, loaderCell: loader)
-    cell.id = "indicator"
-    return cell
   }
 }
 
@@ -76,14 +74,12 @@ class ExpandableCollectionViewController: BaseLoaderCollectionViewController<Loa
 
   private func loaderCell() -> LoaderExpandableCellable {
     let loader = CollectionCell<TestCollectionCell>(data: TestViewModel("indicator"))
-    let cell = LoaderExpandableCell<UICollectionView, TestCollectionCell>(data: TestViewModel("loader"), loader: {
+    return LoaderExpandableCell<UICollectionView, TestCollectionCell>(data: TestViewModel("loader"), id: "indicator", loader: {
       let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
       return SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
         .delay(1.0, scheduler: MainScheduler.instance)
         .concat(SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
                   .delay(2.0, scheduler: MainScheduler.instance))
     }, loaderCell: loader)
-    cell.id = "indicator"
-    return cell
   }
 }
