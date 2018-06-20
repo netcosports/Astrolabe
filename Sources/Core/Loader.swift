@@ -143,21 +143,25 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
   }
 }
 
-public extension Loadable where Self: Accessor, Item == Sectionable {
+public extension Loadable where Self: Containerable, Item == Sectionable {
 
   func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
-    guard let updatedSections = items else { return .just(source.sections) }
-    var merged: [Item] = source.sections
+    guard let updatedSections = items else { return .just(allItems) }
+    var merged: [Item] = allItems
 
     switch intent {
     case .initial, .force, .pullToRefresh:
+      allItems = updatedSections
       return .just(updatedSections)
     default:
       // NOTE: the following checking is very important for paging logic,
       // without this logic we will have infinit reloading in case of last page;
       let hasCells = updatedSections.count != 0 &&
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
-      guard hasCells else { return .just(merged) }
+      guard hasCells else {
+        allItems = updatedSections
+        return .just(merged)
+      }
 
       let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
       for sectionsByPage in sectionByPages {
@@ -175,9 +179,13 @@ public extension Loadable where Self: Accessor, Item == Sectionable {
         guard $0.page != $1.page else { return nil }
         return $0.page < $1.page
       })
+      allItems = merged
       return .just(merged)
     }
   }
+}
+
+public extension Loadable where Self: Accessor, Item == Sectionable {
 
   func apply(items: [Item]?, for intent: LoaderIntent) {
     guard let items = items else { return }

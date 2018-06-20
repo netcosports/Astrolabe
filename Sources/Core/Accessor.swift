@@ -13,6 +13,11 @@ public protocol AccessorView: ContainerView {
   var source: Source { get }
 }
 
+public protocol Containerable: class {
+  associatedtype Item
+  var allItems: [Item] { get set }
+}
+
 public protocol Accessor: class {
   associatedtype Container: AccessorView
   typealias Source = Container.Source
@@ -35,6 +40,18 @@ public extension Accessor {
 
     set (newValue) {
       source.sections = newValue
+    }
+  }
+}
+
+public extension Accessor where Self: Containerable {
+
+  var allItems: [Sectionable] {
+    set(newValue) {
+      sections = newValue
+    }
+    get {
+      return sections
     }
   }
 }

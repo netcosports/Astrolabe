@@ -77,7 +77,7 @@ class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<
   }
 }
 
-class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable where T: AccessorView, T.Source: LoaderReusableSource {
+class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Containerable where T: AccessorView, T.Source: LoaderReusableSource {
 
   convenience init(type: LoaderResult) {
     self.init()
@@ -200,6 +200,13 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable where
         return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
       }
     }
+  }
+
+  func apply(items: [Sectionable]?, for intent: LoaderIntent) {
+    guard let items = items else { return }
+    source.sections = items
+    source.registerCellsForSections()
+    source.containerView?.reloadData()
   }
 
   func sections(for page: Int) -> [Sectionable]? {

@@ -11,6 +11,12 @@
 		75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */; };
 		A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */; };
 		A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5532A9B1F615C4600186A9F /* SelectionViewController.swift */; };
+		AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
+		AA0376A420DA5F1400E6343A /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
+		AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */; };
+		AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
+		AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */; };
+		AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
 		AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
 		AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
 		AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
@@ -97,6 +103,8 @@
 		737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
+		AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModel.swift; sourceTree = "<group>"; };
+		AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModelViewController.swift; sourceTree = "<group>"; };
 		AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTimelineDataExampleCollectionViewController.swift; sourceTree = "<group>"; };
 		AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModel.swift; sourceTree = "<group>"; };
 		AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModelViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +258,8 @@
 				A5532A9B1F615C4600186A9F /* SelectionViewController.swift */,
 				AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */,
 				AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */,
+				AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */,
+				AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -705,6 +715,7 @@
 				B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */,
 				AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */,
 				B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */,
+				AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F031F0CC54D005146DB /* Generator.swift in Sources */,
 				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
@@ -713,6 +724,7 @@
 				B5716F0E1F0CC54D005146DB /* PagerViewController.swift in Sources */,
 				AA52599620BC56010089ECD2 /* BasicTestViewModelViewController.swift in Sources */,
 				B5716F0A1F0CC54D005146DB /* TestCollectionCell.swift in Sources */,
+				AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
 				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
 				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
@@ -756,11 +768,15 @@
 			files = (
 				AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
 				B5716F311F0CC6E9005146DB /* TestCollectionCell.swift in Sources */,
+				AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
 				B5716F291F0CC6E9005146DB /* ExpandableViewController.swift in Sources */,
+				AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F261F0CC6E9005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F241F0CC6E9005146DB /* AppDelegate.swift in Sources */,
 				B5716F2C1F0CC6E9005146DB /* LoaderSourceViewController.swift in Sources */,
 				B5716F321F0CC6E9005146DB /* TestTableCell.swift in Sources */,
+				AA0376A420DA5F1400E6343A /* BasicTestViewModel.swift in Sources */,
+				AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */,
 				B5716F2F1F0CC6E9005146DB /* SourceViewController.swift in Sources */,
 				B5716F2B1F0CC6E9005146DB /* HomeViewController.swift in Sources */,
 				B5716F271F0CC6E9005146DB /* BasicExampleCollectionViewController.swift in Sources */,
