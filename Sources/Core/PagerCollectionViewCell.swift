@@ -9,8 +9,13 @@
 import UIKit
 
 public struct PagerViewModel {
-  let viewController: UIViewController
-  let cellId: String
+  public let viewController: UIViewController
+  public let cellId: String
+
+  public init(viewController: UIViewController, cellId: String) {
+    self.viewController = viewController
+    self.cellId = cellId
+  }
 }
 
 public class PagerCollectionViewCell: CollectionViewCell, Reusable {
