@@ -25,16 +25,14 @@ protocol Expandable: class {
 extension Expandable where Self: ReusableSource {
 
   func adjust(cells: inout [Cellable]) -> [Cellable] {
-    cells.enumerated().forEach { index, cell in
-      if let expandableCell = cell as? ExpandableCellable {
-        if self.isExpanded(cell: expandableCell) {
-          if var expandableCells = expandableCell.expandableCells {
-            let adjustedCells = adjust(cells: &expandableCells)
-            let adjustedCellsIds = adjustedCells.map { $0.id }
-            cells = cells.filter { !adjustedCellsIds.contains($0.id) }
-            cells.insert(contentsOf: adjustedCells, at: index + 1)
-          }
-        }
+    for (index, cell) in cells.enumerated() {
+      guard let expandableCell = cell as? ExpandableCellable, isExpanded(cell: expandableCell) else { continue }
+
+      if var expandableCells = expandableCell.expandableCells {
+        let adjustedCells = adjust(cells: &expandableCells)
+        let adjustedCellsIds = adjustedCells.map { $0.id }
+        cells = cells.filter { !adjustedCellsIds.contains($0.id) }
+        cells.insert(contentsOf: adjustedCells, at: index + 1)
       }
     }
     return cells
@@ -45,22 +43,23 @@ extension Expandable where Self: ReusableSource {
   }
 
   func allIds(in cell: inout ExpandableCellable) -> [String] {
+    guard let subcells = cell.expandableCells else { return [] }
+
     var ids: [String] = []
-    guard let subcells = cell.expandableCells else {
-      return ids
-    }
+    ids.reserveCapacity(subcells.count)
+
     subcells.forEach { subcell in
-      guard var expandableCell = subcell as? ExpandableCellable else {
-        ids.append(subcell.id)
-        return
-      }
-      ids.append(expandableCell.id)
+      ids.append(subcell.id)
+      guard var expandableCell = subcell as? ExpandableCellable else { return }
+
       if isExpanded(cell: expandableCell) {
         let subids = allIds(in: &expandableCell)
         ids.append(contentsOf: subids)
       }
-      self.expandedCells.remove(expandableCell.id)
+
+      expandedCells.remove(expandableCell.id)
     }
+
     return ids
   }
 
@@ -74,14 +73,12 @@ extension Expandable where Self: ReusableSource {
     }
     indexToExpand += 1
 
-    var indexes: [IndexPath] = []
-    for indexToShow in 0..<expandableCells.count {
-      let index = IndexPath(row: indexToExpand + indexToShow, section: sectionIndex)
-      indexes.append(index)
+    let indexPaths = (0 ..< expandableCells.count).map { indexToShow in
+      IndexPath(row: indexToExpand + indexToShow, section: sectionIndex)
     }
     sectionCells.insert(contentsOf: expandableCells, at: indexToExpand)
     section.cells = sectionCells
-    return indexes
+    return indexPaths
   }
 
   func collapseItems(section: inout Sectionable,
@@ -110,16 +107,16 @@ extension Expandable where Self: ReusableSource {
                              expandableCell: ExpandableCellable) -> ExpandableCellable? {
     let allExpandedCells = section.cells
       .compactMap { $0 as? ExpandableCellable }
-      .filter { self.isExpanded(cell: $0) }
+      .filter { isExpanded(cell: $0) }
 
     for expandedCell in allExpandedCells {
-      if expandedCell.expandableCells?.filter({$0.id == expandableCell.id }).first != nil {
-        let parentsCells = expandedCell.expandableCells?.compactMap { $0 as? ExpandableCellable }
-        if let anotherExpandedCell = parentsCells?.filter({ self.isExpanded(cell: $0) }).first {
-          return anotherExpandedCell
-        } else {
-          return nil
-        }
+      guard expandedCell.expandableCells?.filter({ $0.id == expandableCell.id }).first != nil else { continue }
+
+      let parentsCells = expandedCell.expandableCells?.compactMap { $0 as? ExpandableCellable }
+      if let anotherExpandedCell = parentsCells?.filter({ self.isExpanded(cell: $0) }).first {
+        return anotherExpandedCell
+      } else {
+        return nil
       }
     }
 
@@ -146,7 +143,7 @@ extension Expandable where Self: ReusableSource {
     }
 
     if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
-      self.scroll(to: indexPath)
+      scroll(to: indexPath)
     }
   }
 
@@ -173,13 +170,13 @@ extension Expandable where Self: ReusableSource {
   // swiftlint:disable:next function_parameter_count
   func collapseAndExpandItemInSection(section: inout Sectionable,
                                       expandableCell: inout ExpandableCellable,
-                                      collapseableCell: inout ExpandableCellable,
+                                      collapsibleCell: inout ExpandableCellable,
                                       expandableCells: [Cellable],
                                       sectionCells: inout [Cellable],
                                       sectionIndex: Int) {
 
     let collapseIndexes = collapseItems(section: &section,
-                                        expandableCell: &collapseableCell,
+                                        expandableCell: &collapsibleCell,
                                         sectionCells: &sectionCells,
                                         sectionIndex: sectionIndex)
 
@@ -196,10 +193,10 @@ extension Expandable where Self: ReusableSource {
       expandedCells.insert(expandableCell.id)
     }
 
-    if isExpanded(cell: collapseableCell) {
-      expandedCells.remove(collapseableCell.id)
+    if isExpanded(cell: collapsibleCell) {
+      expandedCells.remove(collapsibleCell.id)
     } else {
-      expandedCells.insert(collapseableCell.id)
+      expandedCells.insert(collapsibleCell.id)
     }
 
     let letSection = section
@@ -214,7 +211,7 @@ extension Expandable where Self: ReusableSource {
       }
     })
     reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell)
-    reloadCell(section: section, sectionIndex: sectionIndex, cell: collapseableCell)
+    reloadCell(section: section, sectionIndex: sectionIndex, cell: collapsibleCell)
   }
 
   func handleLoaderCell(expandableCell: ExpandableCellable,
@@ -232,7 +229,7 @@ extension Expandable where Self: ReusableSource {
         onError: { [weak self] _ in
           self?.updateLoaderCell(loaderExpandableCell: &loaderExpandableCellable, indexPath: indexPath)
         }
-        ).disposed(by: disposeBag)
+      ).disposed(by: disposeBag)
     default: break
     }
   }
@@ -258,33 +255,33 @@ extension Expandable where Self: ReusableSource {
           sectionCells.remove(at: loaderIndex)
           self.containerView?.delete(at: [IndexPath(row: loaderIndex, section: indexPath.section)])
           if let loadedCells = loaderExpandableCell.loadedCells {
-            var indexes: [IndexPath] = []
-            (0..<loadedCells.count).forEach {
-              indexes.append(IndexPath(row: targetIndex + $0, section: indexPath.section))
+            let indexPaths = (0 ..< loadedCells.count).map {
+              IndexPath(row: targetIndex + $0, section: indexPath.section)
             }
+
             sectionCells.insert(contentsOf: loadedCells, at: targetIndex)
             section.cells = sectionCells
             registerCellsForSections()
-            containerView?.insert(at: indexes)
+            containerView?.insert(at: indexPaths)
             let cells = loaderExpandableCell.loadedCells
             loaderExpandableCell.expandableCells = cells
           }
         }, completion: nil)
-      } else {
-        if loaderExpandableCell.expandableCells != nil {
-          let cells = loaderExpandableCell.loadedCells
-          loaderExpandableCell.expandableCells = cells
-          var expandableCell: ExpandableCellable = loaderExpandableCell
-          allIds(in: &expandableCell).forEach { id in
-            guard let index = sectionCells.index(where: { $0.id == id }) else { return }
-            sectionCells.remove(at: index)
-          }
-          if let loadedCells = loaderExpandableCell.loadedCells {
-            sectionCells.insert(contentsOf: loadedCells, at: expandableCellIndex + 1)
-          }
-          section.cells = sectionCells
-          containerView?.reloadData()
+      } else if loaderExpandableCell.expandableCells != nil {
+        let cells = loaderExpandableCell.loadedCells
+        loaderExpandableCell.expandableCells = cells
+
+        var expandableCell: ExpandableCellable = loaderExpandableCell
+        allIds(in: &expandableCell).forEach { id in
+          guard let index = sectionCells.index(where: { $0.id == id }) else { return }
+          sectionCells.remove(at: index)
         }
+
+        if let loadedCells = loaderExpandableCell.loadedCells {
+          sectionCells.insert(contentsOf: loadedCells, at: expandableCellIndex + 1)
+        }
+        section.cells = sectionCells
+        containerView?.reloadData()
       }
     }
   }
@@ -311,10 +308,10 @@ extension Expandable where Self: ReusableSource {
                             sectionCells: &sectionCells,
                             sectionIndex: indexPath.section)
     } else {
-      if var collapseableCell = expandedItemInSection(section: section, expandableCell: expandableCell) {
+      if var collapsibleCell = expandedItemInSection(section: section, expandableCell: expandableCell) {
         collapseAndExpandItemInSection(section: &section,
                                        expandableCell: &expandableCell,
-                                       collapseableCell: &collapseableCell,
+                                       collapsibleCell: &collapsibleCell,
                                        expandableCells: expandableCells,
                                        sectionCells: &sectionCells,
                                        sectionIndex: indexPath.section)

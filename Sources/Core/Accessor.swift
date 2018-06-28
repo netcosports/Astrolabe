@@ -38,20 +38,23 @@ public extension Accessor {
       return source.sections
     }
 
-    set (newValue) {
+    set {
       source.sections = newValue
     }
   }
+
 }
 
 public extension Accessor where Self: Containerable {
 
   var allItems: [Sectionable] {
-    set(newValue) {
-      sections = newValue
-    }
     get {
       return sections
     }
+
+    set {
+      sections = newValue
+    }
   }
+
 }

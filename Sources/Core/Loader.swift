@@ -94,19 +94,19 @@ public struct LoadingBehavior: OptionSet {
 }
 
 public protocol LoaderReusableSource: ReusableSource {
-    var startProgress: ProgressClosure? { get set }
-    var stopProgress: ProgressClosure? { get set }
-    var updateEmptyView: EmptyViewClosure? { get set }
-    var autoupdatePeriod: TimeInterval { get set }
-    var loadingBehavior: LoadingBehavior { get set }
+  var startProgress: ProgressClosure? { get set }
+  var stopProgress: ProgressClosure? { get set }
+  var updateEmptyView: EmptyViewClosure? { get set }
+  var autoupdatePeriod: TimeInterval { get set }
+  var loadingBehavior: LoadingBehavior { get set }
 
-    func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
-    func forceLoadNextPage()
-    func pullToRefresh()
-    func appear()
-    func disappear()
-    func cancelLoading()
-    func reloadDataWithEmptyDataSet()
+  func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
+  func forceLoadNextPage()
+  func pullToRefresh()
+  func appear()
+  func disappear()
+  func cancelLoading()
+  func reloadDataWithEmptyDataSet()
 }
 
 public protocol Loadable: class {
@@ -114,7 +114,7 @@ public protocol Loadable: class {
 
   func load(for intent: LoaderIntent) -> Observable<[Item]?>?
   func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<[Item]?>?
-  func apply(items:[Item]?, for intent: LoaderIntent)
+  func apply(items: [Item]?, for intent: LoaderIntent)
 }
 
 public protocol LoaderMediatorProtocol: class {
@@ -138,14 +138,14 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
       return merged
     }.observeOn(MainScheduler.instance)
      .do(onNext: { [weak self] mergedItems in
-        self?.loader?.apply(items:mergedItems, for: intent)
-      }).map({ _ -> Void in () })
+        self?.loader?.apply(items: mergedItems, for: intent)
+      }).map { _ in () }
   }
 }
 
 public extension Loadable where Self: Containerable, Item == Sectionable {
 
-  func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
     guard let updatedSections = items else { return .just(allItems) }
     var merged: [Item] = allItems
 
@@ -155,7 +155,7 @@ public extension Loadable where Self: Containerable, Item == Sectionable {
       return .just(updatedSections)
     default:
       // NOTE: the following checking is very important for paging logic,
-      // without this logic we will have infinit reloading in case of last page;
+      // without this logic we will have infinite reloading in case of last page;
       let hasCells = updatedSections.count != 0 &&
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
       guard hasCells else {
@@ -193,4 +193,5 @@ public extension Loadable where Self: Accessor, Item == Sectionable {
     source.registerCellsForSections()
     source.containerView?.reloadData()
   }
+
 }
