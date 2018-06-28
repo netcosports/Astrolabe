@@ -74,6 +74,6 @@ public extension Reusable where Data == Void {
 
 public extension Reusable {
   static func identifier(for data: Data) -> String {
-    return "\(self)"
+    return String(reflecting: self)
   }
 }
