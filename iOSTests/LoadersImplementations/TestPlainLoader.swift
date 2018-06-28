@@ -25,7 +25,7 @@ class TestPL: PLoader {
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: [result.model].flatMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: [result.model].compactMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   func didReceive(result: PLResult, loadingIntent: LoaderIntent) {

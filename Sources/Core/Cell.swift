@@ -15,8 +15,8 @@ where CellView.Container == Container {
 
   let data: Data
   let setup: SetupClosure<CellView>?
-  let type: CellType
 
+  public let type: CellType
   public let click: ClickClosure?
   public let page: Int = 0
   public var id: String = ""
@@ -30,11 +30,12 @@ where CellView.Container == Container {
     self.id = id
   }
 
-  public init(data: Data, click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
     self.data = data
     self.type = type
     self.setup = setup
     self.click = click
+    self.id = id
   }
 
   public func register<T: ContainerView>(in container: T) {
@@ -81,12 +82,11 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
   ExpandableCellable where CellView.Container == Container {
 
   public var expandableCells: [Cellable]?
-  public var expanded: Bool = false
 
-  public init(data: Data, expandableCells: [Cellable]?, click: ClickClosure? = nil,
+  public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, click: click, type: .cell, setup: setup)
+    super.init(data: data, id: id, click: click, type: .cell, setup: setup)
   }
 }
 
@@ -99,13 +99,14 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
   ExpandableCell<Container, CellView>, LoaderExpandableCellable where CellView.Container == Container {
 
   public init(data: Data,
+              id: String,
               loader: ObservableClosure? = nil,
               loaderCell: Cellable,
               click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
     self.loader = loader
     self.loaderCell = loaderCell
-    super.init(data: data, expandableCells: nil, click: click, setup: setup)
+    super.init(data: data, id: id, expandableCells: nil, click: click, setup: setup)
     self.expandableCells = [loaderCell]
   }
 
@@ -137,33 +138,4 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
 public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionView, T>
   where T.Container == UICollectionView
 public typealias TableCell<T:ReusableView & Reusable> = Cell<UITableView, T>
-  where T.Container == UITableView
-
-open class StyledCell<Container, CellView: ReusableView & StyledReusable>: Cell<Container, CellView>
-  where CellView.Container == Container {
-
-  public typealias Style = CellView.Data.Style
-
-  let style: Style
-
-  public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(style: data.style, data: data, click: click, type: .cell, setup: nil)
-  }
-
-  public init(style: Style, data: Data, click: ClickClosure? = nil, type: CellType = .cell,
-              setup: SetupClosure<CellView>? = nil) {
-    self.style = style
-    super.init(data: data, click: click, type: type, setup: setup)
-  }
-
-  override internal func presetupCellView(with cellView: inout CellView) {
-    if cellView.style == nil {
-      cellView.style = style
-    }
-  }
-}
-
-public typealias StyledCollectionCell<T:ReusableView & StyledReusable> = StyledCell<UICollectionView, T>
-  where T.Container == UICollectionView
-public typealias StyledTableCell<T:ReusableView & StyledReusable> = StyledCell<UITableView, T>
   where T.Container == UITableView

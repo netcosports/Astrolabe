@@ -8,16 +8,21 @@
 
 import UIKit
 
-struct PagerViewModel {
-  let viewController: UIViewController
-  let cellId: String
+public struct PagerViewModel {
+  public let viewController: UIViewController
+  public let cellId: String
+
+  public init(viewController: UIViewController, cellId: String) {
+    self.viewController = viewController
+    self.cellId = cellId
+  }
 }
 
-class PagerCollectionViewCell: CollectionViewCell, Reusable {
+public class PagerCollectionViewCell: CollectionViewCell, Reusable {
 
   open var data: PagerViewModel?
 
-  func setup(with data: PagerViewModel) {
+  open func setup(with data: PagerViewModel) {
     self.data = data
 
     if data.viewController.view.superview != contentView {
@@ -30,11 +35,11 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
 
   private var shouldCallWillAppear = false
 
-  static func size(for data: PagerViewModel, containerSize: CGSize) -> CGSize {
+  public static func size(for data: PagerViewModel, containerSize: CGSize) -> CGSize {
     return containerSize
   }
 
-  static func identifier(for data: PagerViewModel) -> String {
+  public static func identifier(for data: PagerViewModel) -> String {
     return data.cellId
   }
 
@@ -80,7 +85,7 @@ class PagerCollectionViewCell: CollectionViewCell, Reusable {
     data.viewController.endAppearanceTransition()
   }
 
-  override var debugDescription: String {
+  override public var debugDescription: String {
     guard let data = data else { return super.debugDescription }
     return super.debugDescription + " " + data.cellId
   }

@@ -40,20 +40,31 @@ struct SectionDescriptor: Equatable {
 
 typealias SD = SectionDescriptor
 
-private class ConfigurableLoader: Astrolabe.Loader {
+private class ConfigurableLoader: Astrolabe.Loadable, Containerable {
   typealias Configuration = [LoaderIntent: [SD]]
+
+  var allItems: [Sectionable] = []
   let configuration: Configuration
-  init(configuration: Configuration) {
+  let source: CollectionViewSource
+
+  init(configuration: Configuration, source: CollectionViewSource) {
     self.configuration = configuration
+    self.source = source
   }
 
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  func load(for intent: LoaderIntent) -> SectionObservable? {
     if let pagesForIntent = configuration[intent] {
-      return .just(pagesForIntent.flatMap { ConfigurableLoader.section(with: $0) })
+      return .just(pagesForIntent.compactMap { ConfigurableLoader.section(with: $0) })
     } else {
       fail("Unexpected type of intent")
       return nil
     }
+  }
+
+  func apply(items: [Sectionable]?, for intent: LoaderIntent) {
+    guard let items = items else { return }
+    source.sections = items
+    source.containerView?.reloadData()
   }
 
   typealias Cell = CollectionCell<TestViewCell>
@@ -64,12 +75,12 @@ private class ConfigurableLoader: Astrolabe.Loader {
   }
 }
 
-extension ReusableSource {
+extension Array where Element == Sectionable {
 
   var sectionDescriptors: [SD] {
     // NOTE: to identify sections correctly we are using cells count
     // in real project, using cell id is more efficient way
-    return sections.map { SD($0.page, $0.cells.count) }
+    return self.map { SD($0.page, $0.cells.count) }
   }
 }
 
@@ -87,16 +98,17 @@ class LoaderDecoratorSpec: XCTestCase {
     let source = containerView.source
     source.loadingBehavior = [.autoupdate]
     source.autoupdatePeriod = TimeInterval(0.5)
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, source: source.source)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
-          expect(source.sectionDescriptors).to(equal(initialPages))
+          expect(source.sections.sectionDescriptors).to(equal(initialPages))
         case .autoupdate:
-          expect(source.sectionDescriptors).to(equal(autoupdatePages))
+          expect(source.sections.sectionDescriptors).to(equal(autoupdatePages))
           done()
         default:
           fail("Unexpected type of intent")
@@ -117,16 +129,17 @@ class LoaderDecoratorSpec: XCTestCase {
     let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
     let source = containerView.source
     source.loadingBehavior = [.appearance]
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, source: source.source)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
-          expect(source.sectionDescriptors).to(equal(initialPages))
+          expect(source.sections.sectionDescriptors).to(equal(initialPages))
         case .appearance:
-          expect(source.sectionDescriptors).to(equal(appearancePages))
+          expect(source.sections.sectionDescriptors).to(equal(appearancePages))
           done()
         default:
           fail("Unexpected type of intent")
@@ -156,18 +169,23 @@ class LoaderDecoratorSpec: XCTestCase {
     let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
     let source = containerView.source
     source.loadingBehavior = [.paging]
-    let loader = ConfigurableLoader(configuration: configuration)
-    source.loader = loader
+    let loader = ConfigurableLoader(configuration: configuration, source: source.source)
+    source.loader = LoaderMediator(loader: loader)
 
     waitUntil { done in
-      source.stopProgress = {
+      source.stopProgress = { [weak source] in
+        guard let source = source else { return }
         switch $0 {
         case .initial:
-          expect(source.sectionDescriptors).to(equal(initialPages))
+          expect(source.sections.sectionDescriptors).to(equal(initialPages))
+          source.forceLoadNextPage()
         case .page(let page):
           switch page {
-          case 2: expect(source.sectionDescriptors).to(equal(expectedSecondPages))
-          case 5: expect(source.sectionDescriptors).to(equal(expectedThirdPages))
+          case 2:
+            expect(source.sections.sectionDescriptors).to(equal(expectedSecondPages))
+            source.forceLoadNextPage()
+          case 5:
+            expect(source.sections.sectionDescriptors).to(equal(expectedThirdPages))
             done()
           default: fail("Unexpected page number")
           }
@@ -176,8 +194,6 @@ class LoaderDecoratorSpec: XCTestCase {
         }
       }
       source.appear()
-      source.forceLoadNextPage()
-      source.forceLoadNextPage()
     }
   }
 }

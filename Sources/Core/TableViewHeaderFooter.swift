@@ -62,27 +62,3 @@ open class TableViewHeaderFooter: RootTableHeaderFooter, ReusableView {
 
   }
 }
-
-open class StyledTableViewHeaderFooter<Style>: TableViewHeaderFooter {
-  // NOTE: the idea currently is to initialize style only once
-  // this will be managed outside of cell implementation
-  var style: Style? {
-    didSet {
-      if let style = style {
-        setup(with: style)
-      }
-    }
-  }
-
-  open override func setup() {
-    fatalError("Use setup method with style param")
-  }
-
-  override func internalSetup() {
-
-  }
-
-  func setup(with style: Style) {
-
-  }
-}

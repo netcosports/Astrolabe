@@ -9,7 +9,7 @@
 import UIKit
 import Astrolabe
 
-struct TestViewModel {
+struct TestViewModel: Comparable {
   let title: String
   let color: UIColor
 
@@ -26,7 +26,16 @@ struct TestViewModel {
   }
 }
 
-class TestCollectionCell: CollectionViewCell {
+func < (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
+  return lhs.title < rhs.title
+}
+
+func == (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
+  return lhs.title == rhs.title
+}
+
+
+class TestCollectionCell: CollectionViewCell, Reusable {
 
   let label: UILabel = {
     let label = UILabel()
@@ -45,9 +54,6 @@ class TestCollectionCell: CollectionViewCell {
       make.edges.equalToSuperview()
     }
   }
-}
-
-extension TestCollectionCell: Reusable {
 
   func setup(with data: TestViewModel) {
     label.text = data.title
@@ -58,59 +64,18 @@ extension TestCollectionCell: Reusable {
     }
   }
 
-  static func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
+  class func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
     return CGSize(width: 64.0, height: 64.0)
   }
 }
 
-enum Style {
-  case red
-  case blue
-  case green
-}
+class TestCollectionHeaderCell: TestCollectionCell {
 
-struct TestStyledViewModel: StyledData {
-  let style: Style
-  let title: String
-}
-
-class TestStyledCollectionCell: StyledCollectionViewCell<Style> {
-
-  let label: UILabel = {
-    let label = UILabel()
-    label.textColor = .black
-    label.font = .systemFont(ofSize: 18.0)
-    label.textAlignment = .center
-    return label
-  }()
-
-  override func setup(with style: Style) {
-    super.setup(with: style)
-
-    switch style {
-    case .red:
-      contentView.backgroundColor = .red
-    case .blue:
-      contentView.backgroundColor = .blue
-    case .green:
-      contentView.backgroundColor = .green
-    }
-
-    contentView.addSubview(label)
-    label.snp.remakeConstraints { make in
-      make.edges.equalToSuperview()
-    }
-  }
-}
-
-extension TestStyledCollectionCell: StyledReusable {
-  typealias Data = TestStyledViewModel
-
-  func setup(with data: Data) {
-    label.text = data.title
+  override func setup(with data: TestViewModel) {
+    super.setup(with: data)
   }
 
-  static func size(for data: Data, containerSize: CGSize) -> CGSize {
-    return CGSize(width: containerSize.width, height: 64.0)
+  override class func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
+    return CGSize(width: containerSize.width, height: 64)
   }
 }

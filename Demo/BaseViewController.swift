@@ -77,7 +77,7 @@ class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<
   }
 }
 
-class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T: AccessorView, T.Source: LoaderReusableSource {
+class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Containerable where T: AccessorView, T.Source: LoaderReusableSource {
 
   convenience init(type: LoaderResult) {
     self.init()
@@ -114,8 +114,6 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T
 
   override func loadView() {
     super.loadView()
-
-    containerView.source.loader = self
 
     containerView.source.loadingBehavior = [.initial, .paging]
     containerView.source.startProgress = { [weak self] _ in
@@ -167,7 +165,7 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T
     containerView.source.disappear()
   }
 
-  func performLoading(intent: LoaderIntent) -> SectionObservable? {
+  func load(for intent: LoaderIntent) -> Observable<[Sectionable]?>? {
     var currentPage = 1
     var result: [Sectionable]? = nil
     switch intent {
@@ -202,6 +200,13 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loader where T
         return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
       }
     }
+  }
+
+  func apply(items: [Sectionable]?, for intent: LoaderIntent) {
+    guard let items = items else { return }
+    source.sections = items
+    source.registerCellsForSections()
+    source.containerView?.reloadData()
   }
 
   func sections(for page: Int) -> [Sectionable]? {
