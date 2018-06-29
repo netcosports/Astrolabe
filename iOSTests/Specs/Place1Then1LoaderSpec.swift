@@ -18,13 +18,11 @@ class Place1Then1LoaderSpec: XCTestCase {
     do {
       let loader = TestP1T1L()
       let results = try Astrolabe.load(p1t1Loader: loader, intent: .initial).toBlocking().toArray()
-      expect(results).to(haveCount(2))
+      expect(results).to(haveCount(1))
 
-      expect(loader.didReceiveCount) == 2
+      expect(loader.didReceiveCount) == 1
 
-      guard results[0] == nil else { return fail("cached section should be nil section") }
-
-      guard let httpResult = results[1] else { return fail("nil section") }
+      guard let httpResult = results[0] else { return fail("nil section") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
       }
@@ -81,20 +79,19 @@ class Place1Then1LoaderSpec: XCTestCase {
     }
   }
 
-  func testPlace1Then1LoaderThrowOnCache() {
+  func testPlace1Then1LoaderFirstCached() {
     do {
       let loader = TestP1T1L()
-      loader.throwOnCache = true
+
+      _ = try Gnomon.models(for: try loader.request(for: .initial)).toBlocking().first()
 
       let results = try Astrolabe.load(p1t1Loader: loader, intent: .initial).toBlocking().toArray()
-      expect(results).to(haveCount(2))
+      expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
 
-      guard results[0] == nil else { return fail("cached section should be nil section") }
-
-      guard let httpResult = results[1] else { return fail("nil section") }
-      guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
+      guard let cachedResult = results[0] else { return fail("nil section") }
+      guard let cells = cachedResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
       }
       expect(cells).to(haveCount(2))

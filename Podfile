@@ -4,7 +4,8 @@ use_frameworks!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon'
+  pod 'Gnomon', :path => '../Gnomon-refactoring'
+  pod 'Gnomon/Decodable', :path => '../Gnomon-refactoring'
 
   target 'Demo' do
     platform :ios, '9.0'
@@ -32,3 +33,12 @@ abstract_target 'Astrolabe' do
     end
   end
 end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = '$(inherited) TEST'
+    end
+  end
+end
+

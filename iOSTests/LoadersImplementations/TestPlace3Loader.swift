@@ -12,9 +12,9 @@ import Nimble
 
 class TestP3L: P3Loader {
 
-  typealias P3LResult1 = SingleOptionalResult<TestModel1>
-  typealias P3LResult2 = SingleOptionalResult<TestModel2>
-  typealias P3LResult3 = SingleOptionalResult<TestModel3>
+  typealias P3LResult1 = TestModel1
+  typealias P3LResult2 = TestModel2
+  typealias P3LResult3 = TestModel3
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestP3L.P3LRequests {
     return (
@@ -31,7 +31,10 @@ class TestP3L: P3Loader {
 
   func sections(from results: TestP3L.P3LResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    guard let model1 = results.0.model, let model2 = results.1.model, let model3 = results.2.model else { return nil }
+    let model1 = results.0
+    let model2 = results.1
+    let model3 = results.2
+
     return [Section(cells: [
       Cell(data: TestViewCell.ViewModel(model1)),
       Cell(data: TestViewCell.ViewModel(model2)),

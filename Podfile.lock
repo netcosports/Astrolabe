@@ -10,12 +10,14 @@ PODS:
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (3.1.1):
-    - Gnomon/JSON (= 3.1.1)
-  - Gnomon/Core (3.1.1):
+  - Gnomon (3.1.2):
+    - Gnomon/JSON (= 3.1.2)
+  - Gnomon/Core (3.1.2):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/JSON (3.1.1):
+  - Gnomon/Decodable (3.1.2):
+    - Gnomon/Core
+  - Gnomon/JSON (3.1.2):
     - Gnomon/Core
     - SwiftyJSON (~> 4.0)
   - Nimble (7.1.1)
@@ -32,7 +34,8 @@ PODS:
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon
+  - Gnomon (from `../Gnomon-refactoring`)
+  - Gnomon/Decodable (from `../Gnomon-refactoring`)
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
@@ -41,7 +44,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - FormatterKit
-    - Gnomon
     - Nimble
     - RxBlocking
     - RxCocoa
@@ -53,11 +55,13 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
+  Gnomon:
+    :path: "../Gnomon-refactoring"
 
 SPEC CHECKSUMS:
   Astrolabe: c4512444adf33ea0c719caf1d26acb62eb267049
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 05a0b538c8043f149c798a78605461ee5583c38d
+  Gnomon: 71c27d35a7088ca8c4ea047de1d165a534e1d9a9
   Nimble: 391f07782af4b37914f9bd7b2ffbb952731b8202
   RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
@@ -66,6 +70,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: 2e69b1c1a88442dd4bebc56e00344a1f4ef5b3ae
+PODFILE CHECKSUM: e205df7543b4cf10a023edf77ec1002e47fc5042
 
 COCOAPODS: 1.5.0

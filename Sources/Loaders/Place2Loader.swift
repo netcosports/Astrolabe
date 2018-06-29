@@ -2,8 +2,8 @@ import Gnomon
 import RxSwift
 
 public protocol P2Loader: class {
-  associatedtype P2LResult1: OptionalResult
-  associatedtype P2LResult2: OptionalResult
+  associatedtype P2LResult1: BaseModel
+  associatedtype P2LResult2: BaseModel
   associatedtype Output
 
   typealias P2LRequests = (Request<P2LResult1>, Request<P2LResult2>)
@@ -19,8 +19,8 @@ public extension P2Loader {
 }
 
 public protocol P2ContextLoader: class {
-  associatedtype P2LResult1: OptionalResult
-  associatedtype P2LResult2: OptionalResult
+  associatedtype P2LResult1: BaseModel
+  associatedtype P2LResult2: BaseModel
   associatedtype Context
   associatedtype Output
 
@@ -42,8 +42,14 @@ public func load<T: P2Loader>(p2Loader loader: T, intent: LoaderIntent) -> Obser
     let observable1 = Gnomon.cachedThenFetch(request1)
     let observable2 = Gnomon.cachedThenFetch(request2)
 
-    return Observable.zip(observable1, observable2).flatMap { [weak loader] res1, res2 -> Observable<T.Output?> in
-      if res1.responseType == .httpCache && res2.responseType == .httpCache {
+    return Observable.combineLatest(observable1, observable2).filter {
+      switch ($0.type, $1.type) {
+      case (.localCache, .localCache): return true
+      case (.localCache, _), (_, .localCache): return false
+      default: return true
+      }
+    }.flatMap { [weak loader] res1, res2 -> Observable<T.Output?> in
+      if res1.type == .httpCache && res2.type == .httpCache {
         return .empty()
       } else {
         let results = (res1.result, res2.result)
@@ -64,7 +70,7 @@ public func load<T: P2ContextLoader>(p2Loader loader: T, intent: LoaderIntent, c
     let observable2 = Gnomon.cachedThenFetch(request2)
 
     return Observable.zip(observable1, observable2).flatMap { [weak loader] res1, res2 -> Observable<T.Output?> in
-      if res1.responseType == .httpCache && res2.responseType == .httpCache {
+      if res1.type == .httpCache && res2.type == .httpCache {
         return .empty()
       } else {
         let results = (res1.result, res2.result)

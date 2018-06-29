@@ -14,7 +14,7 @@ class TestContextPlainLoader: PContextLoader {
 
   var didReceiveCount = 0
 
-  typealias PLResult = SingleOptionalResult<TestModel4>
+  typealias PLResult = TestModel4
   typealias Context = String
 
   func request(for loadingIntent: LoaderIntent, context: Context) throws -> Request<PLResult> {
@@ -26,9 +26,7 @@ class TestContextPlainLoader: PContextLoader {
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent, context: Context) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: [result.model].compactMap { $0 }.map {
-      Cell(data: TestViewCell.ViewModel($0, context: context))
-    })]
+    return [Section(cells: [Cell(data: TestViewCell.ViewModel(result, context: context))])]
   }
 
   func didReceive(result: PLResult, loadingIntent: LoaderIntent, context: Context) {
