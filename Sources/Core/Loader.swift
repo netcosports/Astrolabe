@@ -99,6 +99,7 @@ public protocol LoaderReusableSource: ReusableSource {
   var updateEmptyView: EmptyViewClosure? { get set }
   var autoupdatePeriod: TimeInterval { get set }
   var loadingBehavior: LoadingBehavior { get set }
+  var loader: LoaderMediatorProtocol? { get set }
 
   func forceReloadData(keepCurrentDataBeforeUpdate: Bool)
   func forceLoadNextPage()
