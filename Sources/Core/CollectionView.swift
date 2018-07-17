@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxCocoa
 
 open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView where T.Container == UICollectionView {
 
@@ -21,4 +22,14 @@ open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView whe
   public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  private let _size = PublishRelay<CGSize>()
+  private(set) lazy var sizeDidChange = ControlEvent<CGSize>(events: _size.distinctUntilChanged())
+
+  open override func layoutSubviews() {
+    super.layoutSubviews()
+
+    _size.accept(frame.size)
+  }
+
 }

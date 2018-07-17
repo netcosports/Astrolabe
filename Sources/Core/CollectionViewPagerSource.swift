@@ -59,6 +59,13 @@ open class CollectionViewPagerSource: CollectionViewSource {
         containerView.setContentOffset(offset, animated: true)
         containerView.isUserInteractionEnabled = false
       }).disposed(by: disposeBag)
+
+    if let collectionView = containerView as? CollectionView<CollectionViewPagerSource> {
+      collectionView.sizeDidChange.skip(1).subscribe(onNext: { [weak self] _ in
+        guard let `self` = self else { return }
+        self.finishAppearanceTransitionIfNeeded()
+      }).disposed(by: disposeBag)
+    }
   }
 
   typealias PageCell = CollectionCell<PagerCollectionViewCell>
@@ -148,6 +155,12 @@ open class CollectionViewPagerSource: CollectionViewSource {
     guard !visibleCells.isEmpty else { return }
 
     disappearing = visibleCells[0] as? PagerCollectionViewCell
+  }
+
+  private func finishAppearanceTransitionIfNeeded() {
+    guard let containerView = containerView else { return }
+    guard disappearing != nil || appearing != nil else { return }
+    finishAppearanceTransition()
   }
 
   private func finishAppearanceTransition() {
