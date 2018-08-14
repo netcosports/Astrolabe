@@ -160,7 +160,7 @@ public extension Loadable where Self: Containerable, Item == Sectionable {
       let hasCells = updatedSections.count != 0 &&
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
       guard hasCells else {
-        allItems = updatedSections
+        allItems = merged
         return .just(merged)
       }
 
