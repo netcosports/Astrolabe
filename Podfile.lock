@@ -10,21 +10,21 @@ PODS:
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (3.1.1):
-    - Gnomon/JSON (= 3.1.1)
-  - Gnomon/Core (3.1.1):
+  - Gnomon (3.1.2):
+    - Gnomon/JSON (= 3.1.2)
+  - Gnomon/Core (3.1.2):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/JSON (3.1.1):
+  - Gnomon/JSON (3.1.2):
     - Gnomon/Core
     - SwiftyJSON (~> 4.0)
-  - Nimble (7.1.1)
-  - RxBlocking (4.1.2):
+  - Nimble (7.1.3)
+  - RxBlocking (4.2.0):
     - RxSwift (~> 4.0)
-  - RxCocoa (4.1.2):
+  - RxCocoa (4.2.0):
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.2)
-  - RxTest (4.1.2):
+  - RxSwift (4.2.0)
+  - RxTest (4.2.0):
     - RxSwift (~> 4.0)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.1.0)
@@ -39,7 +39,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - FormatterKit
     - Gnomon
     - Nimble
@@ -57,15 +57,15 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Astrolabe: c4512444adf33ea0c719caf1d26acb62eb267049
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 05a0b538c8043f149c798a78605461ee5583c38d
-  Nimble: 391f07782af4b37914f9bd7b2ffbb952731b8202
-  RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
-  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
-  RxSwift: e49536837d9901277638493ea537394d4b55f570
-  RxTest: e634f15fd2c2cd0e0120132ef7a4f7be69ad0393
+  Gnomon: e82d177b4a806e846c3a862738886046ec106ffb
+  Nimble: 2839b01d1b31f6a6a7777a221f0d91cf52e8e27b
+  RxBlocking: e339d8a6e752e25ade95ff858466c55436668f59
+  RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
+  RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
+  RxTest: 8da864c0ee47534f586ff18fb0c7e5b2f1fe5023
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
 PODFILE CHECKSUM: 2e69b1c1a88442dd4bebc56e00344a1f4ef5b3ae
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

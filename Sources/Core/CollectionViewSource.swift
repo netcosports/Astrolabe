@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject, ReusableSource,
 UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
@@ -35,7 +36,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
   public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
 #if os(tvOS)
-  public let focusedItem = Variable<Int>(0)
+  public let focusedItem = BehaviorRelay<Int>(value: 0)
 #endif
 
   fileprivate func internalInit() {
@@ -233,7 +234,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
                            didUpdateFocusIn context: UICollectionViewFocusUpdateContext,
                            with coordinator: UIFocusAnimationCoordinator) {
     if let focusedIndex = context.nextFocusedIndexPath?.item {
-      focusedItem.value = focusedIndex
+      focusedItem.accept(focusedIndex)
     }
   }
 
