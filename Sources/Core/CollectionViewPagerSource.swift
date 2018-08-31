@@ -93,8 +93,10 @@ open class CollectionViewPagerSource: CollectionViewSource {
     return layout
   }
 
-  private weak var appearing: PagerCollectionViewCell?
-  private weak var disappearing: PagerCollectionViewCell?
+  typealias PagerCell = PagerSourceCell & UICollectionViewCell
+
+  private weak var appearing: PagerCell?
+  private weak var disappearing: PagerCell?
 
   open override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
     beginAppearanceTransition()
@@ -117,14 +119,14 @@ open class CollectionViewPagerSource: CollectionViewSource {
           appearing.willDisappear()
 
           self.disappearing = appearing
-          self.appearing = newCells[0] as? PagerCollectionViewCell
-          self.appearing?.willAppear()
+          self.appearing = newCells[0] as? PagerCell
+          self.appearing?.willAppear(isCancelled: false)
         } else if visibleCells.contains(disappearing) {
           appearing.willDisappear()
           appearing.didDisappear()
 
-          self.appearing = newCells[0] as? PagerCollectionViewCell
-          self.appearing?.willAppear()
+          self.appearing = newCells[0] as? PagerCell
+          self.appearing?.willAppear(isCancelled: false)
         } else {
           print("\(#file):\(#line) WAT")
         }
@@ -132,10 +134,10 @@ open class CollectionViewPagerSource: CollectionViewSource {
         let newIndexPaths = visibleCells.filter { $0 != disappearing }
 
         guard newIndexPaths.count == 1 else { return assertionFailure() }
-        appearing = newIndexPaths[0] as? PagerCollectionViewCell
+        appearing = newIndexPaths[0] as? PagerCell
 
         disappearing.willDisappear()
-        appearing?.willAppear()
+        appearing?.willAppear(isCancelled: false)
       }
     }
   }
@@ -154,11 +156,11 @@ open class CollectionViewPagerSource: CollectionViewSource {
     let visibleCells = containerView.visibleCells
     guard !visibleCells.isEmpty else { return }
 
-    disappearing = visibleCells[0] as? PagerCollectionViewCell
+    disappearing = visibleCells[0] as? PagerCell
   }
 
   private func finishAppearanceTransitionIfNeeded() {
-    guard let containerView = containerView else { return }
+    guard containerView != nil else { return }
     guard disappearing != nil || appearing != nil else { return }
     finishAppearanceTransition()
   }

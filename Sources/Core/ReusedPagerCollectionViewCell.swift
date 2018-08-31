@@ -14,13 +14,38 @@ public protocol ReusedPageData {
   var data: PageData? { get set }
 }
 
-public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: CollectionViewCell, Reusable
-  where Controller: ReusedPageData {
+public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: CollectionViewCell, Reusable, PagerSourceCell
+where Controller: ReusedPageData {
 
   public typealias Data = Controller.PageData
   public var viewController = Controller()
 
-  public func setup(with data: Data) {
+  open func setup(with data: Data) {
+    if viewController.data != data {
+      viewController.data = data
+    }
+
+    if viewController.view.superview != contentView {
+      setupChildView()
+      shouldCallWillAppear = false
+    } else {
+      shouldCallWillAppear = true
+    }
+  }
+
+  private var shouldCallWillAppear = false
+
+  public static func size(for data: Data, containerSize: CGSize) -> CGSize {
+    return containerSize
+  }
+
+  public static func identifier(for data: PagerViewModel) -> String {
+    return data.cellId
+  }
+
+  private func setupChildView() {
+    viewController.beginAppearanceTransition(true, animated: true)
+
     containerViewController?.addChildViewController(viewController)
     contentView.addSubview(viewController.view)
 
@@ -29,27 +54,34 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: 
                                                               views: ["content": viewController.view]))
     contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
                                                               views: ["content": viewController.view]))
-    contentView.layoutIfNeeded()
-
-    if viewController.data != data {
-      viewController.data = data
-    }
   }
 
-  public static func size(for data: Data, containerSize: CGSize) -> CGSize {
-    return containerSize
+  public func willAppear(isCancelled: Bool = false) {
+    guard shouldCallWillAppear || isCancelled else { return }
+    guard viewController.data != nil else { return }
+
+    setupChildView()
   }
 
-  public override func willDisplay() {
-    super.willDisplay()
+  public func didAppear() {
+    viewController.endAppearanceTransition()
+
+    guard let containerViewController = containerViewController else { return }
     viewController.didMove(toParentViewController: containerViewController)
   }
 
-  public override func endDisplay() {
-    super.endDisplay()
-    viewController.willMove(toParentViewController: nil)
-    viewController.view.removeFromSuperview()
-    viewController.removeFromParentViewController()
+  public func willDisappear() {
+    guard viewController.data != nil else { return }
+    viewController.beginAppearanceTransition(false, animated: true)
   }
 
+  public func didDisappear() {
+    guard viewController.data != nil else { return }
+
+    viewController.willMove(toParentViewController: nil)
+    viewController.removeFromParentViewController()
+    viewController.view.removeFromSuperview()
+
+    viewController.endAppearanceTransition()
+  }
 }

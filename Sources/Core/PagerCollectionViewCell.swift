@@ -18,7 +18,7 @@ public struct PagerViewModel {
   }
 }
 
-public class PagerCollectionViewCell: CollectionViewCell, Reusable {
+public class PagerCollectionViewCell: CollectionViewCell, Reusable, PagerSourceCell {
 
   open var data: PagerViewModel?
 
@@ -56,26 +56,26 @@ public class PagerCollectionViewCell: CollectionViewCell, Reusable {
                                                               views: ["content": data.viewController.view]))
   }
 
-  func willAppear(isCancelled: Bool = false) {
+  public func willAppear(isCancelled: Bool = false) {
     guard shouldCallWillAppear || isCancelled else { return }
     guard let data = data else { return }
 
     setupChildView(data)
   }
 
-  func didAppear() {
+  public func didAppear() {
     data?.viewController.endAppearanceTransition()
 
     guard let containerViewController = containerViewController else { return }
     data?.viewController.didMove(toParentViewController: containerViewController)
   }
 
-  func willDisappear() {
+  public func willDisappear() {
     guard let data = data else { return }
     data.viewController.beginAppearanceTransition(false, animated: true)
   }
 
-  func didDisappear() {
+  public func didDisappear() {
     guard let data = data else { return }
 
     data.viewController.willMove(toParentViewController: nil)

@@ -39,7 +39,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - FormatterKit
     - Gnomon
     - Nimble
@@ -68,4 +68,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2e69b1c1a88442dd4bebc56e00344a1f4ef5b3ae
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.5.0
