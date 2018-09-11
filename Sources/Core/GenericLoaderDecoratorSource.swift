@@ -187,8 +187,13 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
       .observeOn(MainScheduler.instance)
       .subscribe(onError: { [weak self] error in
         guard let `self` = self else { return }
-        self.state = self.cellsCount > 0 ? .hasData : .error(error)
-        self.reloadDataWithEmptyDataSet()
+        if self.cellsCount > 0 {
+          self.state = .hasData
+          self.updateEmptyView?(self.state)
+        } else {
+          self.state = .error(error)
+          self.reloadDataWithEmptyDataSet()
+        }
       }, onCompleted: { [weak self] in
         guard let `self` = self else { return }
         let cellsCountAfterLoad = self.cellsCount
