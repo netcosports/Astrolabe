@@ -38,17 +38,17 @@ class BasicTestViewModel: Loadable {
     return Observable<[Item]?>.just(result).delay(1.0, scheduler: MainScheduler.instance)
   }
 
-  func merge(items:[Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>? {
     guard let items = items else { return nil }
     var mergedItems = all.filter { !items.contains($0) }
     mergedItems.append(contentsOf: items)
     mergedItems.sort()
     all = mergedItems
-    return .just(mergedItems)
+    return .just((items: mergedItems, status: .hasUpdates))
   }
 
-  func apply(items:[Item]?, for intent: LoaderIntent) {
-    guard let cells = items?.map({ Cell(data: $0) }) else { return }
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
+    guard let cells = mergeResult?.items?.map({ Cell(data: $0) }) else { return }
     sectionPubliser.onNext([Section(cells: cells, page: intent.page)])
   }
 }

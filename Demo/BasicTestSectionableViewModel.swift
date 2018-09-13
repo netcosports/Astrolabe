@@ -41,8 +41,8 @@ class BasicTestSectionableViewModel: Loadable, Containerable {
       .delay(1.0, scheduler: MainScheduler.instance)
   }
 
-  func apply(items:[Item]?, for intent: LoaderIntent) {
-    guard let items = items else { return }
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
+    guard let items = mergeResult?.items else { return }
     sectionPubliser.onNext(items)
   }
 }

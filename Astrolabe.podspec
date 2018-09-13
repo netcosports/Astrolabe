@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
 
   s.homepage = 'https://github.com/netcosports/Astrolabe'
   s.license = { :type => "MIT" }
-  s.author = { 
+  s.author = {
     'Sergei Mikhan' => 'sergei@netcosports.com',
     'Vladimir Burdukov' => 'vladimir.burdukov@netcosports.com'
   }
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |sub|
     sub.source_files = 'Sources/Core/*.swift'
-    sub.tvos.exclude_files = 'Sources/Core/*PagerSource.swift'
+    sub.tvos.exclude_files = ['Sources/Core/*PagerSource.swift', 'Sources/Core/*PagerCollectionViewCell.swift']
 
     sub.dependency 'RxSwift', '~> 4.0'
     sub.dependency 'RxCocoa', '~> 4.0'

@@ -110,12 +110,20 @@ public protocol LoaderReusableSource: ReusableSource {
   func reloadDataWithEmptyDataSet()
 }
 
+public enum MergeStatus {
+  case hasUpdates
+  case equalWithCurrent
+}
+
 public protocol Loadable: class {
+
   associatedtype Item
 
+  typealias MergeResult = (items: [Item]?, status: MergeStatus)
+
   func load(for intent: LoaderIntent) -> Observable<[Item]?>?
-  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<[Item]?>?
-  func apply(items: [Item]?, for intent: LoaderIntent)
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>?
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent)
 }
 
 public protocol LoaderMediatorProtocol: class {
@@ -134,26 +142,28 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
   public func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void> {
     guard let observable = loader?.load(for: intent) else { return .empty() }
 
-    return observable.flatMap { [weak self] items -> Observable<[Item]?> in
-      guard let merged = self?.loader?.merge(items:items, for: intent) else { return .empty() }
+    return observable.flatMap { [weak self] items -> Observable<Loader.MergeResult?> in
+      guard let merged = self?.loader?.merge(items: items, for: intent) else { return .empty() }
       return merged
     }.observeOn(MainScheduler.instance)
-     .do(onNext: { [weak self] mergedItems in
-        self?.loader?.apply(items: mergedItems, for: intent)
+     .do(onNext: { [weak self] mergeResult in
+        self?.loader?.apply(mergeResult: mergeResult, for: intent)
       }).map { _ in () }
   }
 }
 
 public extension Loadable where Self: Containerable, Item == Sectionable {
 
-  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<[Item]?>? {
-    guard let updatedSections = items else { return .just(allItems) }
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>? {
+    guard let updatedSections = items else {
+      return .just((items: allItems, status: .equalWithCurrent))
+    }
     var merged: [Item] = allItems
 
     switch intent {
     case .initial, .force, .pullToRefresh:
       allItems = updatedSections
-      return .just(updatedSections)
+      return .just((items: updatedSections, status: .hasUpdates))
     default:
       // NOTE: the following checking is very important for paging logic,
       // without this logic we will have infinite reloading in case of last page;
@@ -161,7 +171,7 @@ public extension Loadable where Self: Containerable, Item == Sectionable {
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
       guard hasCells else {
         allItems = merged
-        return .just(merged)
+        return .just((items: merged, status: .equalWithCurrent))
       }
 
       let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
@@ -181,15 +191,17 @@ public extension Loadable where Self: Containerable, Item == Sectionable {
         return $0.page < $1.page
       })
       allItems = merged
-      return .just(merged)
+      return .just((items: merged, status: .hasUpdates))
     }
   }
 }
 
 public extension Loadable where Self: Accessor, Item == Sectionable {
 
-  func apply(items: [Item]?, for intent: LoaderIntent) {
-    guard let items = items else { return }
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
+    guard let mergeResult = mergeResult else { return }
+    guard mergeResult.status != .equalWithCurrent else { return }
+    guard let items = mergeResult.items else { return }
     source.sections = items
     source.registerCellsForSections()
     source.containerView?.reloadData()

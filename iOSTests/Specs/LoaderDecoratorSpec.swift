@@ -61,8 +61,8 @@ private class ConfigurableLoader: Astrolabe.Loadable, Containerable {
     }
   }
 
-  func apply(items: [Sectionable]?, for intent: LoaderIntent) {
-    guard let items = items else { return }
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
+    guard let items = mergeResult?.items else { return }
     source.sections = items
     source.containerView?.reloadData()
   }

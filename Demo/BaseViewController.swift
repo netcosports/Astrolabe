@@ -202,8 +202,8 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
     }
   }
 
-  func apply(items: [Sectionable]?, for intent: LoaderIntent) {
-    guard let items = items else { return }
+  func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
+    guard let items = mergeResult?.items else { return }
     source.sections = items
     source.registerCellsForSections()
     source.containerView?.reloadData()
