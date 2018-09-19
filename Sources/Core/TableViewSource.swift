@@ -84,11 +84,11 @@ open class TableViewSource: NSObject, ReusableSource {
 
 extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
 
-  public func numberOfSections(in tableView: UITableView) -> Int {
+  open func numberOfSections(in tableView: UITableView) -> Int {
     return sections.count
   }
 
-  public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     let section = sections[section]
     return section.cells.count
   }
@@ -150,24 +150,24 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     (cell as? TableViewCell)?.willDisplay()
   }
 
-  public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
+  open func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
                         forRowAt indexPath: IndexPath) {
     (cell as? TableViewCell)?.endDisplay()
   }
 
-  public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+  open func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
     (view as? TableViewHeaderFooter)?.willDisplay()
   }
 
-  public func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
+  open func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
     (view as? TableViewHeaderFooter)?.endDisplay()
   }
 
-  public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+  open func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
     (view as? TableViewHeaderFooter)?.willDisplay()
   }
 
-  public func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
+  open func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
     (view as? TableViewHeaderFooter)?.endDisplay()
   }
 
@@ -219,11 +219,11 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     }
   }
 
-  public func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+  open func sectionIndexTitles(for tableView: UITableView) -> [String]? {
     return sectionIndexTitles
   }
 
-  public func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
+  open func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
                         at index: Int) -> Int {
     return sections.index(where: { $0.supplementary(for: .header)?.id == title }) ?? 0
   }

@@ -74,11 +74,11 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     return cellView
   }
 
-  public func numberOfSections(in collectionView: UICollectionView) -> Int {
+  open func numberOfSections(in collectionView: UICollectionView) -> Int {
     return sections.count
   }
 
-  public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     let section = sections[section]
     return section.cells.count
   }
@@ -155,7 +155,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     return header.size(with: collectionView)
   }
 
-  public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+  open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
     if indexPath.section == collectionView.numberOfSections - 1
          && indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
@@ -165,16 +165,16 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     (cell as? CellView)?.willDisplay()
   }
 
-  public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+  open func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
     (cell as? CellView)?.endDisplay()
   }
 
-  public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+  open func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
     (view as? CellView)?.willDisplay()
   }
 
-  public func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+  open func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
     (view as? CellView)?.endDisplay()
   }
 
@@ -190,7 +190,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-  public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+  open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
     let section = sections[section]
     if let minimumLineSpacing = section.minimumLineSpacing {
       return minimumLineSpacing
@@ -201,7 +201,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-  public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+  open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
     let section = sections[section]
     if let minimumInteritemSpacing = section.minimumInteritemSpacing {
       return minimumInteritemSpacing
