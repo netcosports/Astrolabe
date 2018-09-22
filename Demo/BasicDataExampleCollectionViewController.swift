@@ -44,6 +44,16 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
 
   let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
 
+  var sections: [Sectionable] {
+    set {
+      source.sections = sections
+    }
+
+    get {
+      return source.sections
+    }
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 

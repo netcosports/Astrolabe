@@ -11,7 +11,7 @@ import Astrolabe
 
 class TableSourceViewController: BaseTableViewController<TableViewSource> {
 
-  override func sections() -> [Sectionable]? {
+  override func allSections() -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let wrappergen = TableGenerator<TestTableCell, TestTableHeader>()
     return [
@@ -27,7 +27,7 @@ class TableSourceViewController: BaseTableViewController<TableViewSource> {
 
 class CollectionSourceViewController: BaseCollectionViewController<CollectionViewSource> {
 
-  override func sections() -> [Sectionable]? {
+  override func allSections() -> [Sectionable]? {
     let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
     let wrappergen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
     return [

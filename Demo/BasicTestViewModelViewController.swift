@@ -42,6 +42,16 @@ class BasicTestViewModelViewController: UIViewController, Accessor {
   let viewModel = BasicTestViewModel()
   let disposeBag = DisposeBag()
 
+  var sections: [Sectionable] {
+    set {
+      source.sections = newValue
+    }
+
+    get {
+      return source.sections
+    }
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 

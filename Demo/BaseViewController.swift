@@ -43,18 +43,28 @@ class BaseViewController<T: UIView>: UIViewController, Accessor where T: Accesso
 
     if let cells = cells() {
       sections = [Section(cells: cells)]
-    } else if let sections = sections() {
+    } else if let sections = allSections() {
       self.sections = sections
     }
 
     containerView.reloadData()
   }
 
+  var sections: [Sectionable] {
+    set {
+      source.sections = newValue
+    }
+
+    get {
+      return source.sections
+    }
+  }
+
   func cells() -> [Cellable]? {
     return nil
   }
 
-  func sections() -> [Sectionable]? {
+  func allSections() -> [Sectionable]? {
     return nil
   }
 }

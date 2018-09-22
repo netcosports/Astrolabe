@@ -15,7 +15,7 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
   typealias Header = TableHeaderSection<TestTableHeader>
 
   // swiftlint:disable:next function_body_length
-  override func sections() -> [Sectionable]? {
+  override func allSections() -> [Sectionable]? {
     var tableCells: [Cellable] = [
       Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
         self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)

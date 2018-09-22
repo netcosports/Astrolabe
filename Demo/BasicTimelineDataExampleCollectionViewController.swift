@@ -41,6 +41,16 @@ class BasicTimelineDataExampleCollectionViewController: UIViewController, Loadab
 
   let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
 
+  var sections: [Sectionable] {
+    set {
+      source.sections = newValue
+    }
+
+    get {
+      return source.sections
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
