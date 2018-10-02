@@ -20,14 +20,12 @@ class PlainLoaderSpec: XCTestCase {
     do {
       let loader = TestPL()
       let results = try Astrolabe.load(pLoader: loader, intent: .initial).toBlocking().toArray()
-      expect(results).to(haveCount(2))
+      expect(results).to(haveCount(1))
 
-      expect(loader.didReceiveCount) == 2
+      expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
-      guard let cachedResult = results[0] else { return fail("nil result") }
-      expect(cachedResult[0].cells).to(haveCount(0))
-
-      guard let httpResult = results[1] else { return fail("nil result") }
+      guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
       }
@@ -40,7 +38,6 @@ class PlainLoaderSpec: XCTestCase {
         data.setup(with: testViewCell)
         expect(testViewCell.title) == String(expected)
 
-        testViewCell.title = nil
         expected += 111
       }
     } catch {
@@ -48,7 +45,7 @@ class PlainLoaderSpec: XCTestCase {
     }
   }
 
-  func testPlainLoaderInitialHttpCache() {
+  func testPlainLoaderInitialHasCache() {
     do {
       let loader = TestPL()
       _ = try Gnomon.models(for: loader.request(for: .initial)).toBlocking().toArray()
@@ -57,6 +54,7 @@ class PlainLoaderSpec: XCTestCase {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.localCache]
 
       guard let cachedResult = results[0] else { return fail("nil result") }
       guard let cells = cachedResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -91,6 +89,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -122,6 +121,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.httpCache]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -156,6 +156,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -188,6 +189,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.httpCache]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -222,6 +224,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -254,6 +257,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.httpCache]
 
       guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -286,14 +290,12 @@ extension PlainLoaderSpec {
 
       let intent: LoaderIntent = .force(keepData: false)
       let results = try Astrolabe.load(pLoader: loader, intent: intent).toBlocking().toArray()
-      expect(results).to(haveCount(2))
+      expect(results).to(haveCount(1))
 
-      expect(loader.didReceiveCount) == 2
+      expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
-      guard let cachedResult = results[0] else { return fail("nil result") }
-      expect(cachedResult[0].cells).to(haveCount(0))
-
-      guard let httpResult = results[1] else { return fail("nil result") }
+      guard let httpResult = results[0] else { return fail("nil result") }
       guard let cells = httpResult[0].cells as? [CollectionCell<TestViewCell>] else {
         return fail("invalid cells type")
       }
@@ -330,6 +332,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.localCache]
 
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -365,6 +368,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.regular]
 
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {
@@ -399,6 +403,7 @@ extension PlainLoaderSpec {
       expect(results).to(haveCount(1))
 
       expect(loader.didReceiveCount) == 1
+      expect(loader.pLoaderResponses.map { $0.type }) == [ResponseType.httpCache]
 
       guard let cacheResult = results[0] else { return fail("nil result") }
       guard let cells = cacheResult[0].cells as? [CollectionCell<TestViewCell>] else {

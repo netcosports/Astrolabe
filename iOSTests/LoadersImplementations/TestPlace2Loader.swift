@@ -12,15 +12,15 @@ import Nimble
 
 class TestP2L: P2Loader {
 
-  typealias P2LResult1 = SingleOptionalResult<TestModel1>
-  typealias P2LResult2 = SingleOptionalResult<TestModel2>
+  typealias P2LResult1 = TestModel1
+  typealias P2LResult2 = TestModel2
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestP2L.P2LRequests {
     return (
-      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id1": "123"])
-        .setXPath("args").build(),
-      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id2": "234"])
-        .setXPath("args").build()
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+        .setParams(["id1": "123"]).setXPath("args").build(),
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+        .setParams(["id2": "234"]).setXPath("args").build()
     )
   }
 
@@ -28,7 +28,10 @@ class TestP2L: P2Loader {
 
   func sections(from results: TestP2L.P2LResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    guard let model1 = results.0.model, let model2 = results.1.model else { return nil }
+
+    let model1 = results.0
+    let model2 = results.1
+
     return [Section(cells: [
       Cell(data: TestViewCell.ViewModel(model1)),
       Cell(data: TestViewCell.ViewModel(model2))

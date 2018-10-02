@@ -6,50 +6,47 @@
 //  Copyright © 2017 NetcoSports. All rights reserved.
 //
 
-import Gnomon
-import Astrolabe
 import SwiftyJSON
 
-struct TestModel1: JSONModel {
+@testable import Gnomon
+@testable import Astrolabe
+
+struct TestModel1: DecodableModel {
 
   let id: String
 
-  init(_ json: JSON) throws {
-    guard let _id = json["id1"].string else { throw "can't parse id" }
-    id = _id
+  private enum CodingKeys: String, CodingKey {
+    case id = "id1"
   }
 
 }
 
-struct TestModel2: JSONModel {
+struct TestModel2: DecodableModel {
 
   let id: String
 
-  init(_ json: JSON) throws {
-    guard let _id = json["id2"].string else { throw "can't parse id" }
-    id = _id
+  private enum CodingKeys: String, CodingKey {
+    case id = "id2"
   }
 
 }
 
-struct TestModel3: JSONModel {
+struct TestModel3: DecodableModel {
 
   let id: String
 
-  init(_ json: JSON) throws {
-    guard let _id = json["id3"].string else { throw "can't parse id" }
-    id = _id
+  private enum CodingKeys: String, CodingKey {
+    case id = "id3"
   }
 
 }
 
-struct TestModel4: JSONModel {
+struct TestModel4: DecodableModel {
 
   let id: String
 
-  init(_ json: JSON) throws {
-    guard let _id = json["id3"].string else { throw "can't parse id" }
-    id = _id
+  private enum CodingKeys: String, CodingKey {
+    case id = "id4"
   }
 
 }
@@ -64,19 +61,19 @@ class TestViewCell: CollectionViewCell, Reusable {
     }
 
     init(_ model: TestModel1) {
-      id = model.id
+      self.id = model.id
     }
 
     init(_ model: TestModel2) {
-      id = model.id
+      self.id = model.id
     }
 
     init(_ model: TestModel3) {
-      id = model.id
+      self.id = model.id
     }
 
     init(_ model: TestModel4, context: String) {
-      id = context + model.id
+      self.id = context + model.id
     }
   }
 

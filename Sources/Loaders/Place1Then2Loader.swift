@@ -2,9 +2,9 @@ import Gnomon
 import RxSwift
 
 public protocol P1T2Loader: class {
-  associatedtype P1T2LFirstResult: OptionalResult
-  associatedtype P1T2LSecondResult1: OptionalResult
-  associatedtype P1T2LSecondResult2: OptionalResult
+  associatedtype P1T2LFirstResult: BaseModel
+  associatedtype P1T2LSecondResult1: BaseModel
+  associatedtype P1T2LSecondResult2: BaseModel
 
   associatedtype Output
 
@@ -54,7 +54,7 @@ public func load<T: P1T2Loader>(p1t2Loader loader: T, intent: LoaderIntent) -> O
 
       return zip.flatMap { [weak loader] res1, res2 -> Observable<T.Output?> in
         guard let loader = loader else { return .just(nil) }
-        if response.responseType == .httpCache && res1.responseType == .httpCache && res2.responseType == .httpCache {
+        if response.type == .httpCache && res1.type == .httpCache && res2.type == .httpCache {
           return .empty()
         } else {
           let results = (response.result, res1.result, res2.result)

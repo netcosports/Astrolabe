@@ -2,9 +2,14 @@ import Gnomon
 import RxSwift
 
 public protocol PLoader: class {
-  associatedtype PLResult: OptionalResult
+  associatedtype PLResult: BaseModel
   associatedtype Output
+
   typealias PLRequest = Request<PLResult>
+
+  #if TEST
+  var pLoaderResponses: [Response<PLResult>] { get set }
+  #endif
   
   func request(for loadingIntent: LoaderIntent) throws -> PLRequest
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> Output?
@@ -16,7 +21,7 @@ public extension PLoader {
 }
 
 public protocol PContextLoader: class {
-  associatedtype PLResult: OptionalResult
+  associatedtype PLResult: BaseModel
   associatedtype Output
   associatedtype Context
 
@@ -44,12 +49,16 @@ public func load<T: PLoader>(pLoader loader: T, intent: LoaderIntent) -> Observa
       observable = Gnomon.cachedThenFetch(request)
     }
     return observable.flatMap { [weak loader] response -> Observable<T.Output?> in
-      switch (intent, response.responseType) {
+      switch (intent, response.type) {
       case (.page, _), (.autoupdate, _), (.pullToRefresh, _): break
       case (.force(let keepData), _) where keepData: break
       case (_, .httpCache): return .empty()
       default: break
       }
+
+      #if TEST
+      loader?.pLoaderResponses.append(response)
+      #endif
 
       return Observable.just(loader?.sections(from: response.result, loadingIntent: intent)).do(onNext: { _ in
         loader?.didReceive(result: response.result, loadingIntent: intent)
@@ -74,7 +83,7 @@ public func load<T: PContextLoader>(pLoader loader: T, intent: LoaderIntent, con
       observable = Gnomon.cachedThenFetch(request)
     }
     return observable.flatMap { [weak loader] response -> Observable<T.Output?> in
-      switch (intent, response.responseType) {
+      switch (intent, response.type) {
       case (.page, _), (.autoupdate, _), (.pullToRefresh, _): break
       case (.force(let keepData), _) where keepData: break
       case (_, .httpCache): return .empty()

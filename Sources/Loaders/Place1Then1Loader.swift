@@ -2,8 +2,8 @@ import Gnomon
 import RxSwift
 
 public protocol P1T1Loader: class {
-  associatedtype P1T1LFirstResult: OptionalResult
-  associatedtype P1T1LSecondResult: OptionalResult
+  associatedtype P1T1LFirstResult: BaseModel
+  associatedtype P1T1LSecondResult: BaseModel
   associatedtype Output
 
   typealias P1T1LFirstRequest = Request<P1T1LFirstResult>
@@ -27,7 +27,8 @@ public func load<T: P1T1Loader>(p1t1Loader loader: T, intent: LoaderIntent) -> O
 
     let cached = Gnomon.cachedModels(for: request).flatMap { [weak loader] res1 -> Observable<T.Output?> in
       guard let loader = loader else { return .just(nil) }
-      guard let request = try? loader.request(for: intent, from: res1.result) else { return .just(nil) }
+      let request = try loader.request(for: intent, from: res1.result)
+
       return Gnomon.cachedModels(for: request).flatMap { [weak loader] res2 -> Observable<T.Output?> in
         guard let loader = loader else { return .just(nil) }
         let results = (res1.result, res2.result)
@@ -43,7 +44,7 @@ public func load<T: P1T1Loader>(p1t1Loader loader: T, intent: LoaderIntent) -> O
 
       return Gnomon.models(for: request).flatMap { [weak loader] res2 -> Observable<T.Output?> in
         guard let loader = loader else { return .just(nil) }
-        if res1.responseType == .httpCache && res2.responseType == .httpCache {
+        if res1.type == .httpCache && res2.type == .httpCache {
           return .empty()
         } else {
           let results = (res1.result, res2.result)

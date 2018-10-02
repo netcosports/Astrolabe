@@ -2,9 +2,9 @@ import Gnomon
 import RxSwift
 
 public protocol P2T1Loader: class {
-  associatedtype P2T1LFirstResult1: OptionalResult
-  associatedtype P2T1LFirstResult2: OptionalResult
-  associatedtype P2T1LSecondResult: OptionalResult
+  associatedtype P2T1LFirstResult1: BaseModel
+  associatedtype P2T1LFirstResult2: BaseModel
+  associatedtype P2T1LSecondResult: BaseModel
 
   associatedtype Output
 
@@ -49,7 +49,7 @@ public func load<T: P2T1Loader>(p2t1Loader loader: T, intent: LoaderIntent) -> O
       let request = try loader.request(for: intent, from: (res1.result, res2.result))
       return Gnomon.models(for: request).flatMap { [weak loader] res -> Observable<T.Output?> in
         guard let loader = loader else { return .just(nil) }
-        if res.responseType == .httpCache {
+        if res.type == .httpCache {
           return .empty()
         } else {
           let results = (res1.result, res2.result, res.result)

@@ -15,6 +15,8 @@ PODS:
   - Gnomon/Core (3.1.2):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
+  - Gnomon/Decodable (3.1.2):
+    - Gnomon/Core
   - Gnomon/JSON (3.1.2):
     - Gnomon/Core
     - SwiftyJSON (~> 4.0)
@@ -32,7 +34,8 @@ PODS:
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon
+  - "Gnomon (from `git@github.com:netcosports/Gnomon.git`, branch `wip-4.0`)"
+  - "Gnomon/Decodable (from `git@github.com:netcosports/Gnomon.git`, branch `wip-4.0`)"
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
@@ -41,7 +44,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - FormatterKit
-    - Gnomon
     - Nimble
     - RxBlocking
     - RxCocoa
@@ -53,6 +55,14 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
+  Gnomon:
+    :branch: wip-4.0
+    :git: "git@github.com:netcosports/Gnomon.git"
+
+CHECKOUT OPTIONS:
+  Gnomon:
+    :commit: 33ca9ff26e76b352386813dcd2a46875c44fd37d
+    :git: "git@github.com:netcosports/Gnomon.git"
 
 SPEC CHECKSUMS:
   Astrolabe: 62b5238866dc1f05cef2736127e4ff4ced50403e
@@ -66,6 +76,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: 2e69b1c1a88442dd4bebc56e00344a1f4ef5b3ae
+PODFILE CHECKSUM: ad5e39f5a95341d5b74898b7a80f9c58e8b8960e
 
 COCOAPODS: 1.5.0

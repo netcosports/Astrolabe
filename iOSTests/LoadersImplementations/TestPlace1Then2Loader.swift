@@ -12,11 +12,9 @@ import Nimble
 
 class TestP1T2L: P1T2Loader {
 
-  var throwOnCache = false
-
-  typealias P1T2LFirstResult = SingleOptionalResult<TestModel1>
-  typealias P1T2LSecondResult1 = SingleOptionalResult<TestModel2>
-  typealias P1T2LSecondResult2 = SingleOptionalResult<TestModel3>
+  typealias P1T2LFirstResult = TestModel1
+  typealias P1T2LSecondResult1 = TestModel2
+  typealias P1T2LSecondResult2 = TestModel3
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<TestP1T2L.P1T2LFirstResult> {
     return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id1": "123"])
@@ -25,10 +23,6 @@ class TestP1T2L: P1T2Loader {
 
   func requests(for loadingIntent: LoaderIntent,
                 from result: TestP1T2L.P1T2LFirstResult) throws -> TestP1T2L.P1T2LSecondRequests {
-    if throwOnCache {
-      throwOnCache = false
-      throw "should throw second requests, sorry"
-    }
     return (
       try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
         .setXPath("args").build(),
@@ -41,7 +35,10 @@ class TestP1T2L: P1T2Loader {
 
   func sections(from results: TestP1T2L.P1T2LResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    guard let model1 = results.0.model, let model2 = results.1.model, let model3 = results.2.model else { return nil }
+    let model1 = results.0
+    let model2 = results.1
+    let model3 = results.2
+
     return [Section(cells: [
       Cell(data: TestViewCell.ViewModel(model1)),
       Cell(data: TestViewCell.ViewModel(model2)),

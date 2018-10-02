@@ -2,9 +2,9 @@ import Gnomon
 import RxSwift
 
 public protocol P3Loader: class {
-  associatedtype P3LResult1: OptionalResult
-  associatedtype P3LResult2: OptionalResult
-  associatedtype P3LResult3: OptionalResult
+  associatedtype P3LResult1: BaseModel
+  associatedtype P3LResult2: BaseModel
+  associatedtype P3LResult3: BaseModel
 
   associatedtype Output
 
@@ -29,7 +29,7 @@ public func load<T: P3Loader>(p3Loader loader: T, intent: LoaderIntent) -> Obser
 
     let zip = Observable.zip(observable1, observable2, observable3)
     return zip.flatMap { [weak loader] res1, res2, res3 -> Observable<T.Output?> in
-      if res1.responseType == .httpCache && res2.responseType == .httpCache && res3.responseType == .httpCache {
+      if res1.type == .httpCache && res2.type == .httpCache && res3.type == .httpCache {
         return .empty()
       } else {
         let results = (res1.result, res2.result, res3.result)

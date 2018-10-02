@@ -12,11 +12,14 @@ class TextMixedLoader {
   var didReceiveMultipleCount = 0
   var didReceivePlainCount = 0
 
+  var pLoaderResponses: [Response<PLResult>] = []
+  var mLoaderResponses: [[Result<Response<MLResult>>]] = []
+
 }
 
 extension TextMixedLoader: MLoader {
 
-  typealias MLResult = SingleOptionalResult<TestModel1>
+  typealias MLResult = TestModel1
 
   func requests(for loadingIntent: LoaderIntent) throws -> TextMixedLoader.MLRequests {
     return try (0...3).map { index -> Request<MLResult> in
@@ -30,7 +33,7 @@ extension TextMixedLoader: MLoader {
 
   func sections(from results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: results.compactMap { $0.model }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: results.compactMap { $0.value }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   func didReceive(results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) {
@@ -42,7 +45,7 @@ extension TextMixedLoader: MLoader {
 
 extension TextMixedLoader: PLoader {
 
-  typealias PLResult = SingleOptionalResult<TestModel1>
+  typealias PLResult = TestModel1
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult> {
     return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
@@ -51,7 +54,7 @@ extension TextMixedLoader: PLoader {
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: [result.model].compactMap { $0 }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: [Cell(data: TestViewCell.ViewModel(result))])]
   }
 
   func didReceive(result: PLResult, loadingIntent: LoaderIntent) {
