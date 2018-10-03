@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Astrolabe'
-  s.version = '4.2'
+  s.version = '4.2.0'
   s.summary = 'Cells management library'
 
   s.homepage = 'https://github.com/netcosports/Astrolabe'
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Loaders' do |sub|
     sub.source_files = 'Sources/Loaders/*.swift'
-    sub.dependency 'Gnomon/Core', '~> 4.2'
+    sub.dependency 'Gnomon/Core', git: => 'https://github.com/netcosports/Gnomon.git', branch: => 'swift-4.2'
     sub.dependency 'Astrolabe/Core'
   end
 end

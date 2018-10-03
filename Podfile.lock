@@ -1,25 +1,25 @@
 PODS:
-  - Astrolabe (3.1.1):
-    - Astrolabe/Core (= 3.1.1)
-  - Astrolabe/Core (3.1.1):
+  - Astrolabe (4.0.0):
+    - Astrolabe/Core (= 4.0.0)
+  - Astrolabe/Core (4.0.0):
     - RxCocoa (~> 4.2)
     - RxSwift (~> 4.2)
-  - Astrolabe/Loaders (3.1.1):
+  - Astrolabe/Loaders (4.0.0):
     - Astrolabe/Core
-    - Gnomon/Core (~> 4.2)
+    - Gnomon/Core (~> 4.0)
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (4.2):
-    - Gnomon/JSON (= 4.2)
-  - Gnomon/Core (4.2):
+  - Gnomon (4.0.1):
+    - Gnomon/JSON (= 4.0.1)
+  - Gnomon/Core (4.0.1):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.0)
-  - Gnomon/Decodable (4.2):
+  - Gnomon/Decodable (4.0.1):
     - Gnomon/Core
-  - Gnomon/JSON (4.2):
+  - Gnomon/JSON (4.0.1):
     - Gnomon/Core
-    - SwiftyJSON (~> 4.2)
+    - SwiftyJSON (~> 4.0)
   - Nimble (7.3.1)
   - RxBlocking (4.3.1):
     - RxSwift (~> 4.0)
@@ -34,8 +34,8 @@ PODS:
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - "Gnomon (from `git@github.com:netcosports/Gnomon.git`, branch `wip-4.0`)"
-  - "Gnomon/Decodable (from `git@github.com:netcosports/Gnomon.git`, branch `wip-4.0`)"
+  - Gnomon (~> 4.0)
+  - Gnomon/Decodable (~> 4.0)
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
@@ -44,6 +44,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - FormatterKit
+    - Gnomon
     - Nimble
     - RxBlocking
     - RxCocoa
@@ -55,19 +56,11 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
-  Gnomon:
-    :branch: wip-4.0
-    :git: "git@github.com:netcosports/Gnomon.git"
-
-CHECKOUT OPTIONS:
-  Gnomon:
-    :commit: 674488332574e20670e783e1cf4894772b7f8cbd
-    :git: "git@github.com:netcosports/Gnomon.git"
 
 SPEC CHECKSUMS:
-  Astrolabe: e825e2cb47164c1b26d7d17768db536dc072162a
+  Astrolabe: bf8d66332c74abf1ad1aed80eab410cd1ff6fd9b
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 6db0917617788f5bfef5effb555dd2b9d30a4d71
+  Gnomon: 41f8f796ada3ed37daa7c04c9fe141b2a5e21280
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   RxBlocking: 64c051285261ca2339481e91b5f70eb06b03660a
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
@@ -76,6 +69,6 @@ SPEC CHECKSUMS:
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: ad5e39f5a95341d5b74898b7a80f9c58e8b8960e
+PODFILE CHECKSUM: b703eced7bd9f8a8886dd8e9a3b1d85fff679492
 
 COCOAPODS: 1.5.3
