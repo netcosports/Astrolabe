@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Loaders' do |sub|
     sub.source_files = 'Sources/Loaders/*.swift'
-    sub.dependency 'Gnomon/Core', git: => 'https://github.com/netcosports/Gnomon.git', branch: => 'swift-4.2'
+    sub.dependency 'Gnomon/Core', :git => 'https://github.com/netcosports/Gnomon.git', :branch => 'swift-4.2'
     sub.dependency 'Astrolabe/Core'
   end
 end
