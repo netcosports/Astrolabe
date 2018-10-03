@@ -17,7 +17,7 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
   typealias Header = CollectionCell<TestCollectionHeaderCell>
 
   let activityIndicator: UIActivityIndicatorView = {
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     activityIndicator.color = .black
     return activityIndicator
   } ()
