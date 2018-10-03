@@ -18,12 +18,12 @@ class TestP3L: P3Loader {
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestP3L.P3LRequests {
     return (
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id1": "123"])
-        .setXPath("args"),
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id2": "234"])
-        .setXPath("args"),
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id3": "345"])
-        .setXPath("args")
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id1": "123"])
+        .setXPath("args").build(),
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id2": "234"])
+        .setXPath("args").build(),
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET).setParams(["id3": "345"])
+        .setXPath("args").build()
     )
   }
 

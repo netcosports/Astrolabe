@@ -101,9 +101,9 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     let section = sections[index]
     var type = CellType.header
     switch kind {
-    case UICollectionView.elementKindSectionHeader:
+    case UICollectionElementKindSectionHeader:
       type = .header
-    case UICollectionView.elementKindSectionFooter:
+    case UICollectionElementKindSectionFooter:
       type = .footer
     default:
       type = .custom(kind: kind)

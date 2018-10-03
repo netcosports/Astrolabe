@@ -24,8 +24,8 @@ extension TextMixedLoader: MLoader {
   func requests(for loadingIntent: LoaderIntent) throws -> TextMixedLoader.MLRequests {
     return try (0...3).map { index -> Request<MLResult> in
       let id = String(123 + index * 111)
-      return try Request(URLString: "\(Params.API.baseURL)/get?id1=\(id)").setMethod(.GET)
-        .setXPath("args")
+      return try RequestBuilder().setURLString("\(Params.API.baseURL)/get?id1=\(id)").setMethod(.GET)
+        .setXPath("args").build()
     }
   }
 
@@ -48,8 +48,8 @@ extension TextMixedLoader: PLoader {
   typealias PLResult = TestModel1
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult> {
-    return try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET)
-      .setParams(["id1": "123"]).setXPath("args")
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+      .setParams(["id1": "123"]).setXPath("args").build()
   }
 
   func sections(from result: PLResult, loadingIntent: LoaderIntent) -> [Sectionable]? {

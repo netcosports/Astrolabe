@@ -14,7 +14,7 @@ open class RootTableCell: UITableViewCell {
     self.init(frame: CGRect.zero)
   }
 
-  public required override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+  public required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     selectionStyle = .none
     internalSetup()

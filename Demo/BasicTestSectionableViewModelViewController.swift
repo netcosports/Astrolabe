@@ -13,7 +13,7 @@ import RxSwift
 class BasicTestSectionableViewModelViewController: UIViewController, Accessor {
 
   let activityIndicator: UIActivityIndicatorView = {
-    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     activityIndicator.color = .black
     return activityIndicator
   } ()

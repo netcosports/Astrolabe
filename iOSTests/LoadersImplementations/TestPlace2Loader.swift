@@ -17,10 +17,10 @@ class TestP2L: P2Loader {
 
   func requests(for loadingIntent: LoaderIntent) throws -> TestP2L.P2LRequests {
     return (
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET)
-        .setParams(["id1": "123"]).setXPath("args"),
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET)
-        .setParams(["id2": "234"]).setXPath("args")
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+        .setParams(["id1": "123"]).setXPath("args").build(),
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+        .setParams(["id2": "234"]).setXPath("args").build()
     )
   }
 

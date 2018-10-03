@@ -19,8 +19,8 @@ class TestML: MLoader {
   func requests(for loadingIntent: LoaderIntent) throws -> TestML.MLRequests {
     return try (0 ... 3).map { index -> Request<MLResult> in
       let id = String(123 + index * 111)
-      return try Request(URLString: "\(Params.API.baseURL)/get?id1=\(id)").setMethod(.GET)
-        .setXPath("args")
+      return try RequestBuilder().setURLString("\(Params.API.baseURL)/get?id1=\(id)").setMethod(.GET)
+        .setXPath("args").build()
     }
   }
 

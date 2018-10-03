@@ -18,8 +18,8 @@ class TestPL: PLoader {
   typealias PLResult = TestModel1
 
   func request(for loadingIntent: LoaderIntent) throws -> Request<PLResult> {
-    return try Request(URLString: "\(Params.API.baseURL)/cache/20").setMethod(.GET)
-      .setParams(["id1": "123"]).setXPath("args")
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setMethod(.GET)
+      .setParams(["id1": "123"]).setXPath("args").build()
   }
 
   typealias Cell = CollectionCell<TestViewCell>

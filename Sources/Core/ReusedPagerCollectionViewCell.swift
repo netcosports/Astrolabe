@@ -20,7 +20,7 @@ where Controller: ReusedPageData {
   public typealias Data = Controller.PageData
   public var viewController = Controller()
 
-  public func setup(with data: Data) {
+  open func setup(with data: Data) {
     if viewController.data != data {
       viewController.data = data
     }
@@ -46,7 +46,7 @@ where Controller: ReusedPageData {
   private func setupChildView() {
     viewController.beginAppearanceTransition(true, animated: true)
 
-    containerViewController?.addChild(viewController)
+    containerViewController?.addChildViewController(viewController)
     contentView.addSubview(viewController.view)
 
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ where Controller: ReusedPageData {
     viewController.endAppearanceTransition()
 
     guard let containerViewController = containerViewController else { return }
-    viewController.didMove(toParent: containerViewController)
+    viewController.didMove(toParentViewController: containerViewController)
   }
 
   public func willDisappear() {
@@ -78,8 +78,8 @@ where Controller: ReusedPageData {
   public func didDisappear() {
     guard viewController.data != nil else { return }
 
-    viewController.willMove(toParent: nil)
-    viewController.removeFromParent()
+    viewController.willMove(toParentViewController: nil)
+    viewController.removeFromParentViewController()
     viewController.view.removeFromSuperview()
 
     viewController.endAppearanceTransition()

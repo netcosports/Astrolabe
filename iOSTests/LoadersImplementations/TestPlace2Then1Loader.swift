@@ -18,17 +18,17 @@ class TestP2T1L: P2T1Loader {
 
   public func requests(for loadingIntent: LoaderIntent) throws -> TestP2T1L.P2T1LFirstRequests {
     return (
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setParams(["id1": "123"])
-        .setXPath("args"),
-      try Request(URLString: "\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
-        .setXPath("args")
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id1": "123"])
+        .setXPath("args").build(),
+      try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id2": "234"])
+        .setXPath("args").build()
     )
   }
 
   func request(for loadingIntent: LoaderIntent,
                from firstResults: TestP2T1L.P2T1LFirstResults) throws -> Request<P2T1LSecondResult> {
-    return try Request(URLString: "\(Params.API.baseURL)/cache/20").setParams(["id3": "345"])
-      .setXPath("args")
+    return try RequestBuilder().setURLString("\(Params.API.baseURL)/cache/20").setParams(["id3": "345"])
+      .setXPath("args").build()
   }
 
   typealias Cell = CollectionCell<TestViewCell>

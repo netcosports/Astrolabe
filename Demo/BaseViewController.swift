@@ -97,7 +97,7 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
   var type: LoaderResult = .infinitePaging
 
   let activityIndicator: UIActivityIndicatorView = {
-    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     activityIndicator.color = .black
     return activityIndicator
   } ()

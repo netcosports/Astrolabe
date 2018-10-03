@@ -59,10 +59,10 @@ extension UICollectionView: ContainerView {
     case .cell:
       register(cellClass, forCellWithReuseIdentifier: identifier)
     case .header:
-      register(cellClass, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      register(cellClass, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
                withReuseIdentifier: identifier)
     case .footer:
-      register(cellClass, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+      register(cellClass, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
                withReuseIdentifier: identifier)
     case .custom(let kind):
       register(cellClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
@@ -80,7 +80,7 @@ extension UICollectionView: ContainerView {
 
     case .header:
       let instance = dequeueReusableSupplementaryView(
-        ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: identifier, for: index as IndexPath)
+        ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: identifier, for: index as IndexPath)
       guard let supplementaryView = instance as? T else {
         fatalError("\(T.self) is not registred")
       }
@@ -88,7 +88,7 @@ extension UICollectionView: ContainerView {
 
     case .footer:
       let instance = dequeueReusableSupplementaryView(
-        ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: identifier, for: index as IndexPath)
+        ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: identifier, for: index as IndexPath)
       guard let supplementaryView = instance as? T else {
         fatalError("\(T.self) is not registred")
       }
