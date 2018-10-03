@@ -42,7 +42,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - FormatterKit
     - Gnomon
     - Nimble
@@ -58,7 +58,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: 574f471f306ca291a3ba35fa3799dce42337c301
+  Astrolabe: a4f98e3a34fa631ec80a5d63d3fe1ddb0db49f60
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 41f8f796ada3ed37daa7c04c9fe141b2a5e21280
   Nimble: 2839b01d1b31f6a6a7777a221f0d91cf52e8e27b
@@ -71,4 +71,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: b703eced7bd9f8a8886dd8e9a3b1d85fff679492
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.5.0
