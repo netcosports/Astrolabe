@@ -14,7 +14,7 @@ import RxSwift
 class BasicTimelineDataExampleCollectionViewController: UIViewController, Loadable, Accessor {
 
   let activityIndicator: UIActivityIndicatorView = {
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     activityIndicator.color = .black
     return activityIndicator
   } ()

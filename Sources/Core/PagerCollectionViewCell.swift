@@ -46,7 +46,7 @@ public class PagerCollectionViewCell: CollectionViewCell, Reusable, PagerSourceC
   private func setupChildView(_ data: PagerViewModel) {
     data.viewController.beginAppearanceTransition(true, animated: true)
 
-    containerViewController?.addChildViewController(data.viewController)
+    containerViewController?.addChild(data.viewController)
     contentView.addSubview(data.viewController.view)
 
     data.viewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ public class PagerCollectionViewCell: CollectionViewCell, Reusable, PagerSourceC
     data?.viewController.endAppearanceTransition()
 
     guard let containerViewController = containerViewController else { return }
-    data?.viewController.didMove(toParentViewController: containerViewController)
+    data?.viewController.didMove(toParent: containerViewController)
   }
 
   public func willDisappear() {
@@ -78,8 +78,8 @@ public class PagerCollectionViewCell: CollectionViewCell, Reusable, PagerSourceC
   public func didDisappear() {
     guard let data = data else { return }
 
-    data.viewController.willMove(toParentViewController: nil)
-    data.viewController.removeFromParentViewController()
+    data.viewController.willMove(toParent: nil)
+    data.viewController.removeFromParent()
     data.viewController.view.removeFromSuperview()
 
     data.viewController.endAppearanceTransition()
