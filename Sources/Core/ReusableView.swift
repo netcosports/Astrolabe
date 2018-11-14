@@ -163,11 +163,11 @@ extension UITableView: ContainerView {
   }
 
   public func insert(at indexes: [IndexPath]) {
-    insertRows(at: indexes, with: .automatic)
+    insertRows(at: indexes, with: .top)
   }
 
   public func delete(at indexes: [IndexPath]) {
-    deleteRows(at: indexes, with: .automatic)
+    deleteRows(at: indexes, with: .top)
   }
 
   public func reload(at indexes: [IndexPath]) {

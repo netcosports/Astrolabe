@@ -21,8 +21,7 @@ protocol Expandable: class {
   var expandableSections: [Sectionable] { get set } 
 
   func isExpanded(cell: ExpandableCellable) -> Bool
-  func adjust(cells: inout [Cellable]) -> [Cellable]
-  func adjust(newSections: [Sectionable])
+  func adjust(newSections: [Sectionable], excludedCells: [String])
   func scroll(to indexPath: IndexPath)
   @discardableResult func reloadCell(section: Sectionable, sectionIndex: Int, cell: Cellable) -> IndexPath?
 }
@@ -32,41 +31,29 @@ extension Expandable where Self: ReusableSource {
   func updateLoaderCell(loaderExpandableCell: LoaderExpandableCellable,
                         cells: [Cellable],
                         indexPath: IndexPath) {
-    loadedExpandableCells[loaderExpandableCell.id] = cells
-    guard isExpanded(cell: loaderExpandableCell) else { return }
-
-    var section = sections[indexPath.section]
-    var sectionCells = section.cells
+    let section = sections[indexPath.section]
+    let sectionCells = section.cells
     let loaderCell = loaderExpandableCell.loaderCell
 
-    if let expandableCellIndex = sectionCells.index(where: { $0.id == loaderExpandableCell.id }) {
-      var targetIndex = expandableCellIndex
+    loadedExpandableCells[loaderExpandableCell.id] = cells
+    guard isExpanded(cell: loaderExpandableCell) else {
+      return
+    }
 
+    if  sectionCells.contains(where: { $0.id == loaderExpandableCell.id }) {
       if let loaderIndex = sectionCells.index(where: { $0.id == loaderCell.id }) {
+        self.adjust(newSections: self.sections, excludedCells: [loaderCell.id])
         containerView?.batchUpdate(block: {
-          targetIndex = loaderIndex
-          sectionCells.remove(at: loaderIndex)
           self.containerView?.delete(at: [IndexPath(row: loaderIndex, section: indexPath.section)])
           if cells.count > 0 {
             let indexPaths = (0 ..< cells.count).map {
-              IndexPath(row: targetIndex + $0, section: indexPath.section)
+              IndexPath(row: loaderIndex + $0, section: indexPath.section)
             }
-            sectionCells.insert(contentsOf: cells, at: targetIndex)
-            section.cells = sectionCells
-            registerCellsForSections()
-            containerView?.insert(at: indexPaths)
+            self.containerView?.insert(at: indexPaths)
           }
         }, completion: nil)
       } else if expandableCells(for: loaderExpandableCell) != nil {
-        var expandableCell: ExpandableCellable = loaderExpandableCell
-        allIds(in: &expandableCell).forEach { id in
-          guard let index = sectionCells.index(where: { $0.id == id }) else { return }
-          sectionCells.remove(at: index)
-        }
-        if cells.count > 0 {
-          sectionCells.insert(contentsOf: cells, at: expandableCellIndex + 1)
-        }
-        section.cells = sectionCells
+        self.adjust(newSections: sections, excludedCells: [loaderCell.id])
         containerView?.reloadData()
       }
     }
@@ -95,23 +82,23 @@ extension Expandable where Self: ReusableSource {
     ).disposed(by: disposeBag)
   }
 
-  func adjust(cells: inout [Cellable]) -> [Cellable] {
+  func adjust(cells: inout [Cellable], excludedCells: [String]) -> [Cellable] {
     for (index, cell) in cells.enumerated() {
       guard let expandableCell = cell as? ExpandableCellable, isExpanded(cell: expandableCell) else { continue }
 
       if var expandableCells = expandableCells(for: expandableCell) {
-        let adjustedCells = adjust(cells: &expandableCells)
+        let adjustedCells = adjust(cells: &expandableCells, excludedCells: excludedCells)
         let adjustedCellsIds = adjustedCells.map { $0.id }
         cells = cells.filter { !adjustedCellsIds.contains($0.id) }
         cells.insert(contentsOf: adjustedCells, at: index + 1)
       }
     }
-    return cells
+    return cells.filter { cell in !excludedCells.contains(where: { $0 == cell.id }) }
   }
 
-  func adjust(newSections: [Sectionable]) {
+  func adjust(newSections: [Sectionable], excludedCells: [String]) {
     for var section in newSections {
-      let cells = adjust(cells: &section.cells)
+      let cells = adjust(cells: &section.cells, excludedCells: excludedCells)
       section.cells = cells
     }
     expandableSections = newSections

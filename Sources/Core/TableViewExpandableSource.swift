@@ -20,7 +20,7 @@ open class TableViewExpandableSource: TableViewSource, Expandable {
   override public var sections: [Sectionable] {
 
     set {
-      adjust(newSections: newValue)
+      adjust(newSections: newValue, excludedCells: [])
     }
 
     get {

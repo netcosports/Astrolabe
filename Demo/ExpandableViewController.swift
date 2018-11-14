@@ -15,14 +15,16 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
   override func viewDidLoad() {
     super.viewDidLoad()
     source.loader = LoaderMediator(loader: self)
-    source.loadingBehavior = [.appearance, .autoupdate, .paging]
-    source.source.expandableBehavior.collapseDisabled = true
+    source.loadingBehavior = [.appearance, .autoupdate]
   }
 
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let cells1: [Cellable] = [
-      loaderCell(),
+      loaderCell(for: 1),
+      loaderCell(for: 2),
+      loaderCell(for: 3),
+      loaderCell(for: 4),
       gen.expandable(page: 10 * page + 1, cells: 1),
       gen.expandable(page: 10 * page + 2, cells: 2),
       gen.expandable(page: 10 * page + 3, cells: 3),
@@ -36,11 +38,11 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
     return [Section(cells: cells1, page: page)]
   }
 
-  private func loaderCell() -> LoaderExpandableCellable {
-    let loader = TableCell<TestTableCell>(data: TestViewModel("indicator"))
-    return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader"), id: "Loader", loader: {
+  private func loaderCell(for page: Int) -> LoaderExpandableCellable {
+    let loader = TableCell<TestTableCell>(data: TestViewModel("indicator \(page)"), id: "indicator \(page)")
+    return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader \(page)"), id: "Loader \(page)", loader: {
       let gen = TableGenerator<TestTableCell, TestTableHeader>()
-      return CellObservable.just(gen.cellsViews(page: 99, cells: 10))
+      return CellObservable.just(gen.cellsViews(page: 1000 * page + 99, cells: 10))
         .delay(1.0, scheduler: MainScheduler.instance)
     }, loaderCell: loader)
   }
@@ -52,7 +54,6 @@ class ExpandableCollectionViewController: BaseLoaderCollectionViewController<Loa
     super.viewDidLoad()
     source.loader = LoaderMediator(loader: self)
     source.loadingBehavior = [.appearance, .autoupdate, .paging]
-    source.source.expandableBehavior.collapseDisabled = true
   }
 
   override func sections(for page: Int) -> [Sectionable]? {
