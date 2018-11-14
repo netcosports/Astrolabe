@@ -14,17 +14,13 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
   let disposeBag = DisposeBag()
   public var expandableBehavior = ExpandableBehavior(collapseDisabled: false)
   public var expandedCells: Set<String> = []
-  fileprivate var expandableSections: [Sectionable] = []
+  public var loadingExpandableCells: [String : CellObservable] = [:]
+  public var loadedExpandableCells: [String : [Cellable]] = [:]
+  public var expandableSections: [Sectionable] = []
   override public var sections: [Sectionable] {
 
     set {
-      let newSections = newValue
-      for var section in newSections {
-        let cells = adjust(cells: &section.cells)
-        section.cells = cells
-      }
-      expandableSections = newSections
-      registerCellsForSections()
+      adjust(newSections: newValue)
     }
 
     get {

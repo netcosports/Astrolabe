@@ -22,6 +22,7 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
   override func sections(for page: Int) -> [Sectionable]? {
     let gen = TableGenerator<TestTableCell, TestTableHeader>()
     let cells1: [Cellable] = [
+      loaderCell(),
       gen.expandable(page: 10 * page + 1, cells: 1),
       gen.expandable(page: 10 * page + 2, cells: 2),
       gen.expandable(page: 10 * page + 3, cells: 3),
@@ -37,12 +38,10 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
 
   private func loaderCell() -> LoaderExpandableCellable {
     let loader = TableCell<TestTableCell>(data: TestViewModel("indicator"))
-    return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader"), id: "indicator", loader: {
+    return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader"), id: "Loader", loader: {
       let gen = TableGenerator<TestTableCell, TestTableHeader>()
-      return SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
+      return CellObservable.just(gen.cellsViews(page: 99, cells: 10))
         .delay(1.0, scheduler: MainScheduler.instance)
-        .concat(SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
-          .delay(2.0, scheduler: MainScheduler.instance))
     }, loaderCell: loader)
   }
 }
@@ -76,10 +75,8 @@ class ExpandableCollectionViewController: BaseLoaderCollectionViewController<Loa
     let loader = CollectionCell<TestCollectionCell>(data: TestViewModel("indicator"))
     return LoaderExpandableCell<UICollectionView, TestCollectionCell>(data: TestViewModel("loader"), id: "indicator", loader: {
       let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
-      return SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
+      return CellObservable.just(gen.cellsViews(page: 99, cells: 10))
         .delay(1.0, scheduler: MainScheduler.instance)
-        .concat(SectionObservable.just([Section(cells: gen.cellsViews(page: 99, cells: 10))])
-                  .delay(2.0, scheduler: MainScheduler.instance))
     }, loaderCell: loader)
   }
 }

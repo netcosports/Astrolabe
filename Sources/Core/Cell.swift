@@ -100,7 +100,7 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
 
   public init(data: Data,
               id: String,
-              loader: ObservableClosure? = nil,
+              loader: CellObservableClosure? = nil,
               loaderCell: Cellable,
               click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
@@ -110,29 +110,14 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
     self.expandableCells = [loaderCell]
   }
 
-  public func performLoading() -> SectionObservable? {
-    guard let sectionObservable = loader?() else {
+  public func load() -> CellObservable {
+    guard let cellsObservable = loader?() else {
       return .just(nil)
     }
-    state = .loading(intent: .initial)
-    return sectionObservable.do(onNext: { [weak self] sections in
-      guard let strongSelf = self, let sections = sections else { return }
-      strongSelf.loadedCells = sections.flatMap { $0.cells }
-      if strongSelf.loadedCells?.count == 0 {
-        strongSelf.state = .empty
-      } else {
-        strongSelf.state = .hasData
-      }
-    }, onError: { [weak self] error in
-      guard let strongSelf = self else { return }
-      strongSelf.state = .error(error)
-    })
+    return cellsObservable
   }
-
-  public var state: LoaderState = .notInitiated
-  public var loadedCells: [Cellable]?
   public var loaderCell: Cellable
-  public var loader: ObservableClosure?
+  public var loader: CellObservableClosure?
 }
 
 public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionView, T>
