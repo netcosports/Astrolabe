@@ -19,6 +19,8 @@ open class TableView<T: ReusableSource>: UITableView, AccessorView where T.Conta
   }
 
   public required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+//    fatalError("init(coder:) has not been implemented")
+    super.init(coder: aDecoder)
+    source.containerView = self
   }
 }
