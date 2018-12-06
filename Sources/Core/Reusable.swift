@@ -20,7 +20,8 @@ public enum SelectionBehavior {
 }
 
 public struct ExpandableBehavior {
-  public var collapseDisabled: Bool
+  public var collapseDisabled = false
+  public var collapseOtherOnExpand = true
 }
 
 public protocol ReusableSource: class {

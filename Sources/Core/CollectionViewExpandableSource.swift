@@ -12,7 +12,7 @@ import RxSwift
 open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
 
   let disposeBag = DisposeBag()
-  public var expandableBehavior = ExpandableBehavior(collapseDisabled: false)
+  public var expandableBehavior = ExpandableBehavior()
   public var expandedCells: Set<String> = []
   public var loadingExpandableCells: [String : CellObservable] = [:]
   public var loadedExpandableCells: [String : [Cellable]] = [:]

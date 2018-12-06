@@ -303,7 +303,7 @@ extension Expandable where Self: ReusableSource {
                             sectionCells: &sectionCells,
                             sectionIndex: indexPath.section)
     } else {
-      if var collapsibleCell = expandedItemInSection(section: section, expandableCell: expandableCell) {
+      if expandableBehavior.collapseOtherOnExpand, var collapsibleCell = expandedItemInSection(section: section, expandableCell: expandableCell) {
         collapseAndExpandItemInSection(section: &section,
                                        expandableCell: &expandableCell,
                                        collapsibleCell: &collapsibleCell,
