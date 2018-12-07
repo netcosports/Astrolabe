@@ -22,6 +22,16 @@ public enum SelectionBehavior {
 public struct ExpandableBehavior {
   public var collapseDisabled = false
   public var collapseOtherOnExpand = true
+  // Disabled or enabled scroll to cell after collapse/expand animation
+  public var autoScrollToItemDisabled = false
+
+  public init(collapseDisabled: Bool = false,
+              collapseOtherOnExpand: Bool = true,
+              autoScrollToItemDisabled: Bool = false) {
+    self.collapseDisabled = collapseDisabled
+    self.collapseOtherOnExpand = collapseOtherOnExpand
+    self.autoScrollToItemDisabled = autoScrollToItemDisabled
+  }
 }
 
 public protocol ReusableSource: class {

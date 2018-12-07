@@ -209,7 +209,8 @@ extension Expandable where Self: ReusableSource {
       expandedCells.insert(expandableCell.id)
     }
 
-    if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
+    if !expandableBehavior.autoScrollToItemDisabled,
+      let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
       scroll(to: indexPath)
     }
   }
@@ -273,7 +274,8 @@ extension Expandable where Self: ReusableSource {
       self.containerView?.delete(at: collapseIndexes)
       self.containerView?.insert(at: expandIndexes)
     }, completion: { _ in
-      if let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
+      if !self.expandableBehavior.autoScrollToItemDisabled,
+        let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
         self.scroll(to: IndexPath(row: itemIndex, section: sectionIndex))
       }
     })
