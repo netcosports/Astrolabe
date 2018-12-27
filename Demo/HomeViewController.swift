@@ -19,6 +19,9 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
     var tableCells: [Cellable] = [
       Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
         self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
+      },
+      Item(data: TestViewModel("Event driven"), id: "Event driven") { [weak self] in
+        self?.navigationController?.pushViewController(EventDrivenController(), animated: true)
       }
     ]
 

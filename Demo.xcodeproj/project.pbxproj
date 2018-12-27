@@ -17,6 +17,8 @@
 		AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
 		AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */; };
 		AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
+		AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */; };
+		AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */; };
 		AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
 		AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
 		AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
@@ -105,6 +107,8 @@
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModel.swift; sourceTree = "<group>"; };
 		AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModelViewController.swift; sourceTree = "<group>"; };
+		AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenViewModel.swift; sourceTree = "<group>"; };
+		AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenController.swift; sourceTree = "<group>"; };
 		AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTimelineDataExampleCollectionViewController.swift; sourceTree = "<group>"; };
 		AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModel.swift; sourceTree = "<group>"; };
 		AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModelViewController.swift; sourceTree = "<group>"; };
@@ -209,6 +213,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		AA44516321D4BCE5008A1EE0 /* EventDriven */ = {
+			isa = PBXGroup;
+			children = (
+				AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */,
+				AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */,
+			);
+			path = EventDriven;
+			sourceTree = "<group>";
+		};
 		B50EFAC51F0CC27E00D31FD6 = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +251,7 @@
 		B50EFAD01F0CC27E00D31FD6 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				AA44516321D4BCE5008A1EE0 /* EventDriven */,
 				B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */,
 				B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */,
 				B5716EF51F0CC54D005146DB /* BaseViewController.swift */,
@@ -727,10 +741,12 @@
 				AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
 				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
+				AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */,
 				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */,
 				B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */,
 				B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */,
+				AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

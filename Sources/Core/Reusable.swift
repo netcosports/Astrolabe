@@ -38,7 +38,7 @@ public protocol ReusableSource: class {
 
   init()
 
-  associatedtype Container: ContainerView
+  associatedtype Container: UIScrollView & ContainerView
 
   var containerView: Container? { get set }
   var hostViewController: UIViewController? { get set }
