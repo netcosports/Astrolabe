@@ -38,10 +38,7 @@ public protocol ExpandableCellable: Cellable {
 }
 
 public protocol LoaderExpandableCellable: ExpandableCellable {
-  func performLoading() -> SectionObservable?
-
-  var state: LoaderState { get }
-  var loadedCells: [Cellable]? { get }
+  func load() -> CellObservable
   var loaderCell: Cellable { get }
 }
 

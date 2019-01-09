@@ -20,6 +20,12 @@ where CellView.Container == Container {
   public let click: ClickClosure?
   public let page: Int = 0
   public var id: String = ""
+  public var cellClass: CellView.Type { return CellView.self }
+
+  open var identifier: String { return cellClass.identifier(for: data) }
+  open var needsToRegister: Bool { return true }
+
+  // MARK: - Init
 
   public convenience init(data: Data, click: ClickClosure? = nil) {
     self.init(data: data, click: click, type: .cell, setup: nil)
@@ -38,17 +44,16 @@ where CellView.Container == Container {
     self.id = id
   }
 
+  // MARK: - Lifecycle
+
   public func register<T: ContainerView>(in container: T) {
-    let cellClass = CellView.self
-    let identifier = cellClass.identifier(for: data)
+    guard needsToRegister else { return }
+
     container.register(type: type, cellClass: cellClass, identifier: identifier)
   }
 
   public func instance<T1: ContainerView, T2: ReusableView>(for container: T1, index: IndexPath) -> T2 {
-    let cellClass = CellView.self
-    let identifier = cellClass.identifier(for: data)
     var cellView: CellView = container.instance(type: type, index: index, identifier: identifier)
-    presetupCellView(with: &cellView)
     setup?(cellView)
     guard let result = cellView as? T2 else {
       fatalError("\(T2.self) is not registred")
@@ -58,14 +63,12 @@ where CellView.Container == Container {
 
   public func setup<T: ReusableView>(with cell: T) {
     guard let cellView = cell as? CellView else {
-      fatalError("\(cell.self) trying to setup as \(CellView.self)")
+      fatalError("\(cell.self) trying to setup as \(cellClass)")
     }
     cellView.setup(with: data)
   }
 
   public func size<T: ContainerView>(with container: T) -> CGSize {
-    let cellClass = CellView.self
-
     switch type {
     case .cell, .header, .footer:
       return cellClass.size(for: data, containerSize: container.size)
@@ -74,8 +77,6 @@ where CellView.Container == Container {
     }
   }
 
-  internal func presetupCellView(with cellView: inout CellView) {
-  }
 }
 
 open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,
@@ -100,7 +101,7 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
 
   public init(data: Data,
               id: String,
-              loader: ObservableClosure? = nil,
+              loader: CellObservableClosure? = nil,
               loaderCell: Cellable,
               click: ClickClosure? = nil,
               setup: SetupClosure<CellView>? = nil) {
@@ -110,29 +111,14 @@ open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
     self.expandableCells = [loaderCell]
   }
 
-  public func performLoading() -> SectionObservable? {
-    guard let sectionObservable = loader?() else {
+  public func load() -> CellObservable {
+    guard let cellsObservable = loader?() else {
       return .just(nil)
     }
-    state = .loading(intent: .initial)
-    return sectionObservable.do(onNext: { [weak self] sections in
-      guard let strongSelf = self, let sections = sections else { return }
-      strongSelf.loadedCells = sections.flatMap { $0.cells }
-      if strongSelf.loadedCells?.count == 0 {
-        strongSelf.state = .empty
-      } else {
-        strongSelf.state = .hasData
-      }
-    }, onError: { [weak self] error in
-      guard let strongSelf = self else { return }
-      strongSelf.state = .error(error)
-    })
+    return cellsObservable
   }
-
-  public var state: LoaderState = .notInitiated
-  public var loadedCells: [Cellable]?
   public var loaderCell: Cellable
-  public var loader: ObservableClosure?
+  public var loader: CellObservableClosure?
 }
 
 public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionView, T>

@@ -20,7 +20,8 @@ open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView whe
   }
 
   public required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: aDecoder)
+    source.containerView = self
   }
 
   private let _size = PublishRelay<CGSize>()

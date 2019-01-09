@@ -71,9 +71,6 @@ private class ConfigurableLoader: Astrolabe.Loadable, Containerable {
   fileprivate static func section(with sd: SD) -> Sectionable? {
     let viewModel = TestViewCell.ViewModel("id")
     let cells: [Cellable] = (0..<sd.id).map { _ in Cell(data: viewModel) }
-    if cells.count == 0 {
-      print("asdasdasd")
-    }
     return Section(cells: cells, page: sd.page)
   }
 }

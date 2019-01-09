@@ -12,6 +12,9 @@ import RxSwift
 public typealias SectionObservable = Observable<[Sectionable]?>
 public typealias ObservableClosure = () -> SectionObservable?
 
+public typealias CellObservable = Observable<[Cellable]?>
+public typealias CellObservableClosure = () -> CellObservable?
+
 public enum LoaderState {
   case notInitiated
   case initiated
