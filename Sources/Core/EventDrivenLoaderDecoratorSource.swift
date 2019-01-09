@@ -139,7 +139,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       self?.handleLastCellDisplayed()
     }
 
-    controlEventSubject.asObserver()
+    controlEventSubject.asObservable()
       .subscribeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] controlEvent in
       guard let self = self else { return }
@@ -163,7 +163,10 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       }
     }).disposed(by: disposeBag)
 
-    sectionsEventSubject.subscribe(onNext: { [weak self] reloadType in
+    sectionsEventSubject.asObservable()
+      .observeOn(MainScheduler.instance)
+      .subscribeOn(MainScheduler.instance)
+      .subscribe(onNext: { [weak self] reloadType in
       guard let self = self else { return }
       guard let containerView = self.containerView else { return }
 

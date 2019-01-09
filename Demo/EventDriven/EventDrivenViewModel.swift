@@ -33,7 +33,8 @@ class EventDrivenViewModel {
     input.source.settings.autoupdatePeriod = 30.0
     input.source.intentObservable.flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
       guard let self = self else { return .empty() }
-      return self.load(for: intent).concat(Observable<LoaderResultEvent>.just(LoaderResultEvent.completed(intent: intent)))
+      return self.load(for: intent)
+        .concat(Observable.just(.completed(intent: intent)))
     }).bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
 
     input.visibility
@@ -61,6 +62,10 @@ class EventDrivenViewModel {
         default: return false
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
+
+    Observable<Int>.timer(10.0, scheduler: MainScheduler.instance).map { _ in
+      LoaderResultEvent.softCurrent
+    }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
 
   private func load(for intent: LoaderIntent) -> Observable<LoaderResultEvent> {
@@ -77,7 +82,7 @@ class EventDrivenViewModel {
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
       return Observable<LoaderResultEvent>
         .just(LoaderResultEvent.soft(sections: self.sections, context: nil))
-        .delay(5.0, scheduler: MainScheduler.instance)
+        .delay(1.0, scheduler: MainScheduler.instance)
     default:
       let result = [
         TestViewModel("Test title initials - 1"),
@@ -89,7 +94,7 @@ class EventDrivenViewModel {
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
       return Observable<LoaderResultEvent>
         .just(LoaderResultEvent.force(sections: self.sections, context: nil))
-        .delay(5.0, scheduler: MainScheduler.instance)
+        .delay(1.0, scheduler: MainScheduler.instance)
     }
   }
 }
