@@ -4,8 +4,8 @@ use_frameworks!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon', :git => 'https://github.com/netcosports/Gnomon.git', :branch => 'swift-4.2'
-  pod 'Gnomon/Decodable', :git => 'https://github.com/netcosports/Gnomon.git', :branch => 'swift-4.2'
+  pod 'Gnomon', '~> 4.2'
+  pod 'Gnomon/Decodable', '~> 4.2'
 
   target 'Demo' do
     platform :ios, '9.0'

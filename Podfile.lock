@@ -10,14 +10,14 @@ PODS:
   - FormatterKit/Resources (1.8.2)
   - FormatterKit/URLRequestFormatter (1.8.2):
     - FormatterKit/Resources
-  - Gnomon (4.2.0):
-    - Gnomon/JSON (= 4.2.0)
-  - Gnomon/Core (4.2.0):
+  - Gnomon (4.2):
+    - Gnomon/JSON (= 4.2)
+  - Gnomon/Core (4.2):
     - FormatterKit/URLRequestFormatter (>= 1.8.2)
     - RxSwift (~> 4.2)
-  - Gnomon/Decodable (4.2.0):
+  - Gnomon/Decodable (4.2):
     - Gnomon/Core
-  - Gnomon/JSON (4.2.0):
+  - Gnomon/JSON (4.2):
     - Gnomon/Core
     - SwiftyJSON (~> 4.2)
   - Nimble (7.3.1)
@@ -34,8 +34,8 @@ PODS:
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon (from `https://github.com/netcosports/Gnomon.git`, branch `swift-4.2`)
-  - Gnomon/Decodable (from `https://github.com/netcosports/Gnomon.git`, branch `swift-4.2`)
+  - Gnomon (~> 4.2)
+  - Gnomon/Decodable (~> 4.2)
   - Nimble (~> 7.0)
   - RxBlocking
   - RxTest
@@ -44,6 +44,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - FormatterKit
+    - Gnomon
     - Nimble
     - RxBlocking
     - RxCocoa
@@ -55,19 +56,11 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
-  Gnomon:
-    :branch: swift-4.2
-    :git: https://github.com/netcosports/Gnomon.git
-
-CHECKOUT OPTIONS:
-  Gnomon:
-    :commit: 6c5d54deb0da5cf5b5481313ba7d48877ea0cde8
-    :git: https://github.com/netcosports/Gnomon.git
 
 SPEC CHECKSUMS:
   Astrolabe: e825e2cb47164c1b26d7d17768db536dc072162a
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 4e1d4db04e3aa36ae7c9749cb03bcb0c331c437c
+  Gnomon: a6640420e0b9d9eb8a6a95f5d930f354905fca24
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   RxBlocking: 64c051285261ca2339481e91b5f70eb06b03660a
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
@@ -76,6 +69,6 @@ SPEC CHECKSUMS:
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 1bf624ce092ff5aa7a24e28d6c3812cdf64b9861
+PODFILE CHECKSUM: f94871414523c73d07e7cfa8c4bc87409941d8a7
 
 COCOAPODS: 1.5.3
