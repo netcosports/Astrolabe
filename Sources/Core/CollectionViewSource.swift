@@ -123,11 +123,11 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
   open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    cell.click?()
     if selectionManagement == .automatic {
       processSelection(for: cell.id)
       containerView?.reloadData()
     }
+    cell.click?()
   }
 
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,

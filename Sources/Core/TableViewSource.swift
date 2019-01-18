@@ -113,11 +113,11 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
   open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    cell.click?()
     if selectionManagement == .automatic {
       processSelection(for: cell.id)
       containerView?.reloadData()
     }
+    cell.click?()
   }
 
   open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
