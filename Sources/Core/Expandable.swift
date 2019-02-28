@@ -209,8 +209,8 @@ extension Expandable where Self: ReusableSource {
       expandedCells.insert(expandableCell.id)
     }
 
-    if !expandableBehavior.autoScrollToItemDisabled,
-      let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell) {
+    if let indexPath = reloadCell(section: section, sectionIndex: sectionIndex, cell: expandableCell),
+      !expandableBehavior.autoScrollToItemDisabled {
       scroll(to: indexPath)
     }
   }
