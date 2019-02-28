@@ -31,8 +31,14 @@ public enum LoaderResultEvent {
 }
 
 public struct Settings {
-  public var autoupdatePeriod: TimeInterval = 30.0
-  public var loadingBehavior: LoadingBehavior = .initial
+  public var autoupdatePeriod: TimeInterval
+  public var loadingBehavior: LoadingBehavior
+
+  public init(autoupdatePeriod: TimeInterval = 30.0,
+              loadingBehavior: LoadingBehavior = .initial) {
+    self.autoupdatePeriod = autoupdatePeriod
+    self.loadingBehavior = loadingBehavior
+  }
 }
 
 public protocol EventDrivenLoaderSource: class {
@@ -117,13 +123,19 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     })
   }
 
+  public var scheduler: SchedulerType = MainScheduler.instance {
+    didSet {
+      bind()
+    }
+  }
+
   fileprivate let controlEventSubject = PublishSubject<InputControlEvent>()
   fileprivate let stateEventSubject = BehaviorSubject<LoaderState>(value: .notInitiated)
   fileprivate let sectionsEventSubject = PublishSubject<LoaderResultEvent>()
   fileprivate let intentSubject = PublishSubject<LoaderIntent>()
   fileprivate let softReloadSubject = PublishSubject<[Sectionable]>()
 
-  fileprivate var disposeBag = DisposeBag()
+  fileprivate var bindDisposeBag = DisposeBag()
   fileprivate var softReloadDisposeBag: DisposeBag?
   fileprivate var timerDisposeBag: DisposeBag?
   #warning("not sure we still need this with event based way")
@@ -133,81 +145,90 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     return (try? stateEventSubject.value()) ?? .notInitiated
   }
 
+  func login() -> Observable<String> {
+    return Observable<String>.just("fdfsdfsdfsd")
+  }
+
+  fileprivate func bind() {
+    let bindDisposeBag = DisposeBag()
+    controlEventSubject.asObservable()
+      .subscribeOn(scheduler)
+      .subscribe(onNext: { [weak self] controlEvent in
+        guard let self = self else { return }
+        switch controlEvent {
+        case .pullToRefresh:
+          self.intentSubject.onNext(LoaderIntent.pullToRefresh)
+        case .force(let keepCurrentDataBeforeUpdate):
+          if !keepCurrentDataBeforeUpdate {
+            self.sections = []
+            self.containerView?.reloadData()
+          }
+          self.intentSubject.onNext(LoaderIntent.force(keepData: keepCurrentDataBeforeUpdate))
+        case .visibilityChanged(let visible):
+          if visible {
+            self.appear()
+          } else {
+            self.disappear()
+          }
+        case .forceNextPage:
+          self.handleLastCellDisplayed()
+        }
+      }).disposed(by: bindDisposeBag)
+
+    sectionsEventSubject.asObservable()
+      .observeOn(scheduler)
+      .subscribeOn(scheduler)
+      .subscribe(onNext: { [weak self] reloadType in
+        guard let self = self else { return }
+        guard let containerView = self.containerView else { return }
+
+        switch reloadType {
+        case .force(let sections, _):
+          self.sections = sections
+          self.containerView?.reloadData()
+          self.unsubscribeSoftReload()
+        case .soft(let sections, _):
+          self.updateDataSoftly(to: sections)
+        case .softCurrent:
+          self.updateDataSoftly(to: self.sections)
+        case .completed(let intent):
+          let cellsCountAfterLoad = self.cellsCount
+          if case .page = intent, cellsCountAfterLoad == self.cellsCountBeforeLoad {
+            self.stateEventSubject.onNext(.hasData)
+            return
+          }
+          if cellsCountAfterLoad == 0 {
+            self.stateEventSubject.onNext(.empty)
+            self.self.containerView?.reloadData()
+          } else {
+            self.stateEventSubject.onNext(.hasData)
+            guard let lastSection = self.sections.last else { return }
+            guard let visibleItems = containerView.visibleItems else { return }
+            let sectionsLastIndex = self.sections.count - 1
+            let itemsLastIndex = lastSection.cells.count - 1
+
+            if visibleItems.contains(where: { $0.section == sectionsLastIndex && $0.item == itemsLastIndex }) {
+              self.handleLastCellDisplayed()
+            }
+          }
+        case .failed(let error):
+          if self.cellsCount > 0 {
+            self.stateEventSubject.onNext(.hasData)
+          } else {
+            self.stateEventSubject.onNext(.error(error))
+            self.containerView?.reloadData()
+          }
+        }
+      }).disposed(by: bindDisposeBag)
+    self.bindDisposeBag = bindDisposeBag
+  }
+
   fileprivate func internalInit() {
     self.decoratedSource.lastCellDisplayed = { [weak self] in
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
     }
-
-    controlEventSubject.asObservable()
-      .subscribeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak self] controlEvent in
-      guard let self = self else { return }
-      switch controlEvent {
-      case .pullToRefresh:
-        self.intentSubject.onNext(LoaderIntent.pullToRefresh)
-      case .force(let keepCurrentDataBeforeUpdate):
-        if !keepCurrentDataBeforeUpdate {
-          self.sections = []
-          self.containerView?.reloadData()
-        }
-        self.intentSubject.onNext(LoaderIntent.force(keepData: keepCurrentDataBeforeUpdate))
-      case .visibilityChanged(let visible):
-        if visible {
-          self.appear()
-        } else {
-          self.disappear()
-        }
-      case .forceNextPage:
-        self.handleLastCellDisplayed()
-      }
-    }).disposed(by: disposeBag)
-
-    sectionsEventSubject.asObservable()
-      .observeOn(MainScheduler.instance)
-      .subscribeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak self] reloadType in
-      guard let self = self else { return }
-      guard let containerView = self.containerView else { return }
-
-      switch reloadType {
-      case .force(let sections, _):
-        self.sections = sections
-        self.containerView?.reloadData()
-        self.unsubscribeSoftReload()
-      case .soft(let sections, _):
-        self.updateDataSoftly(to: sections)
-      case .softCurrent:
-        self.updateDataSoftly(to: self.sections)
-      case .completed(let intent):
-        let cellsCountAfterLoad = self.cellsCount
-        if case .page = intent, cellsCountAfterLoad == self.cellsCountBeforeLoad {
-          self.stateEventSubject.onNext(.hasData)
-          return
-        }
-        if cellsCountAfterLoad == 0 {
-          self.stateEventSubject.onNext(.empty)
-          self.self.containerView?.reloadData()
-        } else {
-          self.stateEventSubject.onNext(.hasData)
-          guard let lastSection = self.sections.last else { return }
-          guard let visibleItems = containerView.visibleItems else { return }
-          let sectionsLastIndex = self.sections.count - 1
-          let itemsLastIndex = lastSection.cells.count - 1
-
-          if visibleItems.contains(where: { $0.section == sectionsLastIndex && $0.item == itemsLastIndex }) {
-            self.handleLastCellDisplayed()
-          }
-        }
-      case .failed(let error):
-        if self.cellsCount > 0 {
-          self.stateEventSubject.onNext(.hasData)
-        } else {
-          self.stateEventSubject.onNext(.error(error))
-          self.containerView?.reloadData()
-        }
-      }
-    }).disposed(by: disposeBag)
+    bind()
   }
 
   fileprivate func updateDataSoftly(to sections: [Sectionable]) {
@@ -218,7 +239,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     let scrollObservable: Observable<Void> = containerView.rx.contentOffset.map { _ in return () }
 
     Observable.merge(scrollObservable, timeoutObservable)
-      .debounce(0.15, scheduler: MainScheduler.instance)
+      .debounce(0.15, scheduler: scheduler)
       .take(1).subscribe(onNext: { [weak self] in
       guard let self = self else { return }
       self.sections = sections
@@ -271,7 +292,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     guard timerDisposeBag == nil else { return }
     let disposeBag = DisposeBag()
     Observable<Int>
-      .interval(settings.autoupdatePeriod, scheduler: MainScheduler.instance)
+      .interval(settings.autoupdatePeriod, scheduler: scheduler)
       .subscribe(onNext: { [weak self] _ in
       self?.intentSubject.onNext(.autoupdate)
     }).disposed(by: disposeBag)
