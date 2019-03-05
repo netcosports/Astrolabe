@@ -100,6 +100,8 @@ public struct LoadingBehavior: OptionSet {
 public protocol LoaderReusableSource: ReusableSource {
   var startProgress: ProgressClosure? { get set }
   var stopProgress: ProgressClosure? { get set }
+  @available(*, deprecated, message: "Use noDataCell closure")
+  var updateEmptyView: EmptyViewClosure? { get set }
   var noDataCell: NoDataCellClosure? { get set }
   var autoupdatePeriod: TimeInterval { get set }
   var loadingBehavior: LoadingBehavior { get set }
