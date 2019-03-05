@@ -27,6 +27,7 @@ public enum LoaderState {
 let defaultReloadInterval: TimeInterval = 30
 public typealias ProgressClosure = (LoaderIntent) -> Void
 public typealias EmptyViewClosure = (LoaderState) -> Void
+public typealias NoDataCellClosure = (LoaderState) -> Cellable
 
 public enum LoaderIntent {
   case initial
@@ -99,7 +100,7 @@ public struct LoadingBehavior: OptionSet {
 public protocol LoaderReusableSource: ReusableSource {
   var startProgress: ProgressClosure? { get set }
   var stopProgress: ProgressClosure? { get set }
-  var updateEmptyView: EmptyViewClosure? { get set }
+  var noDataCell: NoDataCellClosure? { get set }
   var autoupdatePeriod: TimeInterval { get set }
   var loadingBehavior: LoadingBehavior { get set }
   var loader: LoaderMediatorProtocol? { get set }

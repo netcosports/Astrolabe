@@ -33,17 +33,15 @@ public extension Accessor {
     return containerView.source
   }
 
-// FIXME: swift 4.2 compilator crashes when it's enabled,
-// please return it back when it will be fixed
-//  var sections: [Sectionable] {
-//    get {
-//      return source.sections
-//    }
-//
-//    set {
-//      source.sections = newValue
-//    }
-//  }
+  var sections: [Sectionable] {
+    get {
+      return source.sections
+    }
+
+    set {
+      source.sections = newValue
+    }
+  }
 
 }
 
