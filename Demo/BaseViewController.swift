@@ -188,8 +188,8 @@ class BaseLoaderTableViewController<T: LoaderReusableSource>: BaseLoaderViewCont
   
   override func loadView() {
     super.loadView()
-    containerView.source.noDataCell = { state in
-      return Empty(data: state)
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
     }
   }
 }
@@ -200,8 +200,8 @@ class BaseLoaderCollectionViewController<T: LoaderReusableSource>: BaseLoaderVie
   
   override func loadView() {
     super.loadView()
-    containerView.source.noDataCell = { state in
-      return Empty(data: state)
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
     }
     containerView.collectionViewLayout = collectionViewLayout()
   }

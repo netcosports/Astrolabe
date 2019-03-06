@@ -47,7 +47,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
 
   public var startProgress: ProgressClosure?
   public var stopProgress: ProgressClosure?
-  public var noDataCell: NoDataCellClosure?
+  public var noDataState: NoDataStateClosure?
   public var updateEmptyView: EmptyViewClosure?
   public var autoupdatePeriod = defaultReloadInterval
   public var loadingBehavior = LoadingBehavior.initial {
@@ -118,13 +118,13 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   
   public func reloadDataWithEmptyDataSet() {
     containerView?.reloadData()
-    setupEmptyCell(noDataCell?(state))
+    setupNoData(noDataState?(state))
     updateEmptyView?(state)
   }
 
-  private func setupEmptyCell(_ cell: Cellable?) {
-    guard let emptyCell = cell else { return }
-    sections = [Section(cells: [emptyCell])]
+  private func setupNoData(_ noDataSections: [Sectionable]?) {
+    guard let stateSections = noDataSections else { return }
+    sections = stateSections
     containerView?.reloadData()
   }
 
@@ -198,11 +198,11 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
         if self.cellsCount > 0 {
           self.state = .hasData
           self.updateEmptyView?(self.state)
-          self.setupEmptyCell(self.noDataCell?(self.state))
+          self.setupNoData(self.noDataState?(self.state))
         } else {
           self.state = .error(error)
           self.updateEmptyView?(self.state)
-          self.setupEmptyCell(self.noDataCell?(self.state))
+          self.setupNoData(self.noDataState?(self.state))
         }
       }, onCompleted: { [weak self] in
         guard let `self` = self else { return }

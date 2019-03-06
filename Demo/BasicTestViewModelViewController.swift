@@ -46,8 +46,8 @@ class BasicTestViewModelViewController: UIViewController, Accessor {
     containerView.source.stopProgress = { [weak self] _ in
       self?.activityIndicator.stopAnimating()
     }
-    containerView.source.noDataCell = { state in
-      return Empty(data: state)
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
     }
 
     containerView.collectionViewLayout = collectionViewLayout()
