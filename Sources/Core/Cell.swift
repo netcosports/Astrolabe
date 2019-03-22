@@ -53,7 +53,7 @@ where CellView.Container == Container {
   }
 
   public func instance<T1: ContainerView, T2: ReusableView>(for container: T1, index: IndexPath) -> T2 {
-    var cellView: CellView = container.instance(type: type, index: index, identifier: identifier)
+    let cellView: CellView = container.instance(type: type, index: index, identifier: identifier)
     setup?(cellView)
     guard let result = cellView as? T2 else {
       fatalError("\(T2.self) is not registred")

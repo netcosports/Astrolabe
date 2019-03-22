@@ -11,31 +11,12 @@ import Astrolabe
 import RxSwift
 
 class BasicTestSectionableViewModelViewController: UIViewController, Accessor {
-
+  typealias Empty = CollectionCell<EmptyDataCollectionCell>
+  
   let activityIndicator: UIActivityIndicatorView = {
     let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     activityIndicator.color = .black
     return activityIndicator
-  } ()
-
-  let errorLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 22)
-    label.textColor = UIColor.black
-    label.text = "Error"
-    label.textAlignment = .center
-    label.isHidden = true
-    return label
-  } ()
-
-  let noDataLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 22)
-    label.textColor = UIColor.black
-    label.text = "No data"
-    label.textAlignment = .center
-    label.isHidden = true
-    return label
   } ()
 
   let containerView = CollectionView<LoaderDecoratorSource<CollectionViewSource>>()
@@ -65,21 +46,10 @@ class BasicTestSectionableViewModelViewController: UIViewController, Accessor {
     containerView.source.stopProgress = { [weak self] _ in
       self?.activityIndicator.stopAnimating()
     }
-    containerView.source.updateEmptyView = { [weak self] state in
-      guard let strongSelf = self else { return }
-
-      switch state {
-      case .empty:
-        strongSelf.noDataLabel.isHidden = false
-        strongSelf.errorLabel.isHidden = true
-      case .error:
-        strongSelf.noDataLabel.isHidden = true
-        strongSelf.errorLabel.isHidden = false
-      default:
-        strongSelf.noDataLabel.isHidden = true
-        strongSelf.errorLabel.isHidden = true
-      }
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
     }
+
     containerView.collectionViewLayout = collectionViewLayout()
 
     view.addSubview(containerView)
@@ -88,14 +58,8 @@ class BasicTestSectionableViewModelViewController: UIViewController, Accessor {
     }
 
     view.addSubview(activityIndicator)
-    view.addSubview(noDataLabel)
-    view.addSubview(errorLabel)
 
-    noDataLabel.sizeToFit()
-    errorLabel.sizeToFit()
     activityIndicator.center = view.center
-    noDataLabel.center = view.center
-    errorLabel.center = view.center
 
     viewModel.sectionPubliser.subscribe(onNext: { [weak self] sections in
       self?.sections = sections
