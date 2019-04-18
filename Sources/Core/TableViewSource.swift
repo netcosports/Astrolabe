@@ -8,81 +8,41 @@
 
 import UIKit
 
-open class TableViewSource: NSObject, ReusableSource {
+class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
 
-  public typealias Container = UITableView
+  var sections: [Sectionable] = []
 
-  public required override init() {
-    super.init()
-  }
-
-  open var containerView: Container? {
-    didSet {
-      internalInit()
-    }
-  }
-
-  public weak var hostViewController: UIViewController?
-  public var sections: [Sectionable] = [] {
-    didSet {
-      registerCellsForSections()
-    }
-  }
-  public var lastCellDisplayed: VoidClosure?
-  public var selectedCellIds: Set<String> = []
-  public var selectionBehavior: SelectionBehavior = .single
-  public var selectionManagement: SelectionManagement = .none
-  public var displaySectionIndex = false
+  var lastCellDisplayed: VoidClosure?
+  var setupCell: ((TableViewCell, Cellable) -> ())?
+  var setupHeader: ((TableViewHeaderFooter, Cellable) -> ())?
+  var cellSelected: ((Cellable, IndexPath) -> ())?
   fileprivate var sectionIndexTitles: [String]?
 
-  fileprivate func internalInit() {
-    containerView?.delegate = self
-    containerView?.dataSource = self
-    containerView?.backgroundColor = .clear
-    #if !os(tvOS)
-      containerView?.separatorColor = .clear
-      containerView?.separatorStyle = .none
-    #endif
-  }
-
-  public func registerCellsForSections() {
-    guard let containerView = containerView else { return }
-    var indexTitles = [String]()
-    sections.forEach { section in
-      if let header = section.supplementary(for: .header) {
-        header.register(in: containerView)
-        if header.id.count == 1 && displaySectionIndex {
-          indexTitles.append(header.id)
-        }
-      }
-      if let footer = section.supplementary(for: .footer) {
-        footer.register(in: containerView)
-      }
-      section.cells.forEach { cell in
-        cell.register(in: containerView)
-      }
-    }
-    sectionIndexTitles = displaySectionIndex ? indexTitles : nil
-  }
-
-  internal func setupCell(cellView: TableViewCell, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerViewController = hostViewController
+  internal func setupCell(cellView: TableViewCell, containerView: UITableView, cell: Cellable, indexPath: IndexPath) {
     cellView.containerView = containerView
     cellView.indexPath = indexPath
-    cellView.selectedState = selectedCellIds.contains(cell.id)
     cellView.cell = cell
+
+    setupCell?(cellView, cell)
   }
 
   internal func setupCell(headerView: TableViewHeaderFooter, cell: Cellable) {
-    headerView.containerViewController = hostViewController
-    headerView.containerView = containerView
     headerView.indexPath = nil
-    headerView.selectedState = selectedCellIds.contains(cell.id)
     headerView.cell = cell
-  }
-}
 
-extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
+    setupHeader?(headerView, cell)
+//
+//    headerView.containerViewController = hostViewController
+//    headerView.containerView = containerView
+//    headerView.selectedState = selectedCellIds.contains(cell.id)
+  }
+
+  internal func instance(cell: Cellable, containerView: UITableView, indexPath: IndexPath) -> TableViewCell {
+    let cellView: TableViewCell = cell.instance(for: containerView, index: indexPath)
+    setupCell(cellView: cellView, containerView: containerView, cell: cell, indexPath: indexPath)
+    cell.setup(with: cellView)
+    return cellView
+  }
 
   open func numberOfSections(in tableView: UITableView) -> Int {
     return sections.count
@@ -97,7 +57,7 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     let cellView: TableViewCell = cell.instance(for: tableView, index: indexPath)
-    setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
+    setupCell(cellView: cellView, containerView: tableView, cell: cell, indexPath: indexPath)
     cell.setup(with: cellView)
     return cellView
   }
@@ -114,10 +74,7 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     cell.click?()
-    if selectionManagement == .automatic {
-      processSelection(for: cell.id)
-      containerView?.reloadData()
-    }
+    cellSelected?(cell, indexPath)
   }
 
   open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -151,7 +108,7 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
   }
 
   open func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
-                        forRowAt indexPath: IndexPath) {
+                      forRowAt indexPath: IndexPath) {
     (cell as? TableViewCell)?.endDisplay()
   }
 
@@ -224,7 +181,104 @@ extension TableViewSource: UITableViewDataSource, UITableViewDelegate {
   }
 
   open func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
-                        at index: Int) -> Int {
+                      at index: Int) -> Int {
     return sections.index(where: { $0.supplementary(for: .header)?.id == title }) ?? 0
+  }
+}
+
+open class TableViewSource: ReusableSource {
+
+  public typealias Container = UITableView
+
+  let dataSource = TableViewDataSource()
+
+  public required init() {
+  }
+
+  open var containerView: Container? {
+    didSet {
+      internalInit()
+    }
+  }
+
+  public weak var hostViewController: UIViewController?
+  public var sections: [Sectionable] = [] {
+    didSet {
+      dataSource.sections = sections
+      registerCellsForSections()
+    }
+  }
+  public var lastCellDisplayed: VoidClosure? {
+    didSet {
+      dataSource.lastCellDisplayed = lastCellDisplayed
+    }
+  }
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
+  public var selectionManagement: SelectionManagement = .none
+  public var displaySectionIndex = false
+  fileprivate var sectionIndexTitles: [String]? {
+    didSet {
+      dataSource.sectionIndexTitles = sectionIndexTitles
+    }
+  }
+
+  fileprivate func internalInit() {
+    containerView?.delegate = dataSource
+    containerView?.dataSource = dataSource
+    containerView?.backgroundColor = .clear
+    #if !os(tvOS)
+      containerView?.separatorColor = .clear
+      containerView?.separatorStyle = .none
+    #endif
+
+    dataSource.cellSelected = { [weak self] cell, indexPath in
+      self?.click(cell: cell, indexPath: indexPath)
+    }
+
+    dataSource.setupCell = { [weak self] cellView, cell in
+      self?.setup(cellView: cellView, with: cell)
+    }
+
+    dataSource.setupHeader = { [weak self] headerView, cell in
+      self?.setup(headerView: headerView, with: cell)
+    }
+  }
+
+  func setup(cellView: TableViewCell, with cell: Cellable) {
+    cellView.containerViewController = hostViewController
+    cellView.selectedState = selectedCellIds.contains(cell.id)
+  }
+
+  func setup(headerView: TableViewHeaderFooter, with cell: Cellable) {
+    headerView.containerViewController = hostViewController
+    headerView.selectedState = selectedCellIds.contains(cell.id)
+  }
+
+  func click(cell: Cellable, indexPath: IndexPath) {
+    if selectionManagement == .automatic {
+      processSelection(for: cell.id)
+      containerView?.reloadData()
+    }
+  }
+
+  public func registerCellsForSections() {
+    guard let containerView = containerView else { return }
+    var indexTitles = [String]()
+    sections.forEach { section in
+      if let header = section.supplementary(for: .header) {
+        header.register(in: containerView)
+        if header.id.count == 1 && displaySectionIndex {
+          indexTitles.append(header.id)
+        }
+      }
+      if let footer = section.supplementary(for: .footer) {
+        footer.register(in: containerView)
+      }
+      section.cells.forEach { cell in
+        cell.register(in: containerView)
+      }
+    }
+    sectionIndexTitles = displaySectionIndex ? indexTitles : nil
   }
 }
