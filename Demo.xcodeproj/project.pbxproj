@@ -24,6 +24,7 @@
 		AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
 		AA52599620BC56010089ECD2 /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
 		AAB8C76920516E2A00E91771 /* LoaderDecoratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */; };
+		AAD219552223D5400076A6D6 /* EventDrivenSourceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */; };
 		B47ECCCCF35AD03E59C7F676 /* Pods_Astrolabe_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */; };
 		B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */; };
 		B50EFAD91F0CC27E00D31FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */; };
@@ -113,6 +114,7 @@
 		AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModel.swift; sourceTree = "<group>"; };
 		AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModelViewController.swift; sourceTree = "<group>"; };
 		AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderDecoratorSpec.swift; sourceTree = "<group>"; };
+		AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenSourceSpec.swift; sourceTree = "<group>"; };
 		B50EFACE1F0CC27E00D31FD6 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */,
+				AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */,
 				B5716EDB1F0CC35D005146DB /* MixedLoaderSpec.swift */,
 				B5716EDC1F0CC35D005146DB /* MultipleLoaderSpec.swift */,
 				B5716EDD1F0CC35D005146DB /* Place1Then1LoaderSpec.swift */,
@@ -599,6 +602,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-tvOS/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick-tvOS/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-tvOS/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest-tvOS/RxTest.framework",
 			);
@@ -611,6 +615,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
@@ -663,6 +668,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-iOS/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick-iOS/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-iOS/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest-iOS/RxTest.framework",
 			);
@@ -675,6 +681,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
@@ -764,6 +771,7 @@
 				B5484EF220079FF5005245F0 /* TestContextPlainLoader.swift in Sources */,
 				B5716ED01F0CC358005146DB /* Common.swift in Sources */,
 				B5716EE91F0CC35D005146DB /* TestPlainLoader.swift in Sources */,
+				AAD219552223D5400076A6D6 /* EventDrivenSourceSpec.swift in Sources */,
 				B5716EEA1F0CC35D005146DB /* TextMixedLoader.swift in Sources */,
 				B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */,
 				B5716EEE1F0CC35D005146DB /* Place1Then2LoaderSpec.swift in Sources */,
