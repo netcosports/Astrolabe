@@ -10,66 +10,25 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class GenericCollectionViewSource<CellView: UICollectionViewCell>: NSObject, ReusableSource,
-UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
+class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
 
-  public typealias Container = UICollectionView
+  var sections: [Sectionable] = []
 
-  public required override init() {
-    super.init()
-  }
+  var lastCellDisplayed: VoidClosure?
+  var setupCell: ((CellView, Cellable) -> ())?
+  var cellSelected: ((Cellable, IndexPath) -> ())?
 
-  open weak var containerView: Container? {
-    didSet {
-      internalInit()
-    }
-  }
-
-  public weak var hostViewController: UIViewController?
-  public var sections: [Sectionable] = [] {
-    didSet {
-      registerCellsForSections()
-    }
-  }
-  public var lastCellDisplayed: VoidClosure?
-  public var selectedCellIds: Set<String> = []
-  public var selectionBehavior: SelectionBehavior = .single
-  public var selectionManagement: SelectionManagement = .none
-#if os(tvOS)
-  public let focusedItem = BehaviorRelay<Int>(value: 0)
-#endif
-
-  fileprivate func internalInit() {
-    containerView?.backgroundColor = .clear
-    containerView?.dataSource = self
-    containerView?.delegate = self
-  }
-
-  public func registerCellsForSections() {
-    guard let containerView = containerView else { return }
-    sections.forEach { section in
-      section.supplementaryTypes.forEach {
-        if let supplementary = section.supplementary(for: $0) {
-          supplementary.register(in: containerView)
-        }
-      }
-      section.cells.forEach { cell in
-        cell.register(in: containerView)
-      }
-    }
-  }
-
-  internal func setupCell(cellView: CellView, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerViewController = hostViewController
-    cellView.containerView = containerView
+  internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
+    cellView.containerView = collectionView
     cellView.indexPath = indexPath
-    cellView.selectedState = selectedCellIds.contains(cell.id)
     cellView.cell = cell
+
+    setupCell?(cellView, cell)
   }
 
   internal func instance(cell: Cellable, collectionView: UICollectionView, indexPath: IndexPath) -> CellView {
     let cellView: CellView = cell.instance(for: collectionView, index: indexPath)
-    setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
+    setupCell(cellView: cellView, collectionView: collectionView, cell: cell, indexPath: indexPath)
     cell.setup(with: cellView)
     return cellView
   }
@@ -124,10 +83,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
     cell.click?()
-    if selectionManagement == .automatic {
-      processSelection(for: cell.id)
-      containerView?.reloadData()
-    }
+    cellSelected?(cell, indexPath)
   }
 
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -158,7 +114,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
   open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
     if indexPath.section == collectionView.numberOfSections - 1
-         && indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+      && indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
       lastCellDisplayed?()
     }
 
@@ -212,19 +168,7 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-  open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-  }
-
-  open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-  }
-
-  open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-  }
-
-  open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-  }
-
-#if os(tvOS)
+  #if os(tvOS)
 
   open func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
     return true
@@ -238,12 +182,86 @@ UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: R
     }
   }
 
-#endif
+  #endif
 
   @objc fileprivate func actionHeaderClick(recognizer: UITapGestureRecognizer) {
     if let cellView = recognizer.view as? CellView {
       if let click = cellView.cell?.click {
         click()
+      }
+    }
+  }
+}
+
+open class GenericCollectionViewSource<CellView: UICollectionViewCell>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView {
+
+  public required init() {}
+
+  public typealias Container = UICollectionView
+
+  let dataSource = CollectionViewDataSource<CellView>()
+
+  open weak var containerView: Container? {
+    didSet {
+      internalInit()
+    }
+  }
+
+  public weak var hostViewController: UIViewController?
+  public var sections: [Sectionable] = [] {
+    didSet {
+      dataSource.sections = sections
+      registerCellsForSections()
+    }
+  }
+  public var lastCellDisplayed: VoidClosure? {
+    didSet {
+      dataSource.lastCellDisplayed = lastCellDisplayed
+    }
+  }
+  public var selectedCellIds: Set<String> = []
+  public var selectionBehavior: SelectionBehavior = .single
+  public var selectionManagement: SelectionManagement = .none
+#if os(tvOS)
+  public let focusedItem = BehaviorRelay<Int>(value: 0)
+#endif
+
+  fileprivate func internalInit() {
+    containerView?.backgroundColor = .clear
+    containerView?.dataSource = dataSource
+    containerView?.delegate = dataSource
+
+    dataSource.cellSelected = { [weak self] cell, indexPath in
+      self?.click(cell: cell, indexPath: indexPath)
+    }
+
+    dataSource.setupCell = { [weak self] cellView, cell in
+      self?.setup(cellView: cellView, with: cell)
+    }
+  }
+
+  func setup(cellView: CellView, with cell: Cellable) {
+    cellView.containerViewController = hostViewController
+    cellView.selectedState = selectedCellIds.contains(cell.id)
+  }
+
+  func click(cell: Cellable, indexPath: IndexPath) {
+    if selectionManagement == .automatic {
+      processSelection(for: cell.id)
+      containerView?.reloadData()
+    }
+  }
+
+  public func registerCellsForSections() {
+    guard let containerView = containerView else { return }
+    sections.forEach { section in
+      section.supplementaryTypes.forEach {
+        if let supplementary = section.supplementary(for: $0) {
+          supplementary.register(in: containerView)
+        }
+      }
+      section.cells.forEach { cell in
+        cell.register(in: containerView)
       }
     }
   }

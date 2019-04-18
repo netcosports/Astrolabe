@@ -21,6 +21,7 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
 
     set {
       adjust(newSections: newValue, excludedCells: [])
+      dataSource.sections = self.sections
     }
 
     get {
@@ -28,29 +29,24 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
     }
   }
 
-  open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  override func setup(cellView: CollectionViewCell, with cell: Cellable) {
+    super.setup(cellView: cellView, with: cell)
+    guard let expandableCell = cell as? ExpandableCellable else { return }
+    cellView.expandedState = isExpanded(cell: expandableCell)
+  }
+
+  override func click(cell: Cellable, indexPath: IndexPath) {
     var section = sections[indexPath.section]
     var sectionCells = section.cells
     let cell = sectionCells[indexPath.item]
 
-    guard var expandableCell = cell as? ExpandableCellable else {
-      super.collectionView(collectionView, didSelectItemAt: indexPath)
-      return
-    }
+    guard var expandableCell = cell as? ExpandableCellable else { return }
 
     handle(expandableCell: &expandableCell,
            section: &section,
            sectionCells: &sectionCells,
            cell: cell,
            indexPath: indexPath)
-  }
-
-  override func setupCell(cellView: CollectionViewCell, cell: Cellable, indexPath: IndexPath) {
-    super.setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
-    guard let expandableCell = cell as? ExpandableCellable else {
-      return
-    }
-    cellView.expandedState = isExpanded(cell: expandableCell)
   }
 
   @discardableResult func reloadCell(section: Sectionable, sectionIndex: Int, cell: Cellable) -> IndexPath? {
@@ -61,7 +57,7 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
     let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
 
     if let cellView = containerView?.cellForItem(at: indexPath) as? CollectionViewCell {
-      setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
+//      setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
       cell.setup(with: cellView)
     } else {
       UIView.performWithoutAnimation {
