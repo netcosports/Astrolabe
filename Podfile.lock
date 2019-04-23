@@ -21,6 +21,7 @@ PODS:
     - Gnomon/Core
     - SwiftyJSON (~> 4.2)
   - Nimble (7.3.1)
+  - Quick (2.0.0)
   - RxBlocking (4.3.1):
     - RxSwift (~> 4.0)
   - RxCocoa (4.3.1):
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - Gnomon (from `https://github.com/netcosports/Gnomon.git`, branch `swift-4.2`)
   - Gnomon/Decodable (from `https://github.com/netcosports/Gnomon.git`, branch `swift-4.2`)
   - Nimble (~> 7.0)
+  - Quick
   - RxBlocking
   - RxTest
   - SnapKit
@@ -45,6 +47,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - FormatterKit
     - Nimble
+    - Quick
     - RxBlocking
     - RxCocoa
     - RxSwift
@@ -69,6 +72,7 @@ SPEC CHECKSUMS:
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 4e1d4db04e3aa36ae7c9749cb03bcb0c331c437c
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
+  Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   RxBlocking: 64c051285261ca2339481e91b5f70eb06b03660a
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
@@ -76,6 +80,6 @@ SPEC CHECKSUMS:
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 1bf624ce092ff5aa7a24e28d6c3812cdf64b9861
+PODFILE CHECKSUM: 48812b1cf6e8fa5693beddd544f953cd8642df81
 
 COCOAPODS: 1.5.3

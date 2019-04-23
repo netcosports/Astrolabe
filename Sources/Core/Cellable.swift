@@ -11,12 +11,21 @@ import UIKit
 public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
+public typealias EqualsClosure<T> = (T) -> Bool
+public typealias TwoEqualsClosure<T> = (T, T) -> Bool
 
 public enum CellType: Hashable {
   case cell
   case header
   case footer
   case custom(kind: String)
+}
+
+public protocol DataHodler {
+  associatedtype Data
+
+  var data: Data { get }
+  var dataEquals: TwoEqualsClosure<Data>? { get }
 }
 
 public protocol Cellable {
@@ -27,10 +36,13 @@ public protocol Cellable {
 
   var type: CellType { get }
   var click: ClickClosure? { get }
+  var equals: EqualsClosure<Cellable>? { get }
+
   var page: Int { get }
 
   // FIXME: need to clarify this
   var id: String { get }
+
 }
 
 public protocol ExpandableCellable: Cellable {
@@ -46,8 +58,11 @@ public protocol Sectionable {
   var supplementaryTypes: [CellType] { get }
   func supplementary(for type: CellType) -> Cellable?
   var cells: [Cellable] { get set }
+    var equals: EqualsClosure<Sectionable>? { get }
   var page: Int { get }
   var inset: UIEdgeInsets? { get set }
   var minimumLineSpacing: CGFloat? { get set }
   var minimumInteritemSpacing: CGFloat? { get set }
+
+    var id: String { get }
 }

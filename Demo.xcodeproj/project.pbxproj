@@ -91,6 +91,7 @@
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
+		EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -159,6 +160,7 @@
 		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffUtilsTests.swift; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -310,6 +312,7 @@
 		B5716EDA1F0CC35D005146DB /* Specs */ = {
 			isa = PBXGroup;
 			children = (
+				EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */,
 				AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */,
 				B5716EDB1F0CC35D005146DB /* MixedLoaderSpec.swift */,
 				B5716EDC1F0CC35D005146DB /* MultipleLoaderSpec.swift */,
@@ -444,7 +447,7 @@
 					B50EFACD1F0CC27E00D31FD6 = {
 						CreatedOnToolsVersion = 8.3.3;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					B5716EC61F0CC307005146DB = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -468,6 +471,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -599,6 +603,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-tvOS/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick-tvOS/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-tvOS/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest-tvOS/RxTest.framework",
 			);
@@ -611,6 +616,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
@@ -663,6 +669,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-iOS/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick-iOS/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking-iOS/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest-iOS/RxTest.framework",
 			);
@@ -675,6 +682,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
@@ -774,6 +782,7 @@
 				B5716EE81F0CC35D005146DB /* TestPlace3Loader.swift in Sources */,
 				B5716EE71F0CC35D005146DB /* TestPlace2Then1Loader.swift in Sources */,
 				B5716EED1F0CC35D005146DB /* Place1Then1LoaderSpec.swift in Sources */,
+				EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */,
 				B5716EE61F0CC35D005146DB /* TestPlace2Loader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -939,11 +948,15 @@
 			baseConfigurationReference = 66AE31EC04CA8A047821FDD8 /* Pods-Astrolabe-Demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 			};
@@ -954,11 +967,15 @@
 			baseConfigurationReference = 1C019461B7372E161FC5D909 /* Pods-Astrolabe-Demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 			};

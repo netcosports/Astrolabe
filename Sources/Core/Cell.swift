@@ -9,15 +9,19 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container, CellView: ReusableView & Reusable>: Cellable
+open class Cell<Container, CellView: ReusableView & Reusable>: Cellable, DataHodler
 where CellView.Container == Container {
+
   public typealias Data = CellView.Data
 
-  let data: Data
+  public var data: Data
+  public var dataEquals: TwoEqualsClosure<Data>?
+
   let setup: SetupClosure<CellView>?
 
   public let type: CellType
   public let click: ClickClosure?
+  public var equals: EqualsClosure<Cellable>?
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
@@ -36,12 +40,23 @@ where CellView.Container == Container {
     self.id = id
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
     self.data = data
     self.type = type
     self.setup = setup
     self.click = click
     self.id = id
+    if let equals = equals {
+      self.equals = equals
+    } else {
+      self.equals = {
+        if $0.id.isEmpty || self.id.isEmpty {
+          return false
+        } else {
+          return self.id == $0.id
+        }
+      }
+    }
   }
 
   // MARK: - Lifecycle
@@ -53,7 +68,7 @@ where CellView.Container == Container {
   }
 
   public func instance<T1: ContainerView, T2: ReusableView>(for container: T1, index: IndexPath) -> T2 {
-    var cellView: CellView = container.instance(type: type, index: index, identifier: identifier)
+    let cellView: CellView = container.instance(type: type, index: index, identifier: identifier)
     setup?(cellView)
     guard let result = cellView as? T2 else {
       fatalError("\(T2.self) is not registred")
@@ -77,6 +92,15 @@ where CellView.Container == Container {
     }
   }
 
+}
+
+extension Cell where Data: Equatable {
+
+  public convenience init(data: Data, id: String, click: ClickClosure? = nil, dataEquals: @escaping TwoEqualsClosure<Data> = { $0 == $1 }) {
+    self.init(data: data, click: click, type: .cell, setup: nil)
+    self.id = id
+    self.dataEquals = dataEquals
+  }
 }
 
 open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,

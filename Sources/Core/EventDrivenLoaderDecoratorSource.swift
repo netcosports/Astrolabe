@@ -16,12 +16,6 @@ public enum InputControlEvent: Equatable {
   case visibilityChanged(visible: Bool)
 }
 
-public struct CollectionUpdateContext {
-  let inserted: [IndexPath]
-  let deleted: [IndexPath]
-  let updated: [IndexPath]
-}
-
 public enum LoaderResultEvent {
   case force(sections: [Sectionable], context: CollectionUpdateContext?)
   case soft(sections: [Sectionable], context: CollectionUpdateContext?)
@@ -46,6 +40,7 @@ public protocol EventDrivenLoaderSource: class {
 }
 
 open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: ReusableSource, EventDrivenLoaderSource {
+
 
   public typealias Container = DecoratedSource.Container
 
@@ -171,15 +166,19 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       guard let containerView = self.containerView else { return }
 
       switch reloadType {
-      case .force(let sections, _):
+      case .force(let sections, let context):
+        print("--- force: \(sections.count), \(context.debugDescription)")
         self.sections = sections
-        self.containerView?.reloadData()
+        self.reloadDataWithContext(context)
         self.unsubscribeSoftReload()
-      case .soft(let sections, _):
-        self.updateDataSoftly(to: sections)
+      case .soft(let sections, let context):
+        print("--- soft: \(sections.count), \(context.debugDescription)")
+        self.updateDataSoftly(to: sections, context: context)
       case .softCurrent:
-        self.updateDataSoftly(to: self.sections)
+        print("--- softCurrent")
+        self.updateDataSoftly(to: self.sections, context: nil)
       case .completed(let intent):
+        print("--- completed \(intent.page)")
         let cellsCountAfterLoad = self.cellsCount
         if case .page = intent, cellsCountAfterLoad == self.cellsCountBeforeLoad {
           self.stateEventSubject.onNext(.hasData)
@@ -187,7 +186,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
         }
         if cellsCountAfterLoad == 0 {
           self.stateEventSubject.onNext(.empty)
-          self.self.containerView?.reloadData()
+          self.containerView?.reloadData()
         } else {
           self.stateEventSubject.onNext(.hasData)
           guard let lastSection = self.sections.last else { return }
@@ -200,6 +199,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
           }
         }
       case .failed(let error):
+        print("--- failed \(error)")
         if self.cellsCount > 0 {
           self.stateEventSubject.onNext(.hasData)
         } else {
@@ -210,7 +210,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     }).disposed(by: disposeBag)
   }
 
-  fileprivate func updateDataSoftly(to sections: [Sectionable]) {
+    fileprivate func updateDataSoftly(to sections: [Sectionable], context: CollectionUpdateContext?) {
     guard let containerView = self.containerView else { return }
 
     let softReloadDisposeBag = DisposeBag()
@@ -222,9 +222,23 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       .take(1).subscribe(onNext: { [weak self] in
       guard let self = self else { return }
       self.sections = sections
-      self.containerView?.reloadData()
+self.reloadDataWithContext(context)
     }).disposed(by: softReloadDisposeBag)
     self.softReloadDisposeBag = softReloadDisposeBag
+  }
+
+  fileprivate func reloadDataWithContext(_ context: CollectionUpdateContext?) {
+    if let context = context {
+      containerView?.batchUpdate(block: {
+        self.containerView?.insertSectionables(at: context.insertedSections)
+        self.containerView?.deleteSectionables(at: context.deletedSections)
+        self.containerView?.insert(at: context.inserted)
+        self.containerView?.delete(at: context.deleted)
+        self.containerView?.reload(at: context.updated)
+      }, completion: nil)
+    } else {
+      containerView?.reloadData()
+    }
   }
 
   fileprivate func unsubscribeSoftReload() {
