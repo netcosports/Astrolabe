@@ -6,17 +6,6 @@ import RxBlocking
 import Nimble
 import RxSwift
 
-extension Result: Equatable where T: Equatable {
-
-  public static func == (lhs: Result<T>, rhs: Result<T>) -> Bool {
-    switch (lhs, rhs) {
-    case let (.ok(lhs), .ok(rhs)): return lhs == rhs
-    default: return false
-    }
-  }
-
-}
-
 class MultipleLoaderSpec: XCTestCase {
 
   override func setUp() {
@@ -31,8 +20,8 @@ class MultipleLoaderSpec: XCTestCase {
       let results = try Astrolabe.load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(1))
 
-      expect(loader.mLoaderResponses.map { $0.map { $0.value?.type }})
-        == [Array(repeating: .some(ResponseType.regular), count: 4)]
+      expect(loader.mLoaderResponses.map { $0.compactMap { try? $0.get().type }})
+        == [Array(repeating: ResponseType.regular, count: 4)]
 
       expect(loader.didReceiveCount) == 1
 
@@ -95,9 +84,10 @@ class MultipleLoaderSpec: XCTestCase {
       let results = try Astrolabe.load(mLoader: loader, intent: .initial).toBlocking().toArray()
       expect(results).to(haveCount(2))
 
-      expect(loader.mLoaderResponses.map { $0.map { $0.map { $0.type } }}) == [
-        [.ok(ResponseType.localCache), .ok(ResponseType.localCache), .ok(ResponseType.localCache), .ok(ResponseType.localCache)],
-        [.ok(ResponseType.regular), .ok(ResponseType.regular), .ok(ResponseType.regular), .ok(ResponseType.regular)]
+
+      expect(loader.mLoaderResponses.map({ $0.compactMap { try? $0.get().type } })) == [
+        [ResponseType.localCache, ResponseType.localCache, ResponseType.localCache, ResponseType.localCache],
+        [ResponseType.regular, ResponseType.regular, ResponseType.regular, ResponseType.regular]
       ]
 
       expect(loader.didReceiveCount) == 2
