@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		636ACB5FDF6BF177BD8A2753 /* Pods_Astrolabe_Tests_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */; };
 		75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */; };
+		8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */; };
+		8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */; };
 		A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */; };
 		A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5532A9B1F615C4600186A9F /* SelectionViewController.swift */; };
 		AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
@@ -104,6 +106,8 @@
 		49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_tvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AE31EC04CA8A047821FDD8 /* Pods-Astrolabe-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataCollectionCell.swift; sourceTree = "<group>"; };
+		8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataTableCell.swift; sourceTree = "<group>"; };
 		8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModel.swift; sourceTree = "<group>"; };
@@ -276,6 +280,8 @@
 				AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */,
 				AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */,
 				AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */,
+				8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */,
+				8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -735,10 +741,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */,
+				8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */,
 				AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */,
 				B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */,
 				AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F031F0CC54D005146DB /* Generator.swift in Sources */,
+				8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */,
 				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
 				A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */,

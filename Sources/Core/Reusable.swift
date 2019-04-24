@@ -60,7 +60,11 @@ extension ReusableSource {
   func processSelection(for cellId: String) {
     switch selectionBehavior {
     case .single:
-      selectedCellIds = [cellId]
+      if selectedCellIds.contains(cellId) {
+        selectedCellIds.remove(cellId)
+      } else {
+        selectedCellIds = [cellId]
+      }
     case .multiple:
       if selectedCellIds.contains(cellId) {
         selectedCellIds.remove(cellId)
