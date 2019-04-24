@@ -43,11 +43,29 @@ open class DiffUtils {
 
     let allSections = newSections + oldSections
     if let section = allSections.first(where: { $0.id.isEmpty || $0.equals == nil }) {
-      throw DiffError.error("Check section id, equals clusure: \(section)")
+      throw DiffError.error("Check section id, equals closure: \(section)")
+    }
+    if Set(newSections.map({ $0.id })).count != newSections.count {
+      throw DiffError.error("Check new section ids: collision detected")
+    }
+    if Set(oldSections.map({ $0.id })).count != oldSections.count {
+      throw DiffError.error("Check old section ids: collision detected")
     }
 
     if let cell = allSections.compactMap({ $0.cellsOnly() }).reduce([], +).first(where: { $0.id.isEmpty || $0.equals == nil /*|| $0.dataEquals == nil*/ }) {
-      throw DiffError.error("Check cell id, equals clusure, data equals clusure: \(cell)")
+      throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
+    }
+    try newSections.forEach { section in
+      let cellsOnly = section.cellsOnly()
+      if Set(cellsOnly.map({ $0.id })).count != cellsOnly.count {
+        throw DiffError.error("Check cell ids: collision detected for new section \(section)")
+      }
+    }
+    try oldSections.forEach { section in
+      let cellsOnly = section.cellsOnly()
+      if Set(cellsOnly.map({ $0.id })).count != cellsOnly.count {
+        throw DiffError.error("Check cell ids: collision detected for old section \(section)")
+      }
     }
 
     let insertedSections = newSections.filter { newSection in
