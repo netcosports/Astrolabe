@@ -58,11 +58,17 @@ public protocol Sectionable {
   var supplementaryTypes: [CellType] { get }
   func supplementary(for type: CellType) -> Cellable?
   var cells: [Cellable] { get set }
-    var equals: EqualsClosure<Sectionable>? { get }
+  var equals: EqualsClosure<Sectionable>? { get }
   var page: Int { get }
   var inset: UIEdgeInsets? { get set }
   var minimumLineSpacing: CGFloat? { get set }
   var minimumInteritemSpacing: CGFloat? { get set }
+  var id: String { get }
+}
 
-    var id: String { get }
+extension Sectionable {
+
+  func cellsOnly() -> [Cellable] {
+    return cells.filter { $0.type == .cell }
+  }
 }

@@ -8,11 +8,15 @@
 import Foundation
 
 public struct CollectionUpdateContext {
-  let inserted: [IndexPath]
-  let deleted: [IndexPath]
-  let updated: [IndexPath]
-  let insertedSections: IndexSet
-  let deletedSections: IndexSet
+  public let inserted: [IndexPath]
+  public let deleted: [IndexPath]
+  public let updated: [IndexPath]
+  public let insertedSections: IndexSet
+  public let deletedSections: IndexSet
+}
+
+public enum DiffError: Error {
+  case error(String)
 }
 
 open class DiffUtils {
@@ -21,8 +25,30 @@ open class DiffUtils {
     newSections: [Sectionable],
     oldSections: [Sectionable]
   ) -> CollectionUpdateContext? {
-    // assert ids and equals closures
-    // exclude CellType header and footer
+    do {
+      return try diffThrow(newSections: newSections, oldSections: oldSections)
+    } catch DiffError.error(let message) {
+      assertionFailure(message)
+      return nil
+    } catch let error {
+      assertionFailure(error.localizedDescription)
+      return nil
+    }
+  }
+
+  open class func diffThrow(
+    newSections: [Sectionable],
+    oldSections: [Sectionable]
+  ) throws -> CollectionUpdateContext? {
+
+    let allSections = newSections + oldSections
+    if let section = allSections.first(where: { $0.id.isEmpty || $0.equals == nil }) {
+      throw DiffError.error("Check section id, equals clusure: \(section)")
+    }
+
+    if let cell = allSections.compactMap({ $0.cellsOnly() }).reduce([], +).first(where: { $0.id.isEmpty || $0.equals == nil /*|| $0.dataEquals == nil*/ }) {
+      throw DiffError.error("Check cell id, equals clusure, data equals clusure: \(cell)")
+    }
 
     let insertedSections = newSections.filter { newSection in
       return !oldSections.contains { oldSection in
@@ -66,8 +92,8 @@ open class DiffUtils {
       var deletedIndeciesForSection = [IndexPath]()
       var updatedIndeciesForSection = [IndexPath]()
 
-      for (newCellIndex, newCell) in newSectionToDiscover.cells.enumerated() {
-        if let sameOldCell = oldSectionToDiscover.cells.first(where: { $0.equals?(newCell) ?? false }) {
+      for (newCellIndex, newCell) in newSectionToDiscover.cellsOnly().enumerated() {
+        if let sameOldCell = oldSectionToDiscover.cellsOnly().first(where: { $0.equals?(newCell) ?? false }) {
           //        if (sameOldCell as! DataHodler).dataEquals?((sameOldCell as! DataHodler).data, (newCell as! DataHodler).data) ?? false {
           //
           //        }
@@ -76,8 +102,8 @@ open class DiffUtils {
         }
       }
 
-      for (oldCellIndex, oldCell) in oldSectionToDiscover.cells.enumerated() {
-        if !newSectionToDiscover.cells.contains(where: { $0.equals?(oldCell) ?? false }) {
+      for (oldCellIndex, oldCell) in oldSectionToDiscover.cellsOnly().enumerated() {
+        if !newSectionToDiscover.cellsOnly().contains(where: { $0.equals?(oldCell) ?? false }) {
           deletedIndeciesForSection.append(IndexPath(row: oldCellIndex, section: newSectionIndex))
         }
       }
@@ -93,10 +119,10 @@ open class DiffUtils {
 
     print("--- is: \(insertedSectionsIndecies.count), ds: \(deletedSectionsIndecies.count), i: \(insertedIndecies.count), d: \(deletedIndecies.count), u: \(updatedIndecies.count)")
 
-    guard insertedSectionsIndecies.count > 0,
-      deletedSectionsIndecies.count > 0,
-      insertedIndecies.count > 0,
-      deletedIndecies.count > 0,
+    guard insertedSectionsIndecies.count > 0 ||
+      deletedSectionsIndecies.count > 0 ||
+      insertedIndecies.count > 0 ||
+      deletedIndecies.count > 0 ||
       updatedIndecies.count > 0 else {
         return nil
     }

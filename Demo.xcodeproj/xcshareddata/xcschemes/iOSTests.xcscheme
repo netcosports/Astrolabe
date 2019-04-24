@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -38,6 +37,38 @@
                BlueprintName = "iOSTests"
                ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LoaderDecoratorSpec">
+               </Test>
+               <Test
+                  Identifier = "MixedLoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "MultipleLoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "Place1Then1LoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "Place1Then2LoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "Place2LoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "Place2Then1LoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "Place3LoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "PlainLoaderSpec">
+               </Test>
+               <Test
+                  Identifier = "ThreadingSpec">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>
@@ -47,7 +78,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
