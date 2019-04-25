@@ -7,26 +7,48 @@
 
 import Foundation
 
+/** The result of the difference */
 public struct CollectionUpdateContext {
+
+  /** Inserted cells index paths */
   public let inserted: [IndexPath]
+
+  /** Deleted cells index paths */
   public let deleted: [IndexPath]
+
+  /** Updated cell index paths */
   public let updated: [IndexPath]
+
+  /** Inserted section indecies */
   public let insertedSections: IndexSet
+
+  /** Deleted section indecies */
   public let deletedSections: IndexSet
 }
 
+/** Error to throw */
 public enum DiffError: Error {
   case error(String)
 }
 
+/** Utility class to manage differences between new and old sources */
 open class DiffUtils<Data> {
 
+  /**
+   Calculate difference safely.
+   If no difference found nil returned.
+   If data inconsistent no error thrown but nil returned and assertion fired into DEBUG
+   - parameters:
+   - new: new sections source
+   - old: old sections source
+   - returns: CollectionUpdateContext instance or nil
+   */
   open class func diff(
-    newSections: [Sectionable],
-    oldSections: [Sectionable]
+    new newSections: [Sectionable],
+    old oldSections: [Sectionable]
   ) -> CollectionUpdateContext? {
     do {
-      return try diffThrow(newSections: newSections, oldSections: oldSections)
+      return try diffOrThrow(new: newSections, old: oldSections)
     } catch DiffError.error(let message) {
       assertionFailure(message)
       return nil
@@ -36,11 +58,25 @@ open class DiffUtils<Data> {
     }
   }
 
-  open class func diffThrow(
-    newSections: [Sectionable],
-    oldSections: [Sectionable]
+  /**
+   Calculate difference.
+   If no difference found nil returned.
+   - parameters:
+   - new: new sections source
+   - old: old sections source
+   - returns: CollectionUpdateContext instance or nil
+   - throws: DiffError if data inconsistent
+   */
+  open class func diffOrThrow(
+    new newSections: [Sectionable],
+    old oldSections: [Sectionable]
   ) throws -> CollectionUpdateContext? {
 
+    /*
+     Check validity of sections.
+     - id
+     - equals closure
+     */
     let allSections = newSections + oldSections
     if let section = allSections.first(where: { $0.id.isEmpty || $0.equals == nil }) {
       throw DiffError.error("Check section id, equals closure: \(section)")
@@ -52,6 +88,13 @@ open class DiffUtils<Data> {
       throw DiffError.error("Check old section ids: collision detected")
     }
 
+    /*
+     Check validity of cells
+     - id
+     - type
+     - equals closure
+     - data equals closure
+     */
     let allCellsOnly = allSections.compactMap({ $0.cellsOnly() }).reduce([], +)
     if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil || ($0 as! DataHodler<Data>).dataEquals == nil }) {
       throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
@@ -69,43 +112,61 @@ open class DiffUtils<Data> {
       }
     }
 
+    /*
+     Detect inserted sections
+     */
     let insertedSections = newSections.filter { newSection in
       return !oldSections.contains { oldSection in
-        return newSection.equals?(oldSection) ?? false
+        return newSection.equals!(oldSection)
       }
     }
     let insertedSectionsIndecies = IndexSet(insertedSections.compactMap { insertedSection in
-      return newSections.firstIndex { $0.equals?(insertedSection) ?? false }
+      return newSections.firstIndex { $0.equals!(insertedSection) }
     })
 
+    /*
+     Detect deleted sections
+     */
     let deletedSections = oldSections.filter { oldSection in
       return !newSections.contains { newSection in
-        return newSection.equals?(oldSection) ?? false
+        return newSection.equals!(oldSection)
       }
     }
     let deletedSectionsIndecies = IndexSet(deletedSections.compactMap { deletedSection in
-      return oldSections.firstIndex { $0.equals?(deletedSection) ?? false }
+      return oldSections.firstIndex { $0.equals!(deletedSection) }
     })
 
+    /*
+     Detect inserted/deleted/updated cells only in sections
+     that are not inserted or deleted which were detected from the above.
+     */
     var insertedIndecies = [IndexPath]()
     var deletedIndecies = [IndexPath]()
     var updatedIndecies = [IndexPath]()
 
     for (newSectionIndex, newSectionToDiscover) in newSections.enumerated() {
 
+      /* skip already inserted or deleted sections */
       if insertedSections.contains(where: { insertedSection in
-        return insertedSection.equals?(newSectionToDiscover) ?? false
+        return insertedSection.equals!(newSectionToDiscover)
       }) || deletedSections.contains(where: { deletedSection in
-        return deletedSection.equals?(newSectionToDiscover) ?? false
+        return deletedSection.equals!(newSectionToDiscover)
       }) {
         continue
       }
 
       guard let oldSectionToDiscover = oldSections.first(where: { oldSection in
-        return newSectionToDiscover.equals?(oldSection) ?? false
+        return newSectionToDiscover.equals!(oldSection)
       }) else {
         continue
       }
+
+      /*
+       Detect inserted and deleted cells in current section normally.
+       When detecting updated cells we compare it's datas
+       using dedicated dataEquals closure assuming closure provided
+       (if not assertion will be fired or error thrown from verification section in the beginning)
+       */
 
       var insertedIndeciesForSection = [IndexPath]()
       var deletedIndeciesForSection = [IndexPath]()
@@ -115,7 +176,7 @@ open class DiffUtils<Data> {
 
         let indexPath: IndexPath = { IndexPath(row: newCellIndex, section: newSectionIndex) }()
 
-        if let sameOldCell = oldSectionToDiscover.cellsOnly().first(where: { $0.equals?(newCell) ?? false }) {
+        if let sameOldCell = oldSectionToDiscover.cellsOnly().first(where: { $0.equals!(newCell) }) {
           if !(sameOldCell as! DataHodler<Data>).dataEquals!((sameOldCell as! DataHodler<Data>).data, (newCell as! DataHodler<Data>).data) {
             updatedIndeciesForSection.append(indexPath)
           }
@@ -125,7 +186,7 @@ open class DiffUtils<Data> {
       }
 
       for (oldCellIndex, oldCell) in oldSectionToDiscover.cellsOnly().enumerated() {
-        if !newSectionToDiscover.cellsOnly().contains(where: { $0.equals?(oldCell) ?? false }) {
+        if !newSectionToDiscover.cellsOnly().contains(where: { $0.equals!(oldCell) }) {
           deletedIndeciesForSection.append(IndexPath(row: oldCellIndex, section: newSectionIndex))
         }
       }
@@ -135,12 +196,14 @@ open class DiffUtils<Data> {
       updatedIndecies.append(contentsOf: updatedIndeciesForSection)
     }
 
+    /* Make sure the same index path not contained in inserted and deleted index paths */
     updatedIndecies.append(contentsOf: Array(Set(insertedIndecies).intersection(deletedIndecies)))
     insertedIndecies.removeAll { updatedIndecies.contains($0) }
     deletedIndecies.removeAll { updatedIndecies.contains($0) }
 
     print("--- is: \(insertedSectionsIndecies.count), ds: \(deletedSectionsIndecies.count), i: \(insertedIndecies.count), d: \(deletedIndecies.count), u: \(updatedIndecies.count)")
 
+    /* No changes, return nil */
     guard insertedSectionsIndecies.count > 0 ||
       deletedSectionsIndecies.count > 0 ||
       insertedIndecies.count > 0 ||

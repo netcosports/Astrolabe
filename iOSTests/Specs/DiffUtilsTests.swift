@@ -145,7 +145,7 @@ class DiffUtilsTests: QuickSpec {
               ]
             )
 
-            expect { try DiffUtils<Int>.diffThrow(newSections: new, oldSections: old) }.to(throwError())
+            expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
           }
         }
 
@@ -164,7 +164,7 @@ class DiffUtilsTests: QuickSpec {
             ]
           )
 
-          expect { try DiffUtils<Int>.diffThrow(newSections: new, oldSections: old) }.to(throwError())
+          expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
         }
 
         context("are valid") {
@@ -191,7 +191,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffThrow(newSections: new, oldSections: old) }.to(throwError())
+              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             it("with id collisions") {
@@ -217,7 +217,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffThrow(newSections: new, oldSections: old) }.to(throwError())
+              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             it("without data equals closures") {
@@ -249,7 +249,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffThrow(newSections: new, oldSections: old) }.to(throwError())
+              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             context("are valid") {
@@ -279,7 +279,7 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(sections)
                   let new = self.sectionablesWithParams(sections)
 
-                  expect(DiffUtils<Int>.diff(newSections: new, oldSections: old)).to(beNil())
+                  expect(DiffUtils<Int>.diff(new: new, old: old)).to(beNil())
                 }
 
                 it("inserting section") {
@@ -317,7 +317,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                  let context = DiffUtils<Int>.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet(integer: 1)
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.inserted) == [IndexPath]()
@@ -359,7 +359,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                  let context = DiffUtils<Int>.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet(integer: 0)
                   expect(context?.inserted) == [IndexPath]()
@@ -409,7 +409,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                  let context = DiffUtils<Int>.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.inserted) == [IndexPath(row: 2, section: 1)]
@@ -455,7 +455,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                  let context = DiffUtils<Int>.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.inserted) == [IndexPath]()
@@ -496,7 +496,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                    let context = DiffUtils<Int>.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.inserted) == [IndexPath]()
@@ -535,7 +535,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                    let context = DiffUtils<Int>.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.inserted) == [IndexPath]()
