@@ -19,7 +19,7 @@ public enum DiffError: Error {
   case error(String)
 }
 
-open class DiffUtils {
+open class DiffUtils<Data> {
 
   open class func diff(
     newSections: [Sectionable],
@@ -52,7 +52,8 @@ open class DiffUtils {
       throw DiffError.error("Check old section ids: collision detected")
     }
 
-    if let cell = allSections.compactMap({ $0.cellsOnly() }).reduce([], +).first(where: { $0.id.isEmpty || $0.equals == nil /*|| $0.dataEquals == nil*/ }) {
+    let allCellsOnly = allSections.compactMap({ $0.cellsOnly() }).reduce([], +)
+    if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil || ($0 as! DataHodler<Data>).dataEquals == nil }) {
       throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
     }
     try newSections.forEach { section in
@@ -111,12 +112,15 @@ open class DiffUtils {
       var updatedIndeciesForSection = [IndexPath]()
 
       for (newCellIndex, newCell) in newSectionToDiscover.cellsOnly().enumerated() {
+
+        let indexPath: IndexPath = { IndexPath(row: newCellIndex, section: newSectionIndex) }()
+
         if let sameOldCell = oldSectionToDiscover.cellsOnly().first(where: { $0.equals?(newCell) ?? false }) {
-          //        if (sameOldCell as! DataHodler).dataEquals?((sameOldCell as! DataHodler).data, (newCell as! DataHodler).data) ?? false {
-          //
-          //        }
+          if !(sameOldCell as! DataHodler<Data>).dataEquals!((sameOldCell as! DataHodler<Data>).data, (newCell as! DataHodler<Data>).data) {
+            updatedIndeciesForSection.append(indexPath)
+          }
         } else {
-          insertedIndeciesForSection.append(IndexPath(row: newCellIndex, section: newSectionIndex))
+          insertedIndeciesForSection.append(indexPath)
         }
       }
 

@@ -21,11 +21,14 @@ public enum CellType: Hashable {
   case custom(kind: String)
 }
 
-public protocol DataHodler {
-  associatedtype Data
+open class DataHodler<Data> {
 
-  var data: Data { get }
-  var dataEquals: TwoEqualsClosure<Data>? { get }
+  public var data: Data
+  public var dataEquals: TwoEqualsClosure<Data>?
+
+  public init(data: Data) {
+    self.data = data
+  }
 }
 
 public protocol Cellable {

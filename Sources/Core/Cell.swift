@@ -9,19 +9,17 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container, CellView: ReusableView & Reusable>: Cellable, DataHodler
+open class Cell<Container, CellView: ReusableView & Reusable>: DataHodler<CellView.Data>, Cellable
 where CellView.Container == Container {
 
   public typealias Data = CellView.Data
-
-  public var data: Data
-  public var dataEquals: TwoEqualsClosure<Data>?
 
   let setup: SetupClosure<CellView>?
 
   public let type: CellType
   public let click: ClickClosure?
   public var equals: EqualsClosure<Cellable>?
+  public var compare: ((Cellable, Cellable) -> Bool)?
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
@@ -40,21 +38,17 @@ where CellView.Container == Container {
     self.id = id
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
-    self.data = data
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
     self.type = type
     self.setup = setup
     self.click = click
+    super.init(data: data)
     self.id = id
-    if let equals = equals {
-      self.equals = equals
-    } else {
-      self.equals = {
-        if $0.id.isEmpty || self.id.isEmpty {
-          return false
-        } else {
-          return self.id == $0.id
-        }
+    self.equals = {
+      if $0.id.isEmpty || self.id.isEmpty {
+        return false
+      } else {
+        return self.id == $0.id
       }
     }
   }
@@ -97,7 +91,7 @@ where CellView.Container == Container {
 extension Cell where Data: Equatable {
 
   public convenience init(data: Data, id: String, click: ClickClosure? = nil, dataEquals: @escaping TwoEqualsClosure<Data> = { $0 == $1 }) {
-    self.init(data: data, click: click, type: .cell, setup: nil)
+    self.init(data: data, click: click, type: .cell)
     self.id = id
     self.dataEquals = dataEquals
   }
