@@ -463,43 +463,85 @@ class DiffUtilsTests: QuickSpec {
                   expect(context?.updated) == [IndexPath]()
                 }
 
-                it("updating cell") {
+                context("updating cell") {
 
-                  let old = self.sectionablesWithParams(
-                    [
-                      SectionParams(
-                        id: "0",
-                        cellParams: [
-                          CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
-                        ]),
-                      SectionParams(
-                        id: "1",
-                        cellParams: [
-                          CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
-                        ])
-                    ]
-                  )
-                  let new = self.sectionablesWithParams(
-                    [
-                      SectionParams(
-                        id: "0",
-                        cellParams: [
-                          CellParams(id: "0", type: .cell, data: 2, dataEquals: self.simpleDataEquals)
-                        ]),
-                      SectionParams(
-                        id: "1",
-                        cellParams: [
-                          CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
-                        ])
-                    ]
-                  )
+                  it("when data changes") {
 
-                  let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
-                  expect(context?.insertedSections) == IndexSet()
-                  expect(context?.deletedSections) == IndexSet()
-                  expect(context?.inserted) == [IndexPath]()
-                  expect(context?.deleted) == [IndexPath]()
-                  expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                    let old = self.sectionablesWithParams(
+                      [
+                        SectionParams(
+                          id: "0",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ]),
+                        SectionParams(
+                          id: "1",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ])
+                      ]
+                    )
+                    let new = self.sectionablesWithParams(
+                      [
+                        SectionParams(
+                          id: "0",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 2, dataEquals: self.simpleDataEquals)
+                          ]),
+                        SectionParams(
+                          id: "1",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ])
+                      ]
+                    )
+
+                    let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                    expect(context?.insertedSections) == IndexSet()
+                    expect(context?.deletedSections) == IndexSet()
+                    expect(context?.inserted) == [IndexPath]()
+                    expect(context?.deleted) == [IndexPath]()
+                    expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                  }
+
+                  it("when insert and delete same cell") {
+
+                    let old = self.sectionablesWithParams(
+                      [
+                        SectionParams(
+                          id: "0",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ]),
+                        SectionParams(
+                          id: "1",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ])
+                      ]
+                    )
+                    let new = self.sectionablesWithParams(
+                      [
+                        SectionParams(
+                          id: "0",
+                          cellParams: [
+                            CellParams(id: "1", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ]),
+                        SectionParams(
+                          id: "1",
+                          cellParams: [
+                            CellParams(id: "0", type: .cell, data: 1, dataEquals: self.simpleDataEquals)
+                          ])
+                      ]
+                    )
+
+                    let context = DiffUtils<Int>.diff(newSections: new, oldSections: old)
+                    expect(context?.insertedSections) == IndexSet()
+                    expect(context?.deletedSections) == IndexSet()
+                    expect(context?.inserted) == [IndexPath]()
+                    expect(context?.deleted) == [IndexPath]()
+                    expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                  }
                 }
               }
             }
