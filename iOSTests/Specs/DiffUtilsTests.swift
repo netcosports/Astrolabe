@@ -22,11 +22,11 @@ class DiffUtilsTests: QuickSpec {
     var id: String = ""
     var type: CellType = .cell
     var data: Int = -1
-    var dataEquals: ((Int, Int) -> Bool)?
+    var dataEquals: BothEqualsClosure<Int>?
   }
 
   fileprivate var emptySectionables = [Sectionable]()
-  fileprivate let simpleDataEquals: (Int, Int) -> Bool = { $0 == $1 }
+  fileprivate let simpleDataEquals: BothEqualsClosure<Int> = { $0 == $1 }
 
   fileprivate func sectionablesWithParams(
     _ params: [SectionParams]

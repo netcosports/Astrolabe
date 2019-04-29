@@ -19,7 +19,6 @@ where CellView.Container == Container {
   public let type: CellType
   public let click: ClickClosure?
   public var equals: EqualsClosure<Cellable>?
-  public var compare: ((Cellable, Cellable) -> Bool)?
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
@@ -37,18 +36,18 @@ where CellView.Container == Container {
     self.init(data: data, id: id, click: click, type: .cell, setup: nil, dataEquals: nil)
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, dataEquals: TwoEqualsClosure<Data>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
     self.type = type
     self.setup = setup
     self.click = click
     super.init(data: data)
     self.id = id
     self.equals = {
-      if $0.id.isEmpty || self.id.isEmpty {
+      guard !$0.id.isEmpty && !self.id.isEmpty else {
+        assertionFailure("id of a cell must not be empty string")
         return false
-      } else {
-        return self.id == $0.id
       }
+      return self.id == $0.id
     }
     self.dataEquals = dataEquals
   }
@@ -94,7 +93,7 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
   public var expandableCells: [Cellable]?
 
   public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
-              setup: SetupClosure<CellView>? = nil, dataEquals: TwoEqualsClosure<Data>? = nil) {
+              setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
     self.expandableCells = expandableCells
     super.init(data: data, id: id, click: click, type: .cell, setup: setup, dataEquals: dataEquals)
   }

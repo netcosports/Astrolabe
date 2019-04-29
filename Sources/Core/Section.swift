@@ -28,11 +28,11 @@ open class Section: Sectionable {
     self.minimumInteritemSpacing = minimumInteritemSpacing
 
     self.equals = {
-      if $0.id.isEmpty || self.id.isEmpty {
+      guard !$0.id.isEmpty && !self.id.isEmpty else {
+        assertionFailure("id of a section must not be empty string")
         return false
-      } else {
-        return self.id == $0.id
       }
+      return self.id == $0.id
     }
   }
 
