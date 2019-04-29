@@ -232,6 +232,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       containerView?.batchUpdate(block: {
         self.containerView?.insertSectionables(at: context.insertedSections)
         self.containerView?.deleteSectionables(at: context.deletedSections)
+        self.containerView?.reloadSectionables(at: context.updatedSections)
         self.containerView?.insert(at: context.inserted)
         self.containerView?.delete(at: context.deleted)
         self.containerView?.reload(at: context.updated)

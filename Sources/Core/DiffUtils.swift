@@ -24,6 +24,9 @@ public struct CollectionUpdateContext {
 
   /** Deleted section indecies */
   public let deletedSections: IndexSet
+
+  /** Updated section indecies */
+  public let updatedSections: IndexSet
 }
 
 /** Error to throw */
@@ -38,9 +41,8 @@ open class DiffUtils<Data> {
    Calculate difference safely.
    If no difference found nil returned.
    If data inconsistent no error thrown but nil returned and assertion fired into DEBUG
-   - parameters:
-   - new: new sections source
-   - old: old sections source
+   - parameter newSections: new sections source
+   - parameter oldSections: old sections source
    - returns: CollectionUpdateContext instance or nil
    */
   open class func diff(
@@ -61,9 +63,8 @@ open class DiffUtils<Data> {
   /**
    Calculate difference.
    If no difference found nil returned.
-   - parameters:
-   - new: new sections source
-   - old: old sections source
+   - parameter newSections: new sections source
+   - parameter oldSections: old sections source
    - returns: CollectionUpdateContext instance or nil
    - throws: DiffError if data inconsistent
    */
@@ -89,9 +90,31 @@ open class DiffUtils<Data> {
     }
 
     /*
+     Check validity of section suppelementary cells.
+     - id
+     - equals closure
+     - data equals closure
+     */
+    let allSupplyCellsOnly = allSections.compactMap({ $0.supplyCellsOnly() }).reduce([], +)
+    if let cell = allSupplyCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil || ($0 as! DataHodler<Data>).dataEquals == nil }) {
+      throw DiffError.error("Check supplementary cell id, equals closure, data equals closure: \(cell)")
+    }
+    try newSections.forEach { section in
+      let supplyCellsOnly = section.supplyCellsOnly()
+      if Set(supplyCellsOnly.map({ $0.id })).count != supplyCellsOnly.count {
+        throw DiffError.error("Check supplementary cell ids: collision detected for new section \(section)")
+      }
+    }
+    try oldSections.forEach { section in
+      let supplyCellsOnly = section.supplyCellsOnly()
+      if Set(supplyCellsOnly.map({ $0.id })).count != supplyCellsOnly.count {
+        throw DiffError.error("Check supplementary cell ids: collision detected for old section \(section)")
+      }
+    }
+
+    /*
      Check validity of cells
      - id
-     - type
      - equals closure
      - data equals closure
      */
@@ -116,29 +139,78 @@ open class DiffUtils<Data> {
      Detect inserted sections
      */
     let insertedSections = newSections.filter { newSection in
-      return !oldSections.contains { oldSection in
-        return newSection.equals!(oldSection)
-      }
+      return !oldSections.contains { newSection.equals!($0) }
     }
-    let insertedSectionsIndecies = IndexSet(insertedSections.compactMap { insertedSection in
+    var insertedSectionsIndecies = insertedSections.compactMap { insertedSection in
       return newSections.firstIndex { $0.equals!(insertedSection) }
-    })
+    }
 
     /*
      Detect deleted sections
      */
     let deletedSections = oldSections.filter { oldSection in
-      return !newSections.contains { newSection in
-        return newSection.equals!(oldSection)
+      return !newSections.contains { $0.equals!(oldSection) }
+    }
+    var deletedSectionsIndecies = deletedSections.compactMap { deletedSection in
+      return oldSections.firstIndex { $0.equals!(deletedSection) }
+    }
+
+    /*
+     Detect updated sections.
+     By checking index changes.
+     By bypassing it's supplementary items and checking it's equals and dataEquals closures.
+     */
+    var updatedSectionsIndecies = [Int]()
+    for (newSectionIndex, newSectionToDiscover) in newSections.enumerated() {
+
+      /* Skip already inserted or deleted sections */
+      if insertedSectionsIndecies.contains(newSectionIndex) ||
+        deletedSectionsIndecies.contains(newSectionIndex) {
+        continue
+      }
+
+      guard let oldSectionToDiscover = oldSections.first(where: { newSectionToDiscover.equals!($0) }) else {
+        continue
+      }
+
+      /* Check if section moved */
+      if let sameOldSectionIndex = oldSections.firstIndex(where: { $0.equals!(newSectionToDiscover) }),
+        newSectionIndex != sameOldSectionIndex {
+        updatedSectionsIndecies.append(newSectionIndex)
+        continue
+      }
+
+      /*
+       If at least one supplementary item has been changed, mark all section as reloaded
+       Note: all cells in this section will also be re-requested from appropriate delegate
+       */
+      var updated = false
+      let newSupplyCells = newSectionToDiscover.supplyCellsOnly()
+      let oldSupplyCells = oldSectionToDiscover.supplyCellsOnly()
+      if newSupplyCells.count == oldSupplyCells.count {
+        for (index, newSupplyCell) in newSupplyCells.enumerated() {
+          let oldSupplyCell = oldSupplyCells[index]
+          if !newSupplyCell.equals!(oldSupplyCell) ||
+            !(newSupplyCell as! DataHodler<Data>).dataEquals!((oldSupplyCell as! DataHodler<Data>).data, (newSupplyCell as! DataHodler<Data>).data) {
+            updated = true
+            break
+          }
+        }
+      } else {
+        updated = true
+      }
+      if updated {
+        updatedSectionsIndecies.append(newSectionIndex)
       }
     }
-    let deletedSectionsIndecies = IndexSet(deletedSections.compactMap { deletedSection in
-      return oldSections.firstIndex { $0.equals!(deletedSection) }
-    })
+    /* Make sure the same index not contained in inserted and deleted indecies */
+    updatedSectionsIndecies.append(contentsOf: Set(insertedSectionsIndecies).intersection(deletedSectionsIndecies))
+    insertedSectionsIndecies.removeAll { updatedSectionsIndecies.contains($0) }
+    deletedSectionsIndecies.removeAll { updatedSectionsIndecies.contains($0) }
 
     /*
      Detect inserted/deleted/updated cells only in sections
-     that are not inserted or deleted which were detected from the above.
+     that are not inserted, deleted or updated which were detected from the above.
      */
     var insertedIndecies = [IndexPath]()
     var deletedIndecies = [IndexPath]()
@@ -146,8 +218,10 @@ open class DiffUtils<Data> {
 
     for (newSectionIndex, newSectionToDiscover) in newSections.enumerated() {
 
-      /* skip already inserted or deleted sections */
-      if insertedSections.contains(where: { $0.equals!(newSectionToDiscover) }) || deletedSections.contains(where: { $0.equals!(newSectionToDiscover) }) {
+      /* Skip already inserted, deleted and updated sections */
+      if insertedSectionsIndecies.contains(newSectionIndex) ||
+        deletedSectionsIndecies.contains(newSectionIndex) ||
+        updatedSectionsIndecies.contains(newSectionIndex) {
         continue
       }
 
@@ -157,8 +231,8 @@ open class DiffUtils<Data> {
 
       /*
        Detect inserted and deleted cells in current section normally.
-       When detecting updated cells we compare it's datas
-       using dedicated dataEquals closure assuming closure provided
+       When detecting updated cells we compare it's index and datas
+       using dedicated dataEquals closure assuming closure is provided
        (if not assertion will be fired or error thrown from verification section in the beginning)
        */
 
@@ -166,12 +240,16 @@ open class DiffUtils<Data> {
       var deletedIndeciesForSection = [IndexPath]()
       var updatedIndeciesForSection = [IndexPath]()
 
-      for (newCellIndex, newCell) in newSectionToDiscover.cellsOnly().enumerated() {
+      let newSectionCellsOnly = newSectionToDiscover.cellsOnly()
+      for (newCellIndex, newCell) in newSectionCellsOnly.enumerated() {
 
         let indexPath: IndexPath = { IndexPath(row: newCellIndex, section: newSectionIndex) }()
 
         if let sameOldCell = oldSectionToDiscover.cellsOnly().first(where: { $0.equals!(newCell) }) {
-          if !(sameOldCell as! DataHodler<Data>).dataEquals!((sameOldCell as! DataHodler<Data>).data, (newCell as! DataHodler<Data>).data) {
+          /* Check if cell moved otherwise compare datas */
+          if let sameOldCellIndex = oldSectionToDiscover.cellsOnly().firstIndex(where: { $0.equals!(newCell) }),
+            newCellIndex != sameOldCellIndex ||
+            !(sameOldCell as! DataHodler<Data>).dataEquals!((sameOldCell as! DataHodler<Data>).data, (newCell as! DataHodler<Data>).data) {
             updatedIndeciesForSection.append(indexPath)
           }
         } else {
@@ -200,6 +278,7 @@ open class DiffUtils<Data> {
     /* No changes, return nil */
     guard insertedSectionsIndecies.count > 0 ||
       deletedSectionsIndecies.count > 0 ||
+      updatedSectionsIndecies.count > 0 ||
       insertedIndecies.count > 0 ||
       deletedIndecies.count > 0 ||
       updatedIndecies.count > 0 else {
@@ -210,8 +289,9 @@ open class DiffUtils<Data> {
       inserted: insertedIndecies,
       deleted: deletedIndecies,
       updated: updatedIndecies,
-      insertedSections: insertedSectionsIndecies,
-      deletedSections: deletedSectionsIndecies
+      insertedSections: IndexSet(insertedSectionsIndecies),
+      deletedSections: IndexSet(deletedSectionsIndecies),
+      updatedSections: IndexSet(updatedSectionsIndecies)
     )
   }
 }
@@ -220,5 +300,9 @@ extension Sectionable {
 
   func cellsOnly() -> [Cellable] {
     return cells.filter { $0.type == .cell }
+  }
+
+  func supplyCellsOnly() -> [Cellable] {
+    return supplementaryTypes.compactMap { supplementary(for: $0) }
   }
 }
