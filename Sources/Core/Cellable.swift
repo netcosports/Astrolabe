@@ -68,10 +68,3 @@ public protocol Sectionable {
   var minimumInteritemSpacing: CGFloat? { get set }
   var id: String { get }
 }
-
-extension Sectionable {
-
-  func cellsOnly() -> [Cellable] {
-    return cells.filter { $0.type == .cell }
-  }
-}

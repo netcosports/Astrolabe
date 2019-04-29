@@ -30,15 +30,14 @@ where CellView.Container == Container {
   // MARK: - Init
 
   public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil)
+    self.init(data: data, click: click, type: .cell, setup: nil, dataEquals: nil)
   }
 
-  public convenience init(data: Data, id: String, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil)
-    self.id = id
+  public convenience init(data: Data, id: String = "", click: ClickClosure? = nil) {
+    self.init(data: data, id: id, click: click, type: .cell, setup: nil, dataEquals: nil)
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, dataEquals: TwoEqualsClosure<Data>? = nil) {
     self.type = type
     self.setup = setup
     self.click = click
@@ -51,6 +50,7 @@ where CellView.Container == Container {
         return self.id == $0.id
       }
     }
+    self.dataEquals = dataEquals
   }
 
   // MARK: - Lifecycle
@@ -88,24 +88,15 @@ where CellView.Container == Container {
 
 }
 
-extension Cell where Data: Equatable {
-
-  public convenience init(data: Data, id: String, click: ClickClosure? = nil, dataEquals: @escaping TwoEqualsClosure<Data> = { $0 == $1 }) {
-    self.init(data: data, click: click, type: .cell)
-    self.id = id
-    self.dataEquals = dataEquals
-  }
-}
-
 open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,
   ExpandableCellable where CellView.Container == Container {
 
   public var expandableCells: [Cellable]?
 
   public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
-              setup: SetupClosure<CellView>? = nil) {
+              setup: SetupClosure<CellView>? = nil, dataEquals: TwoEqualsClosure<Data>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, id: id, click: click, type: .cell, setup: setup)
+    super.init(data: data, id: id, click: click, type: .cell, setup: setup, dataEquals: dataEquals)
   }
 }
 

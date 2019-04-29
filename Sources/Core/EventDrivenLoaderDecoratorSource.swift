@@ -210,7 +210,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     }).disposed(by: disposeBag)
   }
 
-    fileprivate func updateDataSoftly(to sections: [Sectionable], context: CollectionUpdateContext?) {
+  fileprivate func updateDataSoftly(to sections: [Sectionable], context: CollectionUpdateContext?) {
     guard let containerView = self.containerView else { return }
 
     let softReloadDisposeBag = DisposeBag()
@@ -220,9 +220,9 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     Observable.merge(scrollObservable, timeoutObservable)
       .debounce(0.15, scheduler: MainScheduler.instance)
       .take(1).subscribe(onNext: { [weak self] in
-      guard let self = self else { return }
-      self.sections = sections
-self.reloadDataWithContext(context)
+        guard let self = self else { return }
+        self.sections = sections
+        self.reloadDataWithContext(context)
     }).disposed(by: softReloadDisposeBag)
     self.softReloadDisposeBag = softReloadDisposeBag
   }

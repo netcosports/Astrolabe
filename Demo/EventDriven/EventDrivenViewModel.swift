@@ -30,7 +30,7 @@ class EventDrivenViewModel {
     self.input = input
 
     input.source.settings.loadingBehavior = [.initial, .paging, .autoupdate]
-    input.source.settings.autoupdatePeriod = 5.0
+    input.source.settings.autoupdatePeriod = 15.0
     input.source.intentObservable.flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
       guard let self = self else { return .empty() }
       return self.load(for: intent)
@@ -63,7 +63,7 @@ class EventDrivenViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-    Observable<Int>.timer(15.0, scheduler: MainScheduler.instance).map { _ in
+    Observable<Int>.timer(5.0, scheduler: MainScheduler.instance).map { _ in
       LoaderResultEvent.softCurrent
     }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
@@ -72,18 +72,19 @@ class EventDrivenViewModel {
     let sections: [Sectionable]
     switch intent {
     case .page, .autoupdate:
-      print("--- page: \(intent.page)")
+      print("--- \(intent) page: \(intent.page)")
       let result = [
         TestViewModel("Test title \(intent.page) - 1"),
         TestViewModel("Test title \(intent.page) - 2"),
         TestViewModel("Test title \(intent.page) - 3")
       ]
-      let cells: [Cellable] = result.map { Cell(data: $0, id: "cell_\(intent.page):\($0.title)") }
+      let cells: [Cellable] = result.map { Cell(data: $0, id: "cell_\(intent.page):\($0.title)", dataEquals: { $0 == $1 }) }
       sections = [Section(cells: cells, id: "section_\(intent.page)", page: intent.page)]
       let oldSections = self.sections
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
+      let context = DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
       return Observable<LoaderResultEvent>
-        .just(LoaderResultEvent.soft(sections: self.sections, context: DiffUtils.diff(newSections: self.sections, oldSections: oldSections)))
+        .just(LoaderResultEvent.soft(sections: self.sections, context: context))
         .delay(1.0, scheduler: MainScheduler.instance)
     default:
       let result = [
@@ -91,7 +92,7 @@ class EventDrivenViewModel {
         TestViewModel("Test title initials - 2"),
         TestViewModel("Test title initials - 3")
       ]
-      let cells: [Cellable] = result.map { Cell(data: $0, id: "cell_\(intent.page):\($0.title)") }
+      let cells: [Cellable] = result.map { Cell(data: $0, id: "cell_\(intent.page):\($0.title)", dataEquals: { $0 == $1 }) }
       sections = [Section(cells: cells, id: "section_\(intent.page)", page: intent.page)]
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
       return Observable<LoaderResultEvent>

@@ -46,7 +46,7 @@ open class DiffUtils<Data> {
   open class func diff(
     new newSections: [Sectionable],
     old oldSections: [Sectionable]
-  ) -> CollectionUpdateContext? {
+    ) -> CollectionUpdateContext? {
     do {
       return try diffOrThrow(new: newSections, old: oldSections)
     } catch DiffError.error(let message) {
@@ -70,7 +70,7 @@ open class DiffUtils<Data> {
   open class func diffOrThrow(
     new newSections: [Sectionable],
     old oldSections: [Sectionable]
-  ) throws -> CollectionUpdateContext? {
+    ) throws -> CollectionUpdateContext? {
 
     /*
      Check validity of sections.
@@ -147,17 +147,11 @@ open class DiffUtils<Data> {
     for (newSectionIndex, newSectionToDiscover) in newSections.enumerated() {
 
       /* skip already inserted or deleted sections */
-      if insertedSections.contains(where: { insertedSection in
-        return insertedSection.equals!(newSectionToDiscover)
-      }) || deletedSections.contains(where: { deletedSection in
-        return deletedSection.equals!(newSectionToDiscover)
-      }) {
+      if insertedSections.contains(where: { $0.equals!(newSectionToDiscover) }) || deletedSections.contains(where: { $0.equals!(newSectionToDiscover) }) {
         continue
       }
 
-      guard let oldSectionToDiscover = oldSections.first(where: { oldSection in
-        return newSectionToDiscover.equals!(oldSection)
-      }) else {
+      guard let oldSectionToDiscover = oldSections.first(where: { newSectionToDiscover.equals!($0) }) else {
         continue
       }
 
@@ -219,5 +213,12 @@ open class DiffUtils<Data> {
       insertedSections: insertedSectionsIndecies,
       deletedSections: deletedSectionsIndecies
     )
+  }
+}
+
+extension Sectionable {
+
+  func cellsOnly() -> [Cellable] {
+    return cells.filter { $0.type == .cell }
   }
 }
