@@ -36,6 +36,7 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
   }
 
   override func click(cell: Cellable, indexPath: IndexPath) {
+    super.click(cell: cell, indexPath: indexPath)
     var section = sections[indexPath.section]
     var sectionCells = section.cells
     let cell = sectionCells[indexPath.item]
@@ -57,7 +58,7 @@ open class CollectionViewExpandableSource: CollectionViewSource, Expandable {
     let indexPath = IndexPath(row: itemIndex, section: sectionIndex)
 
     if let cellView = containerView?.cellForItem(at: indexPath) as? CollectionViewCell {
-//      setupCell(cellView: cellView, cell: cell, indexPath: indexPath)
+      setup(cellView: cellView, with: cell)
       cell.setup(with: cellView)
     } else {
       UIView.performWithoutAnimation {
