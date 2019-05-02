@@ -6,10 +6,10 @@ public protocol MLoader: class {
   associatedtype Output
 
   typealias MLRequests = [Request<MLResult>]
-  typealias MLResults = [Result<MLResult>]
+  typealias MLResults = [Result<MLResult, Error>]
 
   #if TEST
-  var mLoaderResponses: [[Result<Response<MLResult>>]] { get set }
+  var mLoaderResponses: [[Result<Response<MLResult>, Error>]] { get set }
   #endif
 
   func requests(for loadingIntent: LoaderIntent) throws -> MLRequests

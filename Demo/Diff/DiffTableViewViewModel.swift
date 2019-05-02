@@ -1,5 +1,5 @@
 //
-//  DiffViewModel.swift
+//  DiffTableViewViewModel.swift
 //  Demo
 //
 //  Created by Alexander Zhigulich on 4/29/19.
@@ -11,7 +11,7 @@ import Astrolabe
 import RxSwift
 import RxCocoa
 
-class DiffViewModel {
+class DiffTableViewViewModel {
 
   struct Input {
     let source: EventDrivenLoaderSource
@@ -21,7 +21,7 @@ class DiffViewModel {
     let isNoDataHidden: Binder<Bool>
   }
 
-  typealias Cell = CollectionCell<TestCollectionCell>
+  typealias Cell = TableCell<TestTableCell>
 
   private var sections: [Sectionable] = []
   private let disposeBag = DisposeBag()
@@ -30,7 +30,7 @@ class DiffViewModel {
     self.input = input
 
     input.source.settings.loadingBehavior = [.initial, .autoupdate]
-    input.source.settings.autoupdatePeriod = 1.0
+    input.source.settings.autoupdatePeriod = 0.5
     input.source.intentObservable.flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
       guard let self = self else { return .empty() }
       return self.load(for: intent)
@@ -62,6 +62,10 @@ class DiffViewModel {
         default: return false
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
+
+//    Observable<Int>.timer(1.0, scheduler: MainScheduler.instance).map { _ in
+//      LoaderResultEvent.softCurrent
+//    }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
 
   private func load(for intent: LoaderIntent) -> Observable<LoaderResultEvent> {
@@ -69,15 +73,7 @@ class DiffViewModel {
     let oldSections = self.sections
     self.sections = (0...Int.random(in: 0...2)).shuffled().map { sectionIndex in
       print("--- section[\(sectionIndex)]:")
-      let section = MultipleSupplementariesSection(
-        supplementaries: [CellType.header, CellType.footer].suffix(from: Int.random(in: 0...2)).shuffled().map { supplyType in
-          print("      --- supply[\(supplyType)]:")
-          return Cell(
-            data: TestViewModel("Supply \(sectionIndex) - \(supplyType)"),
-            id: "supply_\(sectionIndex)_\(supplyType)",
-            type: supplyType,
-            dataEquals: { $0 == $1 })
-        },
+      let section = Section(
         cells: (0...Int.random(in: 0...2)).shuffled().map { cellIndex in
           print("      --- cell[\(cellIndex)]:")
           return Cell(
@@ -89,7 +85,7 @@ class DiffViewModel {
       return section
     }
 
-    let context = DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
+    let context = intent == .initial ? nil : DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
 
     return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
       sections: self.sections,

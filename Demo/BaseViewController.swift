@@ -88,7 +88,7 @@ class BaseCollectionViewController<T: CollectionViewSource>: BaseViewController<
 }
 
 class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Containerable where T: AccessorView, T.Source: LoaderReusableSource {
-
+  
   convenience init(type: LoaderResult) {
     self.init()
     self.type = type
@@ -102,26 +102,6 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
     return activityIndicator
   } ()
 
-  let errorLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 22)
-    label.textColor = UIColor.black
-    label.text = "Error"
-    label.textAlignment = .center
-    label.isHidden = true
-    return label
-  }()
-
-  let noDataLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 22)
-    label.textColor = UIColor.black
-    label.text = "No data"
-    label.textAlignment = .center
-    label.isHidden = true
-    return label
-  }()
-
   override func loadView() {
     super.loadView()
 
@@ -132,35 +112,13 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
     containerView.source.stopProgress = { [weak self] _ in
       self?.activityIndicator.stopAnimating()
     }
-
-    containerView.source.updateEmptyView = { [weak self] state in
-      guard let strongSelf = self else { return }
-
-      switch state {
-      case .empty:
-        strongSelf.noDataLabel.isHidden = false
-        strongSelf.errorLabel.isHidden = true
-      case .error:
-        strongSelf.noDataLabel.isHidden = true
-        strongSelf.errorLabel.isHidden = false
-      default:
-        strongSelf.noDataLabel.isHidden = true
-        strongSelf.errorLabel.isHidden = true
-      }
-    }
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.addSubview(activityIndicator)
-    view.addSubview(noDataLabel)
-    view.addSubview(errorLabel)
-    noDataLabel.sizeToFit()
-    errorLabel.sizeToFit()
     activityIndicator.center = view.center
-    noDataLabel.center = view.center
-    errorLabel.center = view.center
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -224,12 +182,27 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
   }
 }
 
-class BaseLoaderTableViewController<T: LoaderReusableSource>: BaseLoaderViewController<TableView<T>> where T.Container == UITableView { }
+class BaseLoaderTableViewController<T: LoaderReusableSource>: BaseLoaderViewController<TableView<T>> where T.Container == UITableView {
+  
+  typealias Empty = TableCell<EmptyDataTableCell>
+  
+  override func loadView() {
+    super.loadView()
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
+    }
+  }
+}
 
 class BaseLoaderCollectionViewController<T: LoaderReusableSource>: BaseLoaderViewController<CollectionView<T>> where T.Container == UICollectionView {
 
+  typealias Empty = CollectionCell<EmptyDataCollectionCell>
+  
   override func loadView() {
     super.loadView()
+    containerView.source.noDataState = { state in
+      return [Section(cells: [Empty(data: state)])]
+    }
     containerView.collectionViewLayout = collectionViewLayout()
   }
 

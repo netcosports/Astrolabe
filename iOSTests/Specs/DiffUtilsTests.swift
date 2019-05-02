@@ -487,8 +487,8 @@ class DiffUtilsTests: QuickSpec {
                   )
 
                   let context = DiffUtils<Int>.diff(new: new, old: old)
-                  expect(context?.insertedSections) == IndexSet()
-                  expect(context?.deletedSections) == IndexSet(integer: 0)
+                  expect(context?.insertedSections) == IndexSet(integer: 0)
+                  expect(context?.deletedSections) == IndexSet(arrayLiteral: 0, 1)
                   expect(context?.updatedSections) == IndexSet()
                   expect(context?.inserted) == [IndexPath]()
                   expect(context?.deleted) == [IndexPath]()
@@ -567,9 +567,9 @@ class DiffUtilsTests: QuickSpec {
                     )
 
                     let context = DiffUtils<Int>.diff(new: new, old: old)
-                    expect(context?.insertedSections) == IndexSet()
-                    expect(context?.deletedSections) == IndexSet()
-                    expect(context?.updatedSections) == IndexSet(arrayLiteral: 0, 2)
+                    expect(context?.insertedSections) == IndexSet(arrayLiteral: 0, 2)
+                    expect(context?.deletedSections) == IndexSet(arrayLiteral: 0, 2)
+                    expect(context?.updatedSections) == IndexSet()
                     expect(context?.inserted) == [IndexPath]()
                     expect(context?.deleted) == [IndexPath]()
                     expect(context?.updated) == [IndexPath]()
@@ -910,9 +910,9 @@ class DiffUtilsTests: QuickSpec {
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.updatedSections) == IndexSet()
-                    expect(context?.inserted) == [IndexPath]()
-                    expect(context?.deleted) == [IndexPath]()
-                    expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                    expect(context?.inserted) == [IndexPath(row: 0, section: 0)]
+                    expect(context?.deleted) == [IndexPath(row: 0, section: 0)]
+                    expect(context?.updated) == [IndexPath]()
                   }
 
                   it("when swap cells") {

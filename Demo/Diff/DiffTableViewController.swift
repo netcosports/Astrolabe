@@ -1,5 +1,5 @@
 //
-//  DiffController.swift
+//  DiffTableViewController.swift
 //  Demo
 //
 //  Created by Alexander Zhigulich on 4/29/19.
@@ -10,7 +10,7 @@ import UIKit
 import Astrolabe
 import RxSwift
 
-class DiffController: UIViewController {
+class DiffTableViewController: UIViewController {
 
   fileprivate let visibilitySubject = PublishSubject<Bool>()
 
@@ -41,18 +41,18 @@ class DiffController: UIViewController {
   } ()
 
   let disposeBag = DisposeBag()
-  let containerView = CollectionView<EventDrivenLoaderDecoratorSource<CollectionViewSource>>()
-  let viewModel: DiffViewModel
+  let containerView = TableView<EventDrivenLoaderDecoratorSource<TableViewSource>>()
+  let viewModel: DiffTableViewViewModel
 
   init() {
-    let input = DiffViewModel.Input(
+    let input = DiffTableViewViewModel.Input(
       source: containerView.source,
       visibility: visibilitySubject.asObservable(),
       isLoading: activityIndicator.rx.isAnimating,
       isErrorHidden: errorLabel.rx.isHidden,
       isNoDataHidden: noDataLabel.rx.isHidden
     )
-    viewModel = DiffViewModel(input: input)
+    viewModel = DiffTableViewViewModel(input: input)
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -63,7 +63,6 @@ class DiffController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
-    containerView.collectionViewLayout = collectionViewLayout()
     view.addSubview(containerView)
     containerView.snp.remakeConstraints { make in
       make.edges.equalToSuperview()

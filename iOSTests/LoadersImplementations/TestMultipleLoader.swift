@@ -12,7 +12,7 @@ import Nimble
 
 class TestML: MLoader {
 
-  var mLoaderResponses: [[Result<Response<MLResult>>]] = []
+  var mLoaderResponses: [[Result<Response<MLResult>, Error>]] = []
 
   typealias MLResult = TestModel1
 
@@ -28,7 +28,7 @@ class TestML: MLoader {
 
   func sections(from results: TestML.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: results.compactMap { $0.value }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: results.compactMap { try? $0.get() }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   var didReceiveCount = 0

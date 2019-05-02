@@ -39,6 +39,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "EventDrivenSourceSpec">
+               </Test>
+               <Test
                   Identifier = "LoaderDecoratorSpec">
                </Test>
                <Test

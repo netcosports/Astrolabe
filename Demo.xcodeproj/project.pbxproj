@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		636ACB5FDF6BF177BD8A2753 /* Pods_Astrolabe_Tests_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */; };
 		75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */; };
+		8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */; };
+		8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */; };
 		A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */; };
 		A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5532A9B1F615C4600186A9F /* SelectionViewController.swift */; };
 		AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
@@ -92,8 +94,10 @@
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
-		EA96550822773BDD00E37FF4 /* DiffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffViewModel.swift */; };
-		EA96550922773BDD00E37FF4 /* DiffController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffController.swift */; };
+		EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */; };
+		EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */; };
+		EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550A227B773800E37FF4 /* DiffTableViewController.swift */; };
+		EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */; };
 		EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +111,8 @@
 		49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_tvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AE31EC04CA8A047821FDD8 /* Pods-Astrolabe-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataCollectionCell.swift; sourceTree = "<group>"; };
+		8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataTableCell.swift; sourceTree = "<group>"; };
 		8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModel.swift; sourceTree = "<group>"; };
@@ -164,8 +170,10 @@
 		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		EA96550622773BDD00E37FF4 /* DiffViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffViewModel.swift; sourceTree = "<group>"; };
-		EA96550722773BDD00E37FF4 /* DiffController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffController.swift; sourceTree = "<group>"; };
+		EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewViewModel.swift; sourceTree = "<group>"; };
+		EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewController.swift; sourceTree = "<group>"; };
+		EA96550A227B773800E37FF4 /* DiffTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewController.swift; sourceTree = "<group>"; };
+		EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewViewModel.swift; sourceTree = "<group>"; };
 		EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffUtilsTests.swift; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -283,6 +291,8 @@
 				AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */,
 				AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */,
 				AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */,
+				8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */,
+				8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -355,8 +365,10 @@
 		EA96550522773BB200E37FF4 /* Diff */ = {
 			isa = PBXGroup;
 			children = (
-				EA96550722773BDD00E37FF4 /* DiffController.swift */,
-				EA96550622773BDD00E37FF4 /* DiffViewModel.swift */,
+				EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */,
+				EA96550A227B773800E37FF4 /* DiffTableViewController.swift */,
+				EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */,
+				EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */,
 			);
 			path = Diff;
 			sourceTree = "<group>";
@@ -752,12 +764,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */,
+				8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */,
 				AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */,
 				B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */,
 				AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F031F0CC54D005146DB /* Generator.swift in Sources */,
+				8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */,
 				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
+				EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */,
 				A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */,
 				B5716F0B1F0CC54D005146DB /* BasicExampleCollectionViewController.swift in Sources */,
 				B5716F0E1F0CC54D005146DB /* PagerViewController.swift in Sources */,
@@ -767,11 +782,12 @@
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
 				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
 				AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */,
-				EA96550922773BDD00E37FF4 /* DiffController.swift in Sources */,
+				EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */,
+				EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */,
 				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */,
 				B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */,
-				EA96550822773BDD00E37FF4 /* DiffViewModel.swift in Sources */,
+				EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */,
 				B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */,
 				AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */,
 			);
@@ -978,7 +994,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -997,7 +1013,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1012,7 +1028,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) TEST";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1025,7 +1041,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.tests.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1041,7 +1057,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
@@ -1059,7 +1075,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
@@ -1074,7 +1090,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.tests.tvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
 			name = Debug;
@@ -1088,7 +1104,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.tests.tvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
 			name = Release;
