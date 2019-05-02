@@ -180,8 +180,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
         switch reloadType {
         case .force(let sections, let context):
           print("--- force: \(sections.count), \(context.debugDescription)")
-          self.sections = sections
-          self.reloadDataWithContext(context)
+          self.reloadDataWithContext(context, andSetSource: sections)
           self.unsubscribeSoftReload()
         case .soft(let sections, let context):
           print("--- soft: \(sections.count), \(context.debugDescription)")
@@ -241,23 +240,24 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       .debounce(0.15, scheduler: scheduler)
       .take(1).subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.sections = sections
-        self.reloadDataWithContext(context)
+        self.reloadDataWithContext(context, andSetSource: sections)
     }).disposed(by: softReloadDisposeBag)
     self.softReloadDisposeBag = softReloadDisposeBag
   }
 
-  fileprivate func reloadDataWithContext(_ context: CollectionUpdateContext?) {
+  fileprivate func reloadDataWithContext(_ context: CollectionUpdateContext?, andSetSource sections: [Sectionable]) {
     if let context = context {
       containerView?.batchUpdate(block: {
-        self.containerView?.insertSectionables(at: context.insertedSections)
+        self.sections = sections
         self.containerView?.deleteSectionables(at: context.deletedSections)
         self.containerView?.reloadSectionables(at: context.updatedSections)
-        self.containerView?.insert(at: context.inserted)
+        self.containerView?.insertSectionables(at: context.insertedSections)
         self.containerView?.delete(at: context.deleted)
         self.containerView?.reload(at: context.updated)
+        self.containerView?.insert(at: context.inserted)
       }, completion: nil)
     } else {
+      self.sections = sections
       containerView?.reloadData()
     }
   }

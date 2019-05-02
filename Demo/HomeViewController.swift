@@ -22,6 +22,9 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
       },
       Item(data: TestViewModel("Event driven"), id: "Event driven") { [weak self] in
         self?.navigationController?.pushViewController(EventDrivenController(), animated: true)
+      },
+      Item(data: TestViewModel("Diff"), id: "Diff") { [weak self] in
+        self?.navigationController?.pushViewController(DiffController(), animated: true)
       }
     ]
 

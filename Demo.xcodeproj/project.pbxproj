@@ -92,6 +92,8 @@
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
+		EA96550822773BDD00E37FF4 /* DiffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffViewModel.swift */; };
+		EA96550922773BDD00E37FF4 /* DiffController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffController.swift */; };
 		EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -162,6 +164,8 @@
 		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EA96550622773BDD00E37FF4 /* DiffViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffViewModel.swift; sourceTree = "<group>"; };
+		EA96550722773BDD00E37FF4 /* DiffController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffController.swift; sourceTree = "<group>"; };
 		EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffUtilsTests.swift; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -255,6 +259,7 @@
 		B50EFAD01F0CC27E00D31FD6 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				EA96550522773BB200E37FF4 /* Diff */,
 				AA44516321D4BCE5008A1EE0 /* EventDriven */,
 				B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */,
 				B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */,
@@ -345,6 +350,15 @@
 				B5775C961F16A7C700E484A6 /* Info.plist */,
 			);
 			path = tvOSTests;
+			sourceTree = "<group>";
+		};
+		EA96550522773BB200E37FF4 /* Diff */ = {
+			isa = PBXGroup;
+			children = (
+				EA96550722773BDD00E37FF4 /* DiffController.swift */,
+				EA96550622773BDD00E37FF4 /* DiffViewModel.swift */,
+			);
+			path = Diff;
 			sourceTree = "<group>";
 		};
 		FC8FFC32218DD20BA0CF2251 /* Frameworks */ = {
@@ -753,9 +767,11 @@
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
 				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
 				AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */,
+				EA96550922773BDD00E37FF4 /* DiffController.swift in Sources */,
 				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */,
 				B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */,
+				EA96550822773BDD00E37FF4 /* DiffViewModel.swift in Sources */,
 				B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */,
 				AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */,
 			);

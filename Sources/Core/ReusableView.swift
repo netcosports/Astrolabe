@@ -122,11 +122,11 @@ extension UICollectionView: ContainerView {
   }
 
   public func insertSectionables(at indexes: IndexSet) {
-      insertSections(indexes)
+    insertSections(indexes)
   }
 
   public func deleteSectionables(at indexes: IndexSet) {
-      deleteSections(indexes)
+    deleteSections(indexes)
   }
 
   public func reloadSectionables(at indexes: IndexSet) {
@@ -192,11 +192,11 @@ extension UITableView: ContainerView {
   }
 
   public func insertSectionables(at indexes: IndexSet) {
-      insertSections(indexes, with: .top)
+    insertSections(indexes, with: .top)
   }
 
   public func deleteSectionables(at indexes: IndexSet) {
-      deleteSections(indexes, with: .top)
+    deleteSections(indexes, with: .top)
   }
 
   public func reloadSectionables(at indexes: IndexSet) {
