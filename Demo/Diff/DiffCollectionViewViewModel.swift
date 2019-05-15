@@ -30,12 +30,18 @@ class DiffCollectionViewViewModel {
     self.input = input
 
     input.source.settings.loadingBehavior = [.initial, .autoupdate]
-    input.source.settings.autoupdatePeriod = 0.5
-    input.source.intentObservable.flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
-      guard let self = self else { return .empty() }
-      return self.load(for: intent)
-        .concat(Observable.just(.completed(intent: intent)))
+    input.source.settings.autoupdatePeriod = 0.1
+    input.source.intentObservable
+      .observeOn(SerialDispatchQueueScheduler(qos: .background))
+      .flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
+        guard let self = self else { return .empty() }
+        return self.load(for: intent)
+          .concat(Observable.just(.completed(intent: intent)))
     }).bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+
+    self.input.source.sectionsObservable.subscribe { [weak self] sections in
+      self?.sections = sections.element ?? []
+      }.disposed(by: disposeBag)
 
     input.visibility
       .map { InputControlEvent.visibilityChanged(visible: $0) }
@@ -63,15 +69,19 @@ class DiffCollectionViewViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-//    Observable<Int>.timer(1.0, scheduler: MainScheduler.instance).map { _ in
+    Observable<Int>.interval(0.1, scheduler: SerialDispatchQueueScheduler(qos: .background)).map { _ in
+      LoaderResultEvent.force(sections: [], context: nil)
+      }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+
+//    Observable<Int>.interval(0.3, scheduler: MainScheduler.instance).map { _ in
 //      LoaderResultEvent.softCurrent
-//    }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+//      }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
 
   private func load(for intent: LoaderIntent) -> Observable<LoaderResultEvent> {
 
     let oldSections = self.sections
-    self.sections = (0...Int.random(in: 0...2)).shuffled().map { sectionIndex in
+    let newSections: [Sectionable] = (0...Int.random(in: 0...2)).shuffled().map { sectionIndex in
       print("--- section[\(sectionIndex)]:")
       let section = MultipleSupplementariesSection(
         supplementaries: [CellType.header, CellType.footer].suffix(from: Int.random(in: 0...2)).shuffled().map { supplyType in
@@ -93,11 +103,18 @@ class DiffCollectionViewViewModel {
       return section
     }
 
-    let context = intent == .initial ? nil : DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
+    if intent == .initial {
+      return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
+        sections: newSections,
+        context: nil
+      ))
+    } else {
+      let context = DiffUtils<TestViewModel>.diff(new: newSections, old: oldSections)
 
-    return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
-      sections: self.sections,
-      context: context
-    ))
+      return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
+        sections: newSections,
+        context: context
+      ))
+    }
   }
 }

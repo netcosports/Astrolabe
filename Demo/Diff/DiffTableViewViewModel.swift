@@ -23,19 +23,31 @@ class DiffTableViewViewModel {
 
   typealias Cell = TableCell<TestTableCell>
 
-  private var sections: [Sectionable] = []
+  private var sections: [Sectionable] = [] {
+    didSet {
+      //print("---! ViewModel setter: : [\(sections.count)] \(unsafeBitCast(sections, to: Int.self))")
+    }
+  }
   private let disposeBag = DisposeBag()
   private let input: Input
+  fileprivate var counter = 0
   init(input: Input) {
     self.input = input
 
     input.source.settings.loadingBehavior = [.initial, .autoupdate]
-    input.source.settings.autoupdatePeriod = 0.5
-    input.source.intentObservable.flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
-      guard let self = self else { return .empty() }
-      return self.load(for: intent)
-        .concat(Observable.just(.completed(intent: intent)))
+    input.source.settings.autoupdatePeriod = 1.0
+    input.source.intentObservable
+      .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+      .flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
+        guard let self = self else { return .empty() }
+        Thread.sleep(forTimeInterval: 0.6)
+        return self.load(for: intent)
+          .concat(Observable.just(.completed(intent: intent)))
     }).bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+
+    self.input.source.sectionsObservable.subscribe { [weak self] sections in
+      self?.sections = sections.element ?? []
+    }.disposed(by: disposeBag)
 
     input.visibility
       .map { InputControlEvent.visibilityChanged(visible: $0) }
@@ -63,21 +75,27 @@ class DiffTableViewViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-//    Observable<Int>.timer(1.0, scheduler: MainScheduler.instance).map { _ in
-//      LoaderResultEvent.softCurrent
-//    }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+    Observable<Int>.interval(2.2, scheduler: ConcurrentDispatchQueueScheduler(qos: .background)).map { _ in
+      LoaderResultEvent.force(sections: [], context: nil)
+      }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+
+    Observable<Int>.interval(0.3, scheduler: MainScheduler.instance).map { _ in
+      LoaderResultEvent.softCurrent
+    }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
 
   private func load(for intent: LoaderIntent) -> Observable<LoaderResultEvent> {
 
+    print("--- \(counter)")
+
     let oldSections = self.sections
-    self.sections = (0...Int.random(in: 0...2)).shuffled().map { sectionIndex in
-      print("--- section[\(sectionIndex)]:")
+    let newSections: [Sectionable] = (0...counter).map { sectionIndex in
+      //print("--- section[\(sectionIndex)]:")
       let section = Section(
-        cells: (0...Int.random(in: 0...2)).shuffled().map { cellIndex in
-          print("      --- cell[\(cellIndex)]:")
+        cells: (0...Int.random(in: 0...0)).shuffled().map { cellIndex in
+          //print("      --- cell[\(cellIndex)]:")
           return Cell(
-            data: TestViewModel("\(sectionIndex) - \(cellIndex)"),
+            data: TestViewModel("(\(counter)) - \(sectionIndex) - \(cellIndex)"),
             id: "cell_\(sectionIndex)_\(cellIndex)",
             dataEquals: { $0 == $1 })
         })
@@ -85,11 +103,22 @@ class DiffTableViewViewModel {
       return section
     }
 
-    let context = intent == .initial ? nil : DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
+    counter = counter + 1
 
-    return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
-      sections: self.sections,
-      context: context
-    ))
+    //print("---! oldSections: [\(oldSections.count)] \(unsafeBitCast(oldSections, to: Int.self))")
+
+    if intent == .initial {
+      return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
+        sections: newSections,
+        context: nil
+      ))
+    } else {
+      let context = DiffUtils<TestViewModel>.diff(new: newSections, old: oldSections)
+
+      return Observable<LoaderResultEvent>.just(LoaderResultEvent.soft(
+        sections: newSections,
+        context: context
+      ))
+    }
   }
 }
