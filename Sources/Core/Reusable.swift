@@ -49,6 +49,7 @@ public protocol ReusableSource: class {
 
   func registerCellsForSections()
   var lastCellDisplayed: VoidClosure? { get set }
+  var lastCellСondition: LastCellConditionClosure? { get set }
 }
 
 extension ReusableSource {
