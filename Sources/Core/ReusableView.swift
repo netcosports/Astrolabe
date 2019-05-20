@@ -42,6 +42,9 @@ public protocol ContainerView: class {
   func insert(at indexes: [IndexPath])
   func delete(at indexes: [IndexPath])
   func reload(at indexes: [IndexPath])
+  func insertSectionables(at indexes: IndexSet)
+  func deleteSectionables(at indexes: IndexSet)
+  func reloadSectionables(at indexes: IndexSet)
 
   typealias CompletionClosure = (Bool) -> Void
   func batchUpdate(block: VoidClosure, completion: CompletionClosure?)
@@ -118,6 +121,18 @@ extension UICollectionView: ContainerView {
     reloadItems(at: indexes)
   }
 
+  public func insertSectionables(at indexes: IndexSet) {
+    insertSections(indexes)
+  }
+
+  public func deleteSectionables(at indexes: IndexSet) {
+    deleteSections(indexes)
+  }
+
+  public func reloadSectionables(at indexes: IndexSet) {
+    reloadSections(indexes)
+  }
+
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure?) {
     performBatchUpdates(block, completion: completion)
   }
@@ -174,6 +189,18 @@ extension UITableView: ContainerView {
 
   public func reload(at indexes: [IndexPath]) {
     reloadRows(at: indexes, with: .automatic)
+  }
+
+  public func insertSectionables(at indexes: IndexSet) {
+    insertSections(indexes, with: .top)
+  }
+
+  public func deleteSectionables(at indexes: IndexSet) {
+    deleteSections(indexes, with: .top)
+  }
+
+  public func reloadSectionables(at indexes: IndexSet) {
+    reloadSections(indexes, with: .automatic)
   }
 
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure? = nil) {

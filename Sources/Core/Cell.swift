@@ -9,15 +9,16 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container, CellView: ReusableView & Reusable>: Cellable
+open class Cell<Container, CellView: ReusableView & Reusable>: DataHodler<CellView.Data>, Cellable
 where CellView.Container == Container {
+
   public typealias Data = CellView.Data
 
-  let data: Data
   let setup: SetupClosure<CellView>?
 
   public let type: CellType
   public let click: ClickClosure?
+  public var equals: EqualsClosure<Cellable>?
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
@@ -28,20 +29,27 @@ where CellView.Container == Container {
   // MARK: - Init
 
   public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil)
+    self.init(data: data, click: click, type: .cell, setup: nil, dataEquals: nil)
   }
 
-  public convenience init(data: Data, id: String, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil)
-    self.id = id
+  public convenience init(data: Data, id: String = "", click: ClickClosure? = nil) {
+    self.init(data: data, id: id, click: click, type: .cell, setup: nil, dataEquals: nil)
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
-    self.data = data
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
     self.type = type
     self.setup = setup
     self.click = click
+    super.init(data: data)
     self.id = id
+    self.equals = {
+      guard !$0.id.isEmpty && !self.id.isEmpty else {
+        assertionFailure("id of a cell must not be empty string")
+        return false
+      }
+      return self.id == $0.id
+    }
+    self.dataEquals = dataEquals
   }
 
   // MARK: - Lifecycle
@@ -85,9 +93,9 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
   public var expandableCells: [Cellable]?
 
   public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
-              setup: SetupClosure<CellView>? = nil) {
+              setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, id: id, click: click, type: .cell, setup: setup)
+    super.init(data: data, id: id, click: click, type: .cell, setup: setup, dataEquals: dataEquals)
   }
 }
 

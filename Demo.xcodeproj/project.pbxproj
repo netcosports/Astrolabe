@@ -94,6 +94,11 @@
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
+		EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */; };
+		EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */; };
+		EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550A227B773800E37FF4 /* DiffTableViewController.swift */; };
+		EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */; };
+		EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +170,11 @@
 		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewViewModel.swift; sourceTree = "<group>"; };
+		EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewController.swift; sourceTree = "<group>"; };
+		EA96550A227B773800E37FF4 /* DiffTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewController.swift; sourceTree = "<group>"; };
+		EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewViewModel.swift; sourceTree = "<group>"; };
+		EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffUtilsTests.swift; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -257,6 +267,7 @@
 		B50EFAD01F0CC27E00D31FD6 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				EA96550522773BB200E37FF4 /* Diff */,
 				AA44516321D4BCE5008A1EE0 /* EventDriven */,
 				B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */,
 				B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */,
@@ -318,6 +329,7 @@
 		B5716EDA1F0CC35D005146DB /* Specs */ = {
 			isa = PBXGroup;
 			children = (
+				EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */,
 				AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */,
 				AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */,
 				B5716EDB1F0CC35D005146DB /* MixedLoaderSpec.swift */,
@@ -348,6 +360,17 @@
 				B5775C961F16A7C700E484A6 /* Info.plist */,
 			);
 			path = tvOSTests;
+			sourceTree = "<group>";
+		};
+		EA96550522773BB200E37FF4 /* Diff */ = {
+			isa = PBXGroup;
+			children = (
+				EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */,
+				EA96550A227B773800E37FF4 /* DiffTableViewController.swift */,
+				EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */,
+				EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */,
+			);
+			path = Diff;
 			sourceTree = "<group>";
 		};
 		FC8FFC32218DD20BA0CF2251 /* Frameworks */ = {
@@ -452,6 +475,7 @@
 				TargetAttributes = {
 					B50EFACD1F0CC27E00D31FD6 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = JPS45PPV79;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -749,6 +773,7 @@
 				8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */,
 				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
+				EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */,
 				A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */,
 				B5716F0B1F0CC54D005146DB /* BasicExampleCollectionViewController.swift in Sources */,
 				B5716F0E1F0CC54D005146DB /* PagerViewController.swift in Sources */,
@@ -758,9 +783,12 @@
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
 				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
 				AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */,
+				EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */,
+				EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */,
 				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */,
 				B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */,
+				EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */,
 				B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */,
 				AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */,
 			);
@@ -791,6 +819,7 @@
 				B5716EE81F0CC35D005146DB /* TestPlace3Loader.swift in Sources */,
 				B5716EE71F0CC35D005146DB /* TestPlace2Then1Loader.swift in Sources */,
 				B5716EED1F0CC35D005146DB /* Place1Then1LoaderSpec.swift in Sources */,
+				EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */,
 				B5716EE61F0CC35D005146DB /* TestPlace2Loader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -956,11 +985,15 @@
 			baseConfigurationReference = 66AE31EC04CA8A047821FDD8 /* Pods-Astrolabe-Demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JPS45PPV79;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
@@ -971,11 +1004,15 @@
 			baseConfigurationReference = 1C019461B7372E161FC5D909 /* Pods-Astrolabe-Demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JPS45PPV79;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};

@@ -20,8 +20,8 @@ abstract_target 'Astrolabe' do
   abstract_target 'Tests' do
     pod 'Astrolabe/Loaders', :path => '.'
 
-    pod 'Nimble'
     pod 'Quick'
+    pod 'Nimble'
     pod 'RxBlocking'
     pod 'RxTest'
 

@@ -11,18 +11,29 @@ import UIKit
 open class Section: Sectionable {
   public var cells: [Cellable]
   public let page: Int
+  public var id: String = ""
+
+  public var equals: EqualsClosure<Sectionable>?
 
   public var inset: UIEdgeInsets?
   public var minimumLineSpacing: CGFloat?
   public var minimumInteritemSpacing: CGFloat?
 
-  public init(cells: [Cellable], page: Int = 0, inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil,
-              minimumInteritemSpacing: CGFloat? = nil) {
+  public init(cells: [Cellable], id: String = "", page: Int = 0, inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil) {
     self.cells = cells
+        self.id = id
     self.page = page
     self.inset = inset
     self.minimumLineSpacing = minimumLineSpacing
     self.minimumInteritemSpacing = minimumInteritemSpacing
+
+    self.equals = {
+      guard !$0.id.isEmpty && !self.id.isEmpty else {
+        assertionFailure("id of a section must not be empty string")
+        return false
+      }
+      return self.id == $0.id
+    }
   }
 
   public var supplementaryTypes: [CellType] { return [] }
