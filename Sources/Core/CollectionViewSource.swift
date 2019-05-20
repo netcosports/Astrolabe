@@ -15,6 +15,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   var sections: [Sectionable] = []
 
   var lastCellDisplayed: VoidClosure?
+  var lastCellСondition: LastCellConditionClosure?
   var setupCell: ((CellView, Cellable) -> ())?
   var cellSelected: ((Cellable, IndexPath) -> ())?
 
@@ -113,8 +114,9 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
 
   open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                            forItemAt indexPath: IndexPath) {
-    if indexPath.section == collectionView.numberOfSections - 1
-      && indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+    if lastCellСondition?(indexPath,
+                           collectionView.numberOfSections - 1,
+                           collectionView.numberOfItems(inSection: indexPath.section) - 1) ?? false {
       lastCellDisplayed?()
     }
 
@@ -217,6 +219,11 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   public var lastCellDisplayed: VoidClosure? {
     didSet {
       dataSource.lastCellDisplayed = lastCellDisplayed
+    }
+  }
+  public var lastCellСondition: LastCellConditionClosure? {
+    didSet {
+      dataSource.lastCellСondition = lastCellСondition
     }
   }
   public var selectedCellIds: Set<String> = []

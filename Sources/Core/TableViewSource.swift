@@ -37,6 +37,11 @@ open class GenericTableViewSource<DataSource: TableViewDataSource>: ReusableSour
       dataSource.lastCellDisplayed = lastCellDisplayed
     }
   }
+  public var lastCellСondition: LastCellConditionClosure? {
+    didSet {
+      dataSource.lastCellСondition = lastCellСondition
+    }
+  }
   public var selectedCellIds: Set<String> = []
   public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
@@ -66,6 +71,14 @@ open class GenericTableViewSource<DataSource: TableViewDataSource>: ReusableSour
 
     dataSource.setupHeader = { [weak self] headerView, cell in
       self?.setup(headerView: headerView, with: cell)
+    }
+
+    dataSource.lastCellСondition = {
+      if $0.section == $1
+        && $0.item == $2 {
+        return true
+      }
+      return false
     }
   }
 

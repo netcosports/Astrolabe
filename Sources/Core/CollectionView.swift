@@ -16,12 +16,12 @@ open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView whe
 
   public required init() {
     super.init(frame: .zero, collectionViewLayout: CollectionViewSource.defaultLayout)
-    source.containerView = self
+    internalInit()
   }
 
   public required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
-    source.containerView = self
+    internalInit()
   }
 
   private let _size = PublishRelay<CGSize>()
@@ -33,4 +33,14 @@ open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView whe
     _size.accept(frame.size)
   }
 
+  private func internalInit() {
+    source.containerView = self
+    source.lastCellСondition = {
+      if $0.section == $1
+        && $0.item == $2 {
+        return true
+      }
+      return false
+    }
+  }
 }

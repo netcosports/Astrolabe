@@ -20,6 +20,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
   var setupCell: ((TableViewCell, Cellable) -> ())?
   var setupHeader: ((TableViewHeaderFooter, Cellable) -> ())?
   var cellSelected: ((Cellable, IndexPath) -> ())?
+  var lastCellСondition: LastCellConditionClosure?
   var sectionIndexTitles: [String]?
 
   func setupCell(cellView: TableViewCell, containerView: UITableView, cell: Cellable, indexPath: IndexPath) {
@@ -100,8 +101,9 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
   }
 
   open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    if indexPath.section == tableView.numberOfSections - 1
-      && indexPath.item == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+    if lastCellСondition?(indexPath,
+                           tableView.numberOfSections - 1,
+                           tableView.numberOfRows(inSection: indexPath.section) - 1) ?? false {
       lastCellDisplayed?()
     }
     (cell as? TableViewCell)?.willDisplay()

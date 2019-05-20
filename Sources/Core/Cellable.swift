@@ -11,8 +11,10 @@ import UIKit
 public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
+
 public typealias EqualsClosure<T> = (T) -> Bool
 public typealias BothEqualsClosure<T> = (T, T) -> Bool
+public typealias LastCellConditionClosure = (_ path: IndexPath, _ sectionsCounts: Int, _ itemsInSectionCount: Int) -> Bool
 
 public enum CellType: Hashable {
   case cell

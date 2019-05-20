@@ -86,6 +86,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     decoratedSource.registerCellsForSections()
   }
   public var lastCellDisplayed: VoidClosure?
+  public var lastCellСondition: LastCellConditionClosure?
   public let decoratedSource = DecoratedSource()
 
   public var settings = Settings() {
@@ -245,6 +246,10 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
     }
+    self.decoratedSource.lastCellСondition = { [weak self] in
+      return self?.lastCellСondition?($0, $1, $2) ?? false
+    }
+    
     bind()
   }
 

@@ -129,7 +129,11 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
     let visibleCells = containerView.visibleCells
     guard !visibleCells.isEmpty else { return }
 
-    disappearing = visibleCells[0] as? PagerCell
+    if let appearing = appearing {
+      disappearing = visibleCells.first { $0 != appearing } as? PagerCell
+    } else {
+      disappearing = visibleCells[0] as? PagerCell
+    }
   }
 
   private func finishAppearanceTransitionIfNeeded() {
