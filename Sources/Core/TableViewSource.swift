@@ -13,6 +13,7 @@ class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegate 
   var sections: [Sectionable] = []
 
   var lastCellDisplayed: VoidClosure?
+  var lastCellСondition: LastCellConditionClosure?
   var setupCell: ((TableViewCell, Cellable) -> ())?
   var setupHeader: ((TableViewHeaderFooter, Cellable) -> ())?
   var cellSelected: ((Cellable, IndexPath) -> ())?
@@ -100,8 +101,9 @@ class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegate 
   }
 
   open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    if indexPath.section == tableView.numberOfSections - 1
-      && indexPath.item == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+    if lastCellСondition?(indexPath,
+                           tableView.numberOfSections - 1,
+                           tableView.numberOfRows(inSection: indexPath.section) - 1) ?? false {
       lastCellDisplayed?()
     }
     (cell as? TableViewCell)?.willDisplay()
@@ -211,6 +213,11 @@ open class TableViewSource: ReusableSource {
   public var lastCellDisplayed: VoidClosure? {
     didSet {
       dataSource.lastCellDisplayed = lastCellDisplayed
+    }
+  }
+  public var lastCellСondition: LastCellConditionClosure? {
+    didSet {
+      dataSource.lastCellСondition = lastCellСondition
     }
   }
   public var selectedCellIds: Set<String> = []
