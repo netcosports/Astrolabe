@@ -14,7 +14,7 @@ open class GenericTableViewSource<DataSource: TableViewDataSource>: ReusableSour
 
   public typealias Container = UITableView
 
-  let dataSource = DataSource()
+  public let dataSource = DataSource()
 
   public required init() {
   }
