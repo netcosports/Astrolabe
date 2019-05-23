@@ -14,8 +14,8 @@ open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView whe
   public typealias Source = T
   public let source = T()
 
-  public required init() {
-    super.init(frame: .zero, collectionViewLayout: CollectionViewSource.defaultLayout)
+  public required override init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout? = nil) {
+    super.init(frame: frame, collectionViewLayout: layout ?? CollectionViewSource.defaultLayout)
     internalInit()
   }
 
