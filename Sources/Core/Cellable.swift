@@ -21,16 +21,6 @@ public enum CellType: Hashable {
   case custom(kind: String)
 }
 
-open class DataHodler<Data> {
-
-  public var data: Data
-  public var dataEquals: BothEqualsClosure<Data>?
-
-  public init(data: Data) {
-    self.data = data
-  }
-}
-
 public protocol Cellable {
   func register<T: ContainerView>(in container: T)
   func instance<T1: ContainerView, T2: ReusableView>(for container: T1, index: IndexPath) -> T2
@@ -40,6 +30,7 @@ public protocol Cellable {
   var type: CellType { get }
   var click: ClickClosure? { get }
   var equals: EqualsClosure<Cellable>? { get }
+  var dataEquals: EqualsClosure<Cellable>? { get }
 
   var page: Int { get }
 

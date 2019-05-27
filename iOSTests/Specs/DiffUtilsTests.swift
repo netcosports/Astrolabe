@@ -10,23 +10,72 @@ import Quick
 import Nimble
 import Astrolabe
 
+protocol DataProvider {
+  func getValue() -> Self
+  func isEqual(rhs: DataProvider) -> Bool
+}
+
+extension Int: DataProvider {
+  func getValue() -> Int {
+    return self
+  }
+
+  func isEqual(rhs: DataProvider) -> Bool {
+    guard let value = rhs as? Int else { return false }
+    return self == value
+  }
+}
+
+extension String: DataProvider {
+  func getValue() -> String {
+    return self
+  }
+
+  func isEqual(rhs: DataProvider) -> Bool {
+    guard let value = rhs as? String else { return false }
+    return self == value
+  }
+}
+
 class DiffUtilsTests: QuickSpec {
 
-  struct SectionParams {
+  enum UiCellType {
+    case normal
+    case samenormal
+    case new
+    case derrived
+  }
+
+  class CellParams {
+    var id: String
+    var type: CellType
+    var uiType: UiCellType
+    var data: DataProvider
+    var dataEquals: BothEqualsClosure<DataProvider>?
+
+    init(id: String, type: CellType = .cell, uiType: UiCellType = .normal, data: DataProvider, dataEquals: BothEqualsClosure<DataProvider>? = nil) {
+      self.id = id
+      self.type = type
+      self.uiType = uiType
+      self.data = data
+      self.dataEquals = dataEquals
+    }
+  }
+
+  class SectionParams {
     var id: String = ""
     var cellParams = [CellParams]()
     var supplyParams = [CellParams]()
-  }
 
-  struct CellParams {
-    var id: String = ""
-    var type: CellType = .cell
-    var data: Int = -1
-    var dataEquals: BothEqualsClosure<Int>?
+    init(id: String, cellParams: [CellParams] = [], supplyParams: [CellParams] = []) {
+      self.id = id
+      self.cellParams = cellParams
+      self.supplyParams = supplyParams
+    }
   }
 
   fileprivate var emptySectionables = [Sectionable]()
-  fileprivate let simpleDataEquals: BothEqualsClosure<Int> = { $0 == $1 }
+  fileprivate let simpleDataEquals: BothEqualsClosure<DataProvider> = { $0.isEqual(rhs: $1) }
 
   fileprivate func sectionablesWithParams(
     _ params: [SectionParams]
@@ -37,60 +86,73 @@ class DiffUtilsTests: QuickSpec {
       section.id = sectionParam.id
       section.supplementaryTypes = sectionParam.supplyParams.map { $0.type }
       section.supplementaryCells = sectionParam.supplyParams.map { cellParam in
-        return CellStub(id: cellParam.id, type: cellParam.type, data: cellParam.data, dataEquals: cellParam.dataEquals)
+        switch cellParam.uiType {
+        case .normal:
+          return UiCell(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .samenormal:
+          return UiCellSame(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .new:
+          return UiCellNew(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .derrived:
+          return UiCellDerrived(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        }
       }
       section.cells = sectionParam.cellParams.map { cellParam in
-        return CellStub(id: cellParam.id, type: cellParam.type, data: cellParam.data, dataEquals: cellParam.dataEquals)
+        switch cellParam.uiType {
+        case .normal:
+          return UiCell(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .samenormal:
+          return UiCellSame(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .new:
+          return UiCellNew(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        case .derrived:
+          return UiCellDerrived(data: cellParam.data.getValue(), id: cellParam.id, type: cellParam.type, dataEquals: cellParam.dataEquals)
+        }
       }
       return section
     }
   }
 
-  fileprivate class CellStub: DataHodler<Int>, Cellable {
+  fileprivate class CollectionCell: CollectionViewCell, Reusable {
+    typealias Data = DataProvider
 
-    init(id: String, type: CellType, data: Int, dataEquals: ((Int, Int) -> Bool)?) {
-      self.type = type
-      super.init(data: data)
-      self.id = id
-      self.dataEquals = dataEquals
-      equals = {
-        if $0.id.isEmpty || self.id.isEmpty {
-          return false
-        } else {
-          return self.id == $0.id
-        }
-      }
+    func setup(with data: DataProvider) {
     }
 
-    func register<T>(in container: T) where T : ContainerView {
-      // not used
-      fatalError()
+    static func size(for data: DataProvider, containerSize: CGSize) -> CGSize {
+      return .zero
+    }
+  }
+
+  fileprivate class CollectionCellNew: CollectionViewCell, Reusable {
+    typealias Data = DataProvider
+
+    func setup(with data: DataProvider) {
     }
 
-    func instance<T1, T2>(for container: T1, index: IndexPath) -> T2 where T1 : ContainerView, T2 : ReusableView {
-      // not used
-      fatalError()
+    static func size(for data: DataProvider, containerSize: CGSize) -> CGSize {
+      return .zero
     }
+  }
 
-    func setup<T>(with cell: T) where T : ReusableView {
-      // not used
-      fatalError()
-    }
+  fileprivate class CollectionCellDerrived: CollectionCell {
 
-    func size<T>(with container: T) -> CGSize where T : ContainerView {
-      // not used
-      fatalError()
-    }
+  }
 
-    var type: CellType
+  fileprivate class UiCell: Cell<UICollectionView, CollectionCell> {
 
-    var click: ClickClosure?
+  }
 
-    var equals: EqualsClosure<Cellable>?
+  fileprivate class UiCellSame: Cell<UICollectionView, CollectionCell> {
 
-    var page: Int = 0
+  }
 
-    var id: String = ""
+  fileprivate class UiCellNew: Cell<UICollectionView, CollectionCellNew> {
+
+  }
+
+  fileprivate class UiCellDerrived: Cell<UICollectionView, CollectionCellDerrived> {
+
   }
 
   fileprivate class SectionStub: Sectionable {
@@ -127,6 +189,10 @@ class DiffUtilsTests: QuickSpec {
 
     var id: String = ""
   }
+//
+//  fileprivate class SectionStubNew: SectionStub {
+//
+//  }
 
   override func spec() {
 
@@ -149,7 +215,7 @@ class DiffUtilsTests: QuickSpec {
             ]
           )
 
-          expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+          expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
         }
 
         it("with id collisions") {
@@ -167,7 +233,7 @@ class DiffUtilsTests: QuickSpec {
             ]
           )
 
-          expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+          expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
         }
 
         context("with supplementary cells") {
@@ -197,7 +263,7 @@ class DiffUtilsTests: QuickSpec {
               ]
             )
 
-            expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
           }
 
           it("with id collisions") {
@@ -226,7 +292,7 @@ class DiffUtilsTests: QuickSpec {
               ]
             )
 
-            expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
           }
 
           it("without data equals closures") {
@@ -255,7 +321,7 @@ class DiffUtilsTests: QuickSpec {
               ]
             )
 
-            expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
           }
         }
 
@@ -283,7 +349,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             it("with id collisions") {
@@ -309,7 +375,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             it("without data equals closures") {
@@ -341,7 +407,7 @@ class DiffUtilsTests: QuickSpec {
                 ]
               )
 
-              expect { try DiffUtils<Int>.diffOrThrow(new: new, old: old) }.to(throwError())
+              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
             context("are valid") {
@@ -381,7 +447,7 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(sections)
                   let new = self.sectionablesWithParams(sections)
 
-                  expect(DiffUtils<Int>.diff(new: new, old: old)).to(beNil())
+                  expect(DiffUtils.diff(new: new, old: old)).to(beNil())
                 }
 
                 it("inserting section") {
@@ -431,7 +497,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(new: new, old: old)
+                  let context = DiffUtils.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet(integer: 1)
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.updatedSections) == IndexSet()
@@ -486,7 +552,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(new: new, old: old)
+                  let context = DiffUtils.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet(integer: 0)
                   expect(context?.deletedSections) == IndexSet(arrayLiteral: 0, 1)
                   expect(context?.updatedSections) == IndexSet()
@@ -496,6 +562,72 @@ class DiffUtilsTests: QuickSpec {
                 }
 
                 context("updating section") {
+
+                  it("when cell data type changed") {
+                    let old = self.sectionablesWithParams([
+                      SectionParams(
+                        id: "0",
+                        cellParams: [
+                          CellParams(id: "0", type: .cell, data: 0, dataEquals: self.simpleDataEquals),
+                        ],
+                        supplyParams: []
+                      )
+                      ]
+                    )
+                    let new = self.sectionablesWithParams([
+                      SectionParams(
+                        id: "0",
+                        cellParams: [
+                          CellParams(id: "0", type: .cell, data: "0", dataEquals: self.simpleDataEquals),
+                        ],
+                        supplyParams: []
+                      )
+                      ]
+                    )
+
+                    let context = DiffUtils.diff(new: new, old: old)
+                    expect(context?.insertedSections) == IndexSet()
+                    expect(context?.deletedSections) == IndexSet()
+                    expect(context?.updatedSections) == IndexSet()
+                    expect(context?.inserted) == [IndexPath]()
+                    expect(context?.deleted) == [IndexPath]()
+                    expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                  }
+
+                  it("when cell view type changed but data not") {
+                    let old = self.sectionablesWithParams([
+                      SectionParams(
+                        id: "0",
+                        cellParams: [
+                          CellParams(id: "0", type: .cell, uiType: .normal, data: 0, dataEquals: self.simpleDataEquals),
+                          CellParams(id: "1", type: .cell, uiType: .normal, data: 1, dataEquals: self.simpleDataEquals),
+                          CellParams(id: "2", type: .cell, uiType: .normal, data: 2, dataEquals: self.simpleDataEquals),
+                        ],
+                        supplyParams: []
+                      )
+                      ]
+                    )
+                    let new = self.sectionablesWithParams([
+                      SectionParams(
+                        id: "0",
+                        cellParams: [
+                          CellParams(id: "0", type: .cell, uiType: .new, data: 0, dataEquals: self.simpleDataEquals),
+                          CellParams(id: "1", type: .cell, uiType: .derrived, data: 1, dataEquals: self.simpleDataEquals),
+                          CellParams(id: "2", type: .cell, uiType: .samenormal, data: 2, dataEquals: self.simpleDataEquals),
+                        ],
+                        supplyParams: []
+                      )
+                      ]
+                    )
+
+                    let context = DiffUtils.diff(new: new, old: old)
+                    expect(context?.insertedSections) == IndexSet()
+                    expect(context?.deletedSections) == IndexSet()
+                    expect(context?.updatedSections) == IndexSet()
+                    expect(context?.inserted) == [IndexPath]()
+                    expect(context?.deleted) == [IndexPath]()
+                    expect(context?.updated) == [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)]
+                  }
 
                   it("when deleted and inserted has intersection") {
 
@@ -566,7 +698,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(new: new, old: old)
+                    let context = DiffUtils.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet(arrayLiteral: 0, 2)
                     expect(context?.deletedSections) == IndexSet(arrayLiteral: 0, 2)
                     expect(context?.updatedSections) == IndexSet()
@@ -661,7 +793,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(new: new, old: old)
+                    let context = DiffUtils.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.updatedSections) == IndexSet(arrayLiteral: 0, 1, 2)
@@ -729,7 +861,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(new: new, old: old)
+                  let context = DiffUtils.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.updatedSections) == IndexSet()
@@ -792,7 +924,7 @@ class DiffUtilsTests: QuickSpec {
                     ]
                   )
 
-                  let context = DiffUtils<Int>.diff(new: new, old: old)
+                  let context = DiffUtils.diff(new: new, old: old)
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.updatedSections) == IndexSet()
@@ -850,7 +982,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(new: new, old: old)
+                    let context = DiffUtils.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.updatedSections) == IndexSet()
@@ -906,7 +1038,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(new: new, old: old)
+                    let context = DiffUtils.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.updatedSections) == IndexSet()
@@ -942,7 +1074,7 @@ class DiffUtilsTests: QuickSpec {
                       ]
                     )
 
-                    let context = DiffUtils<Int>.diff(new: new, old: old)
+                    let context = DiffUtils.diff(new: new, old: old)
                     expect(context?.insertedSections) == IndexSet()
                     expect(context?.deletedSections) == IndexSet()
                     expect(context?.updatedSections) == IndexSet()

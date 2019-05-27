@@ -37,7 +37,7 @@ class DiffTableViewViewModel {
     input.source.settings.loadingBehavior = [.initial, .autoupdate]
     input.source.settings.autoupdatePeriod = 1.0
     input.source.intentObservable
-      .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+      .observeOn(SerialDispatchQueueScheduler(qos: .background))
       .flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
         guard let self = self else { return .empty() }
         Thread.sleep(forTimeInterval: 0.6)
@@ -75,7 +75,7 @@ class DiffTableViewViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-    Observable<Int>.interval(2.2, scheduler: ConcurrentDispatchQueueScheduler(qos: .background)).map { _ in
+    Observable<Int>.interval(2.2, scheduler: SerialDispatchQueueScheduler(qos: .background)).map { _ in
       LoaderResultEvent.force(sections: [], context: nil)
       }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
 
@@ -113,7 +113,7 @@ class DiffTableViewViewModel {
         context: nil
       ))
     } else {
-      let context = DiffUtils<TestViewModel>.diff(new: newSections, old: oldSections)
+      let context = DiffUtils.diff(new: newSections, old: oldSections)
 
       return Observable<LoaderResultEvent>.just(LoaderResultEvent.soft(
         sections: newSections,

@@ -82,7 +82,7 @@ class EventDrivenViewModel {
       sections = [Section(cells: cells, id: "section_\(intent.page)", page: intent.page)]
       let oldSections = self.sections
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
-      let context = DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
+      let context = DiffUtils.diff(new: self.sections, old: oldSections)
       return Observable<LoaderResultEvent>
         .just(LoaderResultEvent.soft(sections: self.sections, context: context))
         .delay(1.0, scheduler: MainScheduler.instance)

@@ -9,16 +9,18 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container, CellView: ReusableView & Reusable>: DataHodler<CellView.Data>, Cellable
+open class Cell<Container, CellView: ReusableView & Reusable>: Cellable
 where CellView.Container == Container {
 
   public typealias Data = CellView.Data
 
   let setup: SetupClosure<CellView>?
 
+  public var data: Data
   public let type: CellType
   public let click: ClickClosure?
   public var equals: EqualsClosure<Cellable>?
+  public var dataEquals: EqualsClosure<Cellable>?
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
@@ -40,7 +42,15 @@ where CellView.Container == Container {
     self.type = type
     self.setup = setup
     self.click = click
-    super.init(data: data)
+    self.data = data
+    if let dataEquals = dataEquals {
+      self.dataEquals = {
+        guard let cell = $0 as? Cell else {
+          return false
+        }
+        return self.cellClass === cell.cellClass && dataEquals(self.data, cell.data)
+      }
+    }
     self.id = id
     self.equals = {
       guard !$0.id.isEmpty && !self.id.isEmpty else {
@@ -49,7 +59,6 @@ where CellView.Container == Container {
       }
       return self.id == $0.id
     }
-    self.dataEquals = dataEquals
   }
 
   // MARK: - Lifecycle
@@ -85,6 +94,21 @@ where CellView.Container == Container {
     }
   }
 
+}
+
+extension Cell where Data: Equatable {
+
+  public convenience init(data: Data, click: ClickClosure? = nil) {
+    self.init(data: data, click: click, dataEquals: { $0 == $1 })
+  }
+
+  public convenience init(data: Data, id: String = "", click: ClickClosure? = nil) {
+    self.init(data: data, id: id, click: click, dataEquals: { $0 == $1 })
+  }
+
+  public convenience init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil) {
+    self.init(data: data, id: id, click: click, type: type, setup: setup, dataEquals: { $0 == $1 })
+  }
 }
 
 open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,

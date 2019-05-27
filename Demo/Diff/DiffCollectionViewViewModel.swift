@@ -30,7 +30,7 @@ class DiffCollectionViewViewModel {
     self.input = input
 
     input.source.settings.loadingBehavior = [.initial, .autoupdate]
-    input.source.settings.autoupdatePeriod = 0.1
+    input.source.settings.autoupdatePeriod = 1.1
     input.source.intentObservable
       .observeOn(SerialDispatchQueueScheduler(qos: .background))
       .flatMapLatest({ [weak self] intent -> Observable<LoaderResultEvent> in
@@ -69,9 +69,9 @@ class DiffCollectionViewViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-    Observable<Int>.interval(0.1, scheduler: SerialDispatchQueueScheduler(qos: .background)).map { _ in
-      LoaderResultEvent.force(sections: [], context: nil)
-      }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
+//    Observable<Int>.interval(0.1, scheduler: SerialDispatchQueueScheduler(qos: .background)).map { _ in
+//      LoaderResultEvent.force(sections: [], context: nil)
+//      }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
 
 //    Observable<Int>.interval(0.3, scheduler: MainScheduler.instance).map { _ in
 //      LoaderResultEvent.softCurrent
@@ -89,15 +89,13 @@ class DiffCollectionViewViewModel {
           return Cell(
             data: TestViewModel("Supply \(sectionIndex) - \(supplyType)"),
             id: "supply_\(sectionIndex)_\(supplyType)",
-            type: supplyType,
-            dataEquals: { $0 == $1 })
+            type: supplyType)
         },
         cells: (0...Int.random(in: 0...2)).shuffled().map { cellIndex in
           print("      --- cell[\(cellIndex)]:")
           return Cell(
             data: TestViewModel("\(sectionIndex) - \(cellIndex)"),
-            id: "cell_\(sectionIndex)_\(cellIndex)",
-            dataEquals: { $0 == $1 })
+            id: "cell_\(sectionIndex)_\(cellIndex)")
         })
       section.id = "section_\(sectionIndex)"
       return section
@@ -109,7 +107,7 @@ class DiffCollectionViewViewModel {
         context: nil
       ))
     } else {
-      let context = DiffUtils<TestViewModel>.diff(new: newSections, old: oldSections)
+      let context = DiffUtils.diff(new: newSections, old: oldSections)
 
       return Observable<LoaderResultEvent>.just(LoaderResultEvent.force(
         sections: newSections,

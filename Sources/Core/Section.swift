@@ -21,12 +21,11 @@ open class Section: Sectionable {
 
   public init(cells: [Cellable], id: String = "", page: Int = 0, inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil) {
     self.cells = cells
-        self.id = id
+    self.id = id
     self.page = page
     self.inset = inset
     self.minimumLineSpacing = minimumLineSpacing
     self.minimumInteritemSpacing = minimumInteritemSpacing
-
     self.equals = {
       guard !$0.id.isEmpty && !self.id.isEmpty else {
         assertionFailure("id of a section must not be empty string")
