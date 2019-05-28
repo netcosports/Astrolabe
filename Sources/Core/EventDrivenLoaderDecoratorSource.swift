@@ -152,10 +152,6 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     return (try? stateEventSubject.value()) ?? .notInitiated
   }
 
-  func login() -> Observable<String> {
-    return Observable<String>.just("fdfsdfsdfsd")
-  }
-
   fileprivate func bind() {
     let bindDisposeBag = DisposeBag()
     controlEventSubject.asObservable()
@@ -184,7 +180,6 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
 
     sectionsEventSubject.asObservable()
       .observeOn(scheduler)
-      .subscribeOn(scheduler)
       .subscribe(onNext: { [weak self] reloadType in
         guard let self = self else { return }
         guard let containerView = self.containerView else { return }
