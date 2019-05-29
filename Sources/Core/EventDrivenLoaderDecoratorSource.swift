@@ -155,7 +155,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
   fileprivate func bind() {
     let bindDisposeBag = DisposeBag()
     controlEventSubject.asObservable()
-      .subscribeOn(scheduler)
+      .observeOn(scheduler)
       .subscribe(onNext: { [weak self] controlEvent in
         guard let self = self else { return }
         switch controlEvent {
