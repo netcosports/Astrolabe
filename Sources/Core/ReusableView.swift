@@ -10,6 +10,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+public enum TargetScrollPosition {
+  case start
+  case end
+  case center
+}
+
 public protocol ReusableView: class {
   associatedtype Container: ContainerView
 
@@ -48,6 +54,8 @@ public protocol ContainerView: class {
 
   typealias CompletionClosure = (Bool) -> Void
   func batchUpdate(block: VoidClosure, completion: CompletionClosure?)
+  
+  func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool)
 }
 
 extension UICollectionView: ContainerView {
@@ -136,6 +144,18 @@ extension UICollectionView: ContainerView {
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure?) {
     performBatchUpdates(block, completion: completion)
   }
+  
+  public func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool) {
+    let vertical = ((collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection ?? .vertical) == .vertical
+    switch position {
+    case .center:
+      scrollToItem(at: index, at: vertical ? .centeredVertically : .centeredHorizontally , animated: animated)
+    case .start:
+      scrollToItem(at: index, at: vertical ? .top : .left , animated: animated)
+    case .end:
+      scrollToItem(at: index, at: vertical ? .bottom : .right , animated: animated)
+    }
+  }
 }
 
 extension UITableView: ContainerView {
@@ -216,6 +236,17 @@ extension UITableView: ContainerView {
       block()
       endUpdates()
       CATransaction.commit()
+    }
+  }
+  
+  public func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool) {
+    switch position {
+    case .center:
+      scrollToRow(at: index, at: .middle, animated: animated)
+    case .start:
+      scrollToRow(at: index, at: .top, animated: animated)
+    case .end:
+      scrollToRow(at: index, at: .bottom, animated: animated)
     }
   }
 }
