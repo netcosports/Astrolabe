@@ -220,7 +220,7 @@ open class GenericDataSourceCollectionViewSource<T: DataSource, CellView: UIColl
 
   public typealias Container = UICollectionView
 
-  let dataSource = T()
+  public let dataSource = T()
 
   open weak var containerView: Container? {
     didSet {
