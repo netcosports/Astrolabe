@@ -10,14 +10,28 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
+public protocol DataSource: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-  var sections: [Sectionable] = []
+  associatedtype CellView: UICollectionViewCell
+  init()
 
-  var lastCellDisplayed: VoidClosure?
-  var lastCellСondition: LastCellConditionClosure?
-  var setupCell: ((CellView, Cellable) -> ())?
-  var cellSelected: ((Cellable, IndexPath) -> ())?
+  var sections: [Sectionable] { get set }
+
+  var lastCellDisplayed: VoidClosure? { get set }
+  var lastCellСondition: LastCellConditionClosure? { get set }
+  var setupCell: ((CellView, Cellable) -> ())? { get set }
+  var cellSelected: ((Cellable, IndexPath) -> ())? { get set }
+}
+
+open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, DataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
+
+  required public override init() {}
+  public var sections: [Sectionable] = []
+
+  public var lastCellDisplayed: VoidClosure?
+  public var lastCellСondition: LastCellConditionClosure?
+  public var setupCell: ((CellView, Cellable) -> ())?
+  public var cellSelected: ((Cellable, IndexPath) -> ())?
 
   internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
     cellView.containerView = collectionView
@@ -195,13 +209,18 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   }
 }
 
-open class GenericCollectionViewSource<CellView: UICollectionViewCell>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView {
+//open class GenericCollectionViewSource<CellView: UICollectionViewCell>: ReusableSource where CellView:
+//ReusableView, CellView.Container == UICollectionView {
+//
+//}
+
+open class GenericDataSourceCollectionViewSource<T: DataSource, CellView: UICollectionViewCell>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView, CellView == T.CellView {
 
   public required init() {}
 
   public typealias Container = UICollectionView
 
-  let dataSource = CollectionViewDataSource<CellView>()
+  let dataSource = T()
 
   open weak var containerView: Container? {
     didSet {
@@ -283,4 +302,5 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   }
 }
 
+public typealias GenericCollectionViewSource<CellView: UICollectionViewCell & ReusableView> = GenericDataSourceCollectionViewSource<CollectionViewDataSource<CellView>, CellView> where CellView.Container == UICollectionView
 public typealias CollectionViewSource = GenericCollectionViewSource<CollectionViewCell>
