@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellView: ReusableView, CellView.Container == UICollectionView {
+class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate where CellView: ReusableView, CellView.Container == UICollectionView {
 
   var sections: [Sectionable] = []
 
@@ -71,13 +71,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
     guard let supplementary = section.supplementary(for: type) else {
       fatalError("Section does not have supplementary view of kind \(kind)")
     }
-    let supplementaryView = instance(cell: supplementary, collectionView: collectionView, indexPath: indexPath)
-    if supplementary.click != nil {
-      supplementaryView.gestureRecognizers?.forEach { supplementaryView.removeGestureRecognizer($0) }
-      let recognizer = UITapGestureRecognizer(target: self, action: #selector(actionHeaderClick))
-      supplementaryView.addGestureRecognizer(recognizer)
-    }
-    return supplementaryView
+    return instance(cell: supplementary, collectionView: collectionView, indexPath: indexPath)
   }
 
   open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -170,6 +164,23 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
     }
   }
 
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    guard let subviews = gestureRecognizer.view?.subviews else { return true }
+    if let scrollView = subviews.compactMap({ self.scrollView(in: $0) }).first {
+      gestureRecognizer.require(toFail: scrollView.panGestureRecognizer)
+    }
+    return true
+  }
+
+  private func scrollView(in view: UIView) -> UIScrollView? {
+    if let scrollView = view as? UIScrollView {
+      return scrollView
+    }
+    if let scrollView = view.subviews.compactMap({ self.scrollView(in: $0) }).first {
+      return scrollView
+    }
+    return nil
+  }
   #if os(tvOS)
 
   open func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -185,14 +196,6 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   }
 
   #endif
-
-  @objc fileprivate func actionHeaderClick(recognizer: UITapGestureRecognizer) {
-    if let cellView = recognizer.view as? CellView {
-      if let click = cellView.cell?.click {
-        click()
-      }
-    }
-  }
 }
 
 open class GenericCollectionViewSource<CellView: UICollectionViewCell>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView {
@@ -229,9 +232,9 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   public var selectedCellIds: Set<String> = []
   public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
-#if os(tvOS)
+  #if os(tvOS)
   public let focusedItem = BehaviorRelay<Int>(value: 0)
-#endif
+  #endif
 
   fileprivate func internalInit() {
     containerView?.backgroundColor = .clear
@@ -245,6 +248,10 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
     dataSource.setupCell = { [weak self] cellView, cell in
       self?.setup(cellView: cellView, with: cell)
     }
+    let recognizer = UITapGestureRecognizer(target: self, action: #selector(actionHeaderClick))
+    recognizer.cancelsTouchesInView = false
+    recognizer.delegate = dataSource
+    containerView?.addGestureRecognizer(recognizer)
   }
 
   func setup(cellView: CellView, with cell: Cellable) {
@@ -280,6 +287,42 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
     layout.sectionInset = UIEdgeInsets.zero
     layout.scrollDirection = .vertical
     return layout
+  }
+
+  @objc fileprivate func actionHeaderClick(recognizer: UITapGestureRecognizer) {
+    var view: UIScrollView? = containerView
+
+    while view != nil {
+      if let cell = supplementary(in: view, at: recognizer.location(in: view)) {
+        cell.click?()
+      }
+      view = parentScrollView(of: view?.superview)
+    }
+  }
+
+  private func supplementary(in scrollView: UIScrollView?, at point: CGPoint) -> Cellable? {
+    guard let scrollView = scrollView else { return nil }
+    return scrollView.subviews
+      .filter({ $0.frame.contains(point) })
+      .compactMap({ ($0 as? CellView)?.cell }).first(where: {
+        switch $0.type {
+        case .custom, .footer, .header:
+          return true
+        default:
+          return false
+        }
+      })
+  }
+
+  private func parentScrollView(of scrollView: UIView?) -> UIScrollView? {
+    var view = scrollView
+    while view != nil {
+      if let scrollView = view as? UIScrollView {
+        return scrollView
+      }
+      view = view?.superview
+    }
+    return nil
   }
 }
 
