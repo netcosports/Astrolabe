@@ -13,7 +13,7 @@ class TextMixedLoader {
   var didReceivePlainCount = 0
 
   var pLoaderResponses: [Response<PLResult>] = []
-  var mLoaderResponses: [[Result<Response<MLResult>>]] = []
+  var mLoaderResponses: [[Result<Response<MLResult>, Error>]] = []
 
 }
 
@@ -33,7 +33,7 @@ extension TextMixedLoader: MLoader {
 
   func sections(from results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) -> [Sectionable]? {
     if Thread.isMainThread { fail("sections should not be called in main thread") }
-    return [Section(cells: results.compactMap { $0.value }.map { Cell(data: TestViewCell.ViewModel($0)) })]
+    return [Section(cells: results.compactMap { try? $0.get() }.map { Cell(data: TestViewCell.ViewModel($0)) })]
   }
 
   func didReceive(results: TextMixedLoader.MLResults, loadingIntent: LoaderIntent) {

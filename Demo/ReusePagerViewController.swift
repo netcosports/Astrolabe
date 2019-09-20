@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import Astrolabe
 
 class ExampleReusePagerItemViewController: BaseCollectionViewController<CollectionViewSource>, ReusedPageData {
@@ -83,9 +85,9 @@ class ReusePagerViewController: BaseCollectionViewController<CollectionViewReuse
     source.sections = [Section(cells: cells)]
     containerView.reloadData()
 
-    let pageStripCells: [Cellable] = datas.enumerated().map { index, _ in
-      PageStripCell(data: TestViewModel("\(index)")) { [weak self] in
-        self?.source.rx.selectedItem.onNext(index)
+    let pageStripCells: [Cellable] = datas.enumerated().map { data in
+      PageStripCell(data: TestViewModel("\(data.offset)")) { [weak self] in
+        self?.source.rx.selectedItem.onNext(data.offset)
       }
     }
     pageStripCollectionView.source.sections = [Section(cells: pageStripCells)]

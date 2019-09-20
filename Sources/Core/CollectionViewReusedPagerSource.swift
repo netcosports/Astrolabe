@@ -27,10 +27,11 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   }
 
   fileprivate func internalInit() {
-    containerView?.isPagingEnabled = true
-    containerView?.bounces = false
+    guard let containerView = containerView else { return }
+    containerView.isPagingEnabled = true
+    containerView.bounces = false
     if #available(iOS 10.0, tvOS 10.0, *) {
-      containerView?.isPrefetchingEnabled = false
+      containerView.isPrefetchingEnabled = false
     }
 
     selectedItem.asObservable().skip(1).observeOn(MainScheduler.instance)
@@ -51,6 +52,59 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
         self.finishAppearanceTransitionIfNeeded()
       }).disposed(by: disposeBag)
     }
+
+    containerView.rx.willBeginDragging.subscribe(onNext: { [weak self] in
+      self?.beginAppearanceTransition()
+    }).disposed(by: disposeBag)
+
+    containerView.rx.didEndDecelerating.subscribe(onNext: { [weak self] in
+      self?.finishAppearanceTransition()
+    }).disposed(by: disposeBag)
+
+    containerView.rx.didEndScrollingAnimation.subscribe(onNext: { [weak self] in
+      self?.finishAppearanceTransition()
+    }).disposed(by: disposeBag)
+
+    containerView.rx.didScroll.subscribe(onNext: { [weak self] in
+      guard let self = self else { return }
+      guard let containerView = self.containerView else { return }
+      guard let disappearing = self.disappearing else { return self.beginAppearanceTransition() }
+
+      let visibleCells = containerView.visibleCells
+
+      if visibleCells.count == 2 {
+        if let appearing = self.appearing {
+          let newCells = visibleCells.filter { $0 != disappearing && $0 != appearing }
+
+          guard newCells.count == 1 else { return }
+
+          if visibleCells.contains(appearing) {
+            disappearing.didDisappear()
+            appearing.willDisappear()
+
+            self.disappearing = appearing
+            self.appearing = newCells[0] as? PagerCell
+            self.appearing?.willAppear(isCancelled: false)
+          } else if visibleCells.contains(disappearing) {
+            appearing.willDisappear()
+            appearing.didDisappear()
+
+            self.appearing = newCells[0] as? PagerCell
+            self.appearing?.willAppear(isCancelled: false)
+          } else {
+            print("\(#file):\(#line) WAT")
+          }
+        } else {
+          let newIndexPaths = visibleCells.filter { $0 != disappearing }
+
+          guard newIndexPaths.count == 1 else { return assertionFailure() }
+          self.appearing = newIndexPaths[0] as? PagerCell
+
+          disappearing.willDisappear()
+          self.appearing?.willAppear(isCancelled: false)
+        }
+      }
+    }).disposed(by: disposeBag)
   }
 
   override public class var defaultLayout: UICollectionViewFlowLayout {
@@ -69,65 +123,17 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   fileprivate let disposeBag = DisposeBag()
   fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
 
-  open override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-    beginAppearanceTransition()
-  }
-
-  open override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    guard let containerView = containerView else { return }
-    guard let disappearing = disappearing else { return beginAppearanceTransition() }
-
-    let visibleCells = containerView.visibleCells
-
-    if visibleCells.count == 2 {
-      if let appearing = appearing {
-        let newCells = visibleCells.filter { $0 != disappearing && $0 != appearing }
-
-        guard newCells.count == 1 else { return }
-
-        if visibleCells.contains(appearing) {
-          disappearing.didDisappear()
-          appearing.willDisappear()
-
-          self.disappearing = appearing
-          self.appearing = newCells[0] as? PagerCell
-          self.appearing?.willAppear(isCancelled: false)
-        } else if visibleCells.contains(disappearing) {
-          appearing.willDisappear()
-          appearing.didDisappear()
-
-          self.appearing = newCells[0] as? PagerCell
-          self.appearing?.willAppear(isCancelled: false)
-        } else {
-          print("\(#file):\(#line) WAT")
-        }
-      } else {
-        let newIndexPaths = visibleCells.filter { $0 != disappearing }
-
-        guard newIndexPaths.count == 1 else { return assertionFailure() }
-        appearing = newIndexPaths[0] as? PagerCell
-
-        disappearing.willDisappear()
-        appearing?.willAppear(isCancelled: false)
-      }
-    }
-  }
-
-  open override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    finishAppearanceTransition()
-  }
-
-  open override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-    finishAppearanceTransition()
-  }
-
   private func beginAppearanceTransition() {
     guard let containerView = containerView else { return }
 
     let visibleCells = containerView.visibleCells
     guard !visibleCells.isEmpty else { return }
 
-    disappearing = visibleCells[0] as? PagerCell
+    if let appearing = appearing {
+      disappearing = visibleCells.first { $0 != appearing } as? PagerCell
+    } else {
+      disappearing = visibleCells[0] as? PagerCell
+    }
   }
 
   private func finishAppearanceTransitionIfNeeded() {
@@ -170,6 +176,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   }
 }
 
+extension CollectionViewReusedPagerSource: ReactiveCompatible {}
 extension Reactive where Base: CollectionViewReusedPagerSource {
 
   public var selectedItem: ControlProperty<Int> {

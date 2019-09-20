@@ -158,26 +158,28 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
   }
 }
 
-public extension Loadable where Self: Containerable, Item == Sectionable {
+extension Array where Element == Sectionable {
 
-  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>? {
+  public mutating func merge(items: [Sectionable]?, for intent: LoaderIntent) -> (items: [Sectionable]?, status: MergeStatus)? {
     guard let updatedSections = items else {
-      return .just((items: allItems, status: .equalWithCurrent))
+      return (items: self, status: .equalWithCurrent)
     }
-    var merged: [Item] = allItems
+    var merged: [Sectionable] = self
 
     switch intent {
     case .initial, .force, .pullToRefresh:
-      allItems = updatedSections
-      return .just((items: updatedSections, status: .hasUpdates))
+      self.removeAll()
+      self.append(contentsOf: updatedSections)
+      return (items: updatedSections, status: .hasUpdates)
     default:
       // NOTE: the following checking is very important for paging logic,
       // without this logic we will have infinite reloading in case of last page;
       let hasCells = updatedSections.count != 0 &&
         !(updatedSections.count == 1 && updatedSections.first?.cells.count == 0)
       guard hasCells else {
-        allItems = merged
-        return .just((items: merged, status: .equalWithCurrent))
+        self.removeAll()
+        self.append(contentsOf: merged)
+        return (items: merged, status: .equalWithCurrent)
       }
 
       let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
@@ -196,9 +198,17 @@ public extension Loadable where Self: Containerable, Item == Sectionable {
         guard $0.page != $1.page else { return nil }
         return $0.page < $1.page
       })
-      allItems = merged
-      return .just((items: merged, status: .hasUpdates))
+      self.removeAll()
+      self.append(contentsOf: merged)
+      return (items: merged, status: .hasUpdates)
     }
+  }
+}
+
+public extension Loadable where Self: Containerable, Item == Sectionable {
+
+  func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>? {
+    return .just(allItems.merge(items: items, for: intent))
   }
 }
 

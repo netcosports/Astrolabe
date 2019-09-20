@@ -19,6 +19,12 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
     var tableCells: [Cellable] = [
       Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
         self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
+      },
+      Item(data: TestViewModel("Event driven"), id: "Event driven") { [weak self] in
+        self?.navigationController?.pushViewController(EventDrivenController(), animated: true)
+      },
+      Item(data: TestViewModel("Diff"), id: "Diff") { [weak self] in
+        self?.navigationController?.pushViewController(DiffTableViewController(), animated: true)
       }
     ]
 
@@ -61,6 +67,9 @@ class HomeViewController: BaseTableViewController<TableViewSource> {
     ])
 
     var collectionCells: [Cellable] = [
+      Item(data: TestViewModel("Diff"), id: "Diff") { [weak self] in
+        self?.navigationController?.pushViewController(DiffCollectionViewController(), animated: true)
+      },
       Item(data: TestViewModel("Basic Collection Example"), id: "Basic Collection Source") { [weak self] in
         self?.navigationController?.pushViewController(BasicExampleCollectionViewController(), animated: true)
       },

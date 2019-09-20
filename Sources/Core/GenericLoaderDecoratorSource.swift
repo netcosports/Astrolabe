@@ -63,6 +63,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     }
   }
   public var lastCellDisplayed: VoidClosure?
+  public var lastCellСondition: LastCellConditionClosure?
 
   public let source = DecoratedSource()
   fileprivate var loaderDisposeBag: DisposeBag?
@@ -74,6 +75,9 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
     self.source.lastCellDisplayed = { [weak self] in
       self?.lastCellDisplayed?()
       self?.handleLastCellDisplayed()
+    }
+    self.source.lastCellСondition = { [weak self] in
+      return self?.lastCellСondition?($0, $1, $2) ?? false
     }
   }
 

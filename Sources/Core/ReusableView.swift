@@ -7,6 +7,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+
+public enum TargetScrollPosition {
+  case start
+  case end
+  case center
+}
 
 public protocol ReusableView: class {
   associatedtype Container: ContainerView
@@ -40,9 +48,14 @@ public protocol ContainerView: class {
   func insert(at indexes: [IndexPath])
   func delete(at indexes: [IndexPath])
   func reload(at indexes: [IndexPath])
+  func insertSectionables(at indexes: IndexSet)
+  func deleteSectionables(at indexes: IndexSet)
+  func reloadSectionables(at indexes: IndexSet)
 
   typealias CompletionClosure = (Bool) -> Void
   func batchUpdate(block: VoidClosure, completion: CompletionClosure?)
+  
+  func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool)
 }
 
 extension UICollectionView: ContainerView {
@@ -116,8 +129,32 @@ extension UICollectionView: ContainerView {
     reloadItems(at: indexes)
   }
 
+  public func insertSectionables(at indexes: IndexSet) {
+    insertSections(indexes)
+  }
+
+  public func deleteSectionables(at indexes: IndexSet) {
+    deleteSections(indexes)
+  }
+
+  public func reloadSectionables(at indexes: IndexSet) {
+    reloadSections(indexes)
+  }
+
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure?) {
     performBatchUpdates(block, completion: completion)
+  }
+  
+  public func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool) {
+    let vertical = ((collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection ?? .vertical) == .vertical
+    switch position {
+    case .center:
+      scrollToItem(at: index, at: vertical ? .centeredVertically : .centeredHorizontally , animated: animated)
+    case .start:
+      scrollToItem(at: index, at: vertical ? .top : .left , animated: animated)
+    case .end:
+      scrollToItem(at: index, at: vertical ? .bottom : .right , animated: animated)
+    }
   }
 }
 
@@ -174,6 +211,18 @@ extension UITableView: ContainerView {
     reloadRows(at: indexes, with: .automatic)
   }
 
+  public func insertSectionables(at indexes: IndexSet) {
+    insertSections(indexes, with: .top)
+  }
+
+  public func deleteSectionables(at indexes: IndexSet) {
+    deleteSections(indexes, with: .top)
+  }
+
+  public func reloadSectionables(at indexes: IndexSet) {
+    reloadSections(indexes, with: .automatic)
+  }
+
   public func batchUpdate(block: VoidClosure, completion: CompletionClosure? = nil) {
     if #available(iOS 11.0, tvOS 11.0, *) {
       performBatchUpdates(block, completion: completion)
@@ -187,6 +236,17 @@ extension UITableView: ContainerView {
       block()
       endUpdates()
       CATransaction.commit()
+    }
+  }
+  
+  public func scroll(to index: IndexPath, at position: TargetScrollPosition, animated: Bool) {
+    switch position {
+    case .center:
+      scrollToRow(at: index, at: .middle, animated: animated)
+    case .start:
+      scrollToRow(at: index, at: .top, animated: animated)
+    case .end:
+      scrollToRow(at: index, at: .bottom, animated: animated)
     }
   }
 }
