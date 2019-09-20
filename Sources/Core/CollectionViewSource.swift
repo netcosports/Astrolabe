@@ -19,6 +19,10 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   var setupCell: ((CellView, Cellable) -> ())?
   var cellSelected: ((Cellable, IndexPath) -> ())?
 
+  #if os(tvOS)
+  public let focusedItem = BehaviorRelay<Int>(value: 0)
+  #endif
+
   internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
     cellView.containerView = collectionView
     cellView.indexPath = indexPath
@@ -234,6 +238,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   public var selectionManagement: SelectionManagement = .none
   #if os(tvOS)
   public let focusedItem = BehaviorRelay<Int>(value: 0)
+  private let disposeBag = DisposeBag()
   #endif
 
   fileprivate func internalInit() {
@@ -252,6 +257,10 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
     recognizer.cancelsTouchesInView = false
     recognizer.delegate = dataSource
     containerView?.addGestureRecognizer(recognizer)
+
+    #if os(tvOS)
+    dataSource.focusedItem.bind(to: focusedItem).disposed(by: disposeBag)
+    #endif
   }
 
   func setup(cellView: CellView, with cell: Cellable) {
