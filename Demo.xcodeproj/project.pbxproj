@@ -595,7 +595,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe-iOS/Astrolabe.framework",
 				"${BUILT_PRODUCTS_DIR}/FormatterKit-iOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
@@ -616,7 +616,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		62731AFD36A4E713C7C32099 /* [CP] Embed Pods Frameworks */ = {
@@ -625,7 +625,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-tvOS/Astrolabe.framework",
 				"${BUILT_PRODUCTS_DIR}/FormatterKit-tvOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
@@ -652,7 +652,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */ = {
@@ -661,7 +661,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe-tvOS/Astrolabe.framework",
 				"${BUILT_PRODUCTS_DIR}/FormatterKit-tvOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
@@ -682,7 +682,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */ = {
@@ -691,7 +691,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-iOS/Astrolabe.framework",
 				"${BUILT_PRODUCTS_DIR}/FormatterKit-iOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
@@ -718,7 +718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D2817AFD902167952BDCA363 /* [CP] Check Pods Manifest.lock */ = {

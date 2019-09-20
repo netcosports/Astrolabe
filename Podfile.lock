@@ -61,7 +61,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: 897228e9a0c99056ac2f828d3bae623e9d7a6f12
+  Astrolabe: 351e1351d9116a301fc0d082ed7e733bc7dbb65f
   FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
   Gnomon: 1ec31fc498ccab37377fc1fdc1cbe68f341d4ac6
   Nimble: 45f786ae66faa9a709624227fae502db55a8bdd0
@@ -75,4 +75,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e04fa2144e7587aa54b9aa3e5bb9ccd474fe72cb
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.7.5
