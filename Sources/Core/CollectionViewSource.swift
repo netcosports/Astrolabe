@@ -313,6 +313,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
     guard let scrollView = scrollView else { return nil }
     return scrollView.subviews
       .filter({ $0.frame.contains(point) })
+      .filter( { $0.alpha > 0.0 && !$0.isHidden })
       .compactMap({ ($0 as? CellView)?.cell }).first(where: {
         switch $0.type {
         case .custom, .footer, .header:
