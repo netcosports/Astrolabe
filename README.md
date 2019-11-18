@@ -4,6 +4,7 @@ Type-safe approach to manage UITableView and UICollectionView cells. Supports ex
 
 [![Build Status](https://travis-ci.org/netcosports/Astrolabe.svg?branch=master)](https://travis-ci.org/netcosports/Astrolabe)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Astrolabe.svg)](http://cocoapods.org/pods/Astrolabe)
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 
 # Installation
 
