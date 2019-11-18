@@ -256,7 +256,7 @@ open class EventDrivenLoaderDecoratorSource<DecoratedSource: ReusableSource>: Re
     let scrollObservable: Observable<Void> = containerView.rx.contentOffset.map { _ in return () }
 
     Observable.merge(scrollObservable, delayedObservable)
-      .debounce(0.15, scheduler: scheduler)
+      .debounce(.milliseconds(15), scheduler: scheduler)
       .take(1)
       .subscribe(onNext: { [weak self] in
         guard self != nil else { return }
