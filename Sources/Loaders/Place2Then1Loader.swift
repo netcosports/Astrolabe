@@ -1,5 +1,8 @@
 import Gnomon
 import RxSwift
+#if SWIFT_PACKAGE
+  import Astrolabe
+#endif
 
 public protocol P2T1Loader: class {
   associatedtype P2T1LFirstResult1: BaseModel
