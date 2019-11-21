@@ -21,7 +21,7 @@ extension Target {
 }
 
 let package = Package(
-    name: "spmAstrolabe",
+    name: "Astrolabe",
     platforms: [
       .iOS(.v9), .tvOS(.v9)
     ],
