@@ -288,7 +288,7 @@ extension Expandable where Self: ReusableSource {
               sectionCells: inout [Cellable],
               cell: Cellable,
               indexPath: IndexPath) {
-    guard let expandableCells = expandableCells(for: expandableCell) else {
+    guard let expandableCells = expandableCells(for: expandableCell), !expandableCells.isEmpty else {
       if isExpanded(cell: expandableCell) {
         expandedCells.remove(expandableCell.id)
       } else {

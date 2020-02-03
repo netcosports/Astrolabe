@@ -25,6 +25,14 @@
 		AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
 		AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
 		AA52599620BC56010089ECD2 /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
+		AAB178762334DD320074ABC2 /* EmptyDataCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */; };
+		AAB178772334DD370074ABC2 /* EmptyDataTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */; };
+		AAB178782334DD470074ABC2 /* EventDrivenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */; };
+		AAB178792334DD510074ABC2 /* DiffTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550A227B773800E37FF4 /* DiffTableViewController.swift */; };
+		AAB1787A2334DD6D0074ABC2 /* DiffTableViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */; };
+		AAB1787B2334DD790074ABC2 /* EventDrivenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */; };
+		AAB1787C2334DD930074ABC2 /* DiffCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */; };
+		AAB1787D2334DDA10074ABC2 /* DiffCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */; };
 		AAB8C76920516E2A00E91771 /* LoaderDecoratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */; };
 		AAD219552223D5400076A6D6 /* EventDrivenSourceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */; };
 		B47ECCCCF35AD03E59C7F676 /* Pods_Astrolabe_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */; };
@@ -595,11 +603,11 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe-iOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/FormatterKit-iOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay-iOS/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit-iOS/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
@@ -607,16 +615,16 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FormatterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		62731AFD36A4E713C7C32099 /* [CP] Embed Pods Frameworks */ = {
@@ -625,11 +633,11 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-tvOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/FormatterKit-tvOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-tvOS/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay-tvOS/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-tvOS/Nimble.framework",
@@ -640,9 +648,9 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FormatterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
@@ -652,7 +660,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */ = {
@@ -661,11 +669,11 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe-tvOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/FormatterKit-tvOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-tvOS/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay-tvOS/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit-tvOS/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
@@ -673,16 +681,16 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FormatterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */ = {
@@ -691,11 +699,11 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-iOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/FormatterKit-iOS/FormatterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay-iOS/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-iOS/Nimble.framework",
@@ -706,9 +714,9 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FormatterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
@@ -718,7 +726,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D2817AFD902167952BDCA363 /* [CP] Check Pods Manifest.lock */ = {
@@ -829,15 +837,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
+				AAB1787B2334DD790074ABC2 /* EventDrivenViewModel.swift in Sources */,
 				B5716F311F0CC6E9005146DB /* TestCollectionCell.swift in Sources */,
+				AAB178762334DD320074ABC2 /* EmptyDataCollectionCell.swift in Sources */,
 				AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
+				AAB178772334DD370074ABC2 /* EmptyDataTableCell.swift in Sources */,
 				B5716F291F0CC6E9005146DB /* ExpandableViewController.swift in Sources */,
+				AAB1787A2334DD6D0074ABC2 /* DiffTableViewViewModel.swift in Sources */,
+				AAB1787D2334DDA10074ABC2 /* DiffCollectionViewViewModel.swift in Sources */,
 				AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F261F0CC6E9005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
+				AAB178792334DD510074ABC2 /* DiffTableViewController.swift in Sources */,
 				B5716F241F0CC6E9005146DB /* AppDelegate.swift in Sources */,
 				B5716F2C1F0CC6E9005146DB /* LoaderSourceViewController.swift in Sources */,
+				AAB178782334DD470074ABC2 /* EventDrivenController.swift in Sources */,
 				B5716F321F0CC6E9005146DB /* TestTableCell.swift in Sources */,
 				AA0376A420DA5F1400E6343A /* BasicTestViewModel.swift in Sources */,
+				AAB1787C2334DD930074ABC2 /* DiffCollectionViewController.swift in Sources */,
 				AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */,
 				B5716F2F1F0CC6E9005146DB /* SourceViewController.swift in Sources */,
 				B5716F2B1F0CC6E9005146DB /* HomeViewController.swift in Sources */,

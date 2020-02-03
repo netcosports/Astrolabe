@@ -1,5 +1,8 @@
 import Gnomon
 import RxSwift
+#if SWIFT_PACKAGE
+  import Astrolabe
+#endif
 
 public protocol MLoader: class {
   associatedtype MLResult: BaseModel
