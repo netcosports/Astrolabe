@@ -83,12 +83,12 @@ open class GenericTableViewSource<DataSource: TableViewDataSource>: ReusableSour
   }
 
   func setup(cellView: TableViewCell, with cell: Cellable) {
-    cellView.containerViewController = hostViewController
+    cellView.hostViewController = hostViewController
     cellView.selectedState = selectedCellIds.contains(cell.id)
   }
 
   func setup(headerView: TableViewHeaderFooter, with cell: Cellable) {
-    headerView.containerViewController = hostViewController
+    headerView.hostViewController = hostViewController
     headerView.selectedState = selectedCellIds.contains(cell.id)
   }
 
