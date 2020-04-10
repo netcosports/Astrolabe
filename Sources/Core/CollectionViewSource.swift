@@ -24,7 +24,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   #endif
 
   internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
-    cellView.internalContainerView = collectionView
+    cellView.hostContainerView = collectionView
     cellView.indexPath = indexPath
     cellView.cell = cell
 
@@ -264,7 +264,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   }
 
   func setup(cellView: CellView, with cell: Cellable) {
-    cellView.containerViewController = hostViewController
+    cellView.hostViewController = hostViewController
     cellView.selectedState = selectedCellIds.contains(cell.id)
   }
 

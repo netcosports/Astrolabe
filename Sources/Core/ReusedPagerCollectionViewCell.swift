@@ -46,7 +46,7 @@ where Controller: ReusedPageData {
   private func setupChildView() {
     viewController.beginAppearanceTransition(true, animated: true)
 
-    containerViewController?.addChild(viewController)
+    hostViewController?.addChild(viewController)
     contentView.addSubview(viewController.view)
 
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +66,7 @@ where Controller: ReusedPageData {
   public func didAppear() {
     viewController.endAppearanceTransition()
 
-    guard let containerViewController = containerViewController else { return }
+    guard let containerViewController = hostViewController else { return }
     viewController.didMove(toParent: containerViewController)
   }
 
