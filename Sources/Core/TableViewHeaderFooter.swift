@@ -41,7 +41,7 @@ open class RootTableHeaderFooter: UITableViewHeaderFooterView {
 open class TableViewHeaderFooter: RootTableHeaderFooter, ReusableView {
   open var cell: Cellable?
   open weak var containerViewController: UIViewController?
-  open weak var containerView: UITableView?
+  open weak var internalContainerView: UITableView?
   open var indexPath: IndexPath?
   open var selectedState = false
   open var expandedState = false

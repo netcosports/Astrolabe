@@ -25,7 +25,7 @@ public protocol ReusableView: class {
   var cell: Cellable? { get set }
 
   var containerViewController: UIViewController? { get set }
-  var containerView: Container? { get set }
+  var internalContainerView: Container? { get set }
   var indexPath: IndexPath? { get set }
 
   var selectedState: Bool { get set }

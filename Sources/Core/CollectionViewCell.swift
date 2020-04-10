@@ -40,7 +40,7 @@ open class RootCollectionCell: UICollectionViewCell {
 
 open class CollectionViewCell: RootCollectionCell, ReusableView {
   open var cell: Cellable?
-  open weak var containerView: UICollectionView?
+  open weak var internalContainerView: UICollectionView?
   open weak var containerViewController: UIViewController?
   open var indexPath: IndexPath?
   open var selectedState = false

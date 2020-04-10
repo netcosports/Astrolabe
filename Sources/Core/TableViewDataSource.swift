@@ -24,7 +24,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
   var sectionIndexTitles: [String]?
 
   func setupCell(cellView: TableViewCell, containerView: UITableView, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerView = containerView
+    cellView.internalContainerView = containerView
     cellView.indexPath = indexPath
     cellView.cell = cell
 

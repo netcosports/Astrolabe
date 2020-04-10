@@ -24,7 +24,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   #endif
 
   internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerView = collectionView
+    cellView.internalContainerView = collectionView
     cellView.indexPath = indexPath
     cellView.cell = cell
 
