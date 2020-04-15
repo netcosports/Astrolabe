@@ -38,6 +38,10 @@ public struct Settings {
 public protocol EventDrivenLoaderSource: class {
   var settings: Settings { get set }
 
+  var selectedCellIds: Set<String> { get set }
+  var selectionBehavior: SelectionBehavior { get set }
+  var selectionManagement: SelectionManagement { get set }
+
   var stateObservable: Observable<LoaderState> { get }
   var intentObservable: Observable<LoaderIntent> { get }
   var sectionsObservable: Observable<[Sectionable]> { get }
