@@ -16,7 +16,7 @@ public enum SelectionManagement {
 }
 
 public enum SelectionBehavior {
-  case single, multiple
+  case single, singleUnselectable, multiple
 }
 
 public struct ExpandableBehavior {
@@ -71,6 +71,10 @@ extension ReusableSource {
         selectedCellIds.remove(cellId)
       } else {
         selectedCellIds.insert(cellId)
+      }
+    case .singleUnselectable:
+      if !selectedCellIds.contains(cellId) {
+        selectedCellIds = [cellId]
       }
     }
   }
