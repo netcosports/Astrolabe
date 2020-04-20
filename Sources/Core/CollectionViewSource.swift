@@ -56,13 +56,13 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
 
   open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
                            at indexPath: IndexPath) -> UICollectionReusableView {
-    let index: Int
+    let sectionIndex: Int
     if indexPath.count == 1 {
-      index = indexPath[0]
+      sectionIndex = indexPath[0]
     } else {
-      index = indexPath.section
+      sectionIndex = indexPath.section
     }
-    let section = sections[index]
+    let section = sections[sectionIndex]
     var type = CellType.header
     switch kind {
     case UICollectionView.elementKindSectionHeader:
@@ -72,10 +72,19 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
     default:
       type = .custom(kind: kind)
     }
-    guard let supplementary = section.supplementary(for: type) else {
+    var targetSupplementary: Cellable?
+    let supplementaries = section.supplementaries(for: type)
+    if indexPath.count == 1 {
+      targetSupplementary = supplementaries.first
+    } else if indexPath.item < supplementaries.count {
+      targetSupplementary = supplementaries[indexPath.item]
+    }
+    guard let supplementary = targetSupplementary else {
       fatalError("Section does not have supplementary view of kind \(kind)")
     }
-    return instance(cell: supplementary, collectionView: collectionView, indexPath: indexPath)
+    return instance(cell: supplementary,
+                    collectionView: collectionView,
+                    indexPath: indexPath)
   }
 
   open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -95,7 +104,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                            referenceSizeForHeaderInSection section: Int) -> CGSize {
     let section = sections[section]
-    guard let header = section.supplementary(for: .header) else {
+    guard let header = section.supplementaries(for: .header).first else {
       return CGSize.zero
     }
     return header.size(with: collectionView)
@@ -104,7 +113,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                            referenceSizeForFooterInSection section: Int) -> CGSize {
     let section = sections[section]
-    guard let header = section.supplementary(for: .footer) else {
+    guard let header = section.supplementaries(for: .footer).first else {
       return CGSize.zero
     }
     return header.size(with: collectionView)
@@ -278,9 +287,10 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   public func registerCellsForSections() {
     guard let containerView = containerView else { return }
     sections.forEach { section in
-      section.supplementaryTypes.forEach {
-        if let supplementary = section.supplementary(for: $0) {
-          supplementary.register(in: containerView)
+      section.supplementaryTypes.forEach { type in
+        let supplementaries = section.supplementaries(for: type)
+        supplementaries.forEach {
+          $0.register(in: containerView)
         }
       }
       section.cells.forEach { cell in

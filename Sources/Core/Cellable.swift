@@ -61,7 +61,7 @@ public protocol LoaderExpandableCellable: ExpandableCellable {
 
 public protocol Sectionable {
   var supplementaryTypes: [CellType] { get }
-  func supplementary(for type: CellType) -> Cellable?
+  func supplementaries(for type: CellType) -> [Cellable]
   var cells: [Cellable] { get set }
   var equals: EqualsClosure<Sectionable>? { get }
   var page: Int { get }

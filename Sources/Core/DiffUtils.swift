@@ -375,7 +375,7 @@ fileprivate extension Sectionable {
   }
 
   func supplyCellsOnly() -> [Cellable] {
-    return supplementaryTypes.compactMap { supplementary(for: $0) }
+    return supplementaryTypes.flatMap { supplementaries(for: $0) }
   }
 
   func firstCellLike(_ cell: Cellable) -> Cellable? {

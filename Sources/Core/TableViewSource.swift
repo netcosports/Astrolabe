@@ -103,13 +103,13 @@ open class GenericTableViewSource<DataSource: TableViewDataSource>: ReusableSour
     guard let containerView = containerView else { return }
     var indexTitles = [String]()
     sections.forEach { section in
-      if let header = section.supplementary(for: .header) {
+      if let header = section.supplementaries(for: .header).first {
         header.register(in: containerView)
         if header.id.count == 1 && displaySectionIndex {
           indexTitles.append(header.id)
         }
       }
-      if let footer = section.supplementary(for: .footer) {
+      if let footer = section.supplementaries(for: .footer).first {
         footer.register(in: containerView)
       }
       section.cells.forEach { cell in
