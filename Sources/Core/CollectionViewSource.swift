@@ -194,6 +194,22 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
     }
     return nil
   }
+
+  open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+    return true
+  }
+
+  open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    guard var section = sections.first else {
+      return
+    }
+    var cells = section.cells
+    let cell = cells.remove(at: sourceIndexPath.item)
+    cells.insert(cell, at: destinationIndexPath.item)
+    section.cells = cells
+    self.sections = [section]
+  }
+
   #if os(tvOS)
 
   open func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -207,7 +223,6 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
       focusedItem.accept(focusedIndex)
     }
   }
-
   #endif
 }
 
@@ -249,6 +264,12 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   public let focusedItem = BehaviorRelay<Int>(value: 0)
   private let disposeBag = DisposeBag()
   #endif
+
+  // NOTE: property to pass current sections from the datasource
+  // it could be different with the one in a sections because of reordering feature
+  public var orderedSections: [Sectionable] {
+    return dataSource.sections
+  }
 
   fileprivate func internalInit() {
     containerView?.backgroundColor = .clear
