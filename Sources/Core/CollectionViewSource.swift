@@ -18,6 +18,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   var lastCellСondition: LastCellConditionClosure?
   var setupCell: ((CellView, Cellable) -> ())?
   var cellSelected: ((Cellable, IndexPath) -> ())?
+  var disabledForReorderCells: [String] = []
 
   #if os(tvOS)
   public let focusedItem = BehaviorRelay<Int>(value: 0)
@@ -196,7 +197,9 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   }
 
   open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-    return true
+    let section = sections[indexPath.section]
+    let cell = section.cells[indexPath.item]
+    return !disabledForReorderCells.contains(cell.id)
   }
 
   open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -269,6 +272,12 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   // it could be different with the one in a sections because of reordering feature
   public var orderedSections: [Sectionable] {
     return dataSource.sections
+  }
+
+  public var disabledForReorderCells: [String] = [] {
+    didSet {
+      dataSource.disabledForReorderCells = disabledForReorderCells
+    }
   }
 
   fileprivate func internalInit() {
