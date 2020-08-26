@@ -206,7 +206,7 @@ open class HeaderFooterSection<Container, HeaderView: ReusableView & Reusable,
   public init(cells: [Cellable], headerData: HeaderData, footerData: FooterData, page: Int = 0, id: String? = nil,
               inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
               headerClick: ClickClosure? = nil, footerClick: ClickClosure? = nil) {
-    super.init(cells: cells, page: page, inset: inset,
+    super.init(cells: cells, id: id ?? "", page: page, inset: inset,
                minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
 
     headerCell = HeaderCell(data: headerData, click: headerClick, type: .header)
