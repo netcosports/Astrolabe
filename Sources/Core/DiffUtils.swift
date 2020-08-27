@@ -27,6 +27,22 @@ public struct CollectionUpdateContext {
 
   /** Updated section indecies */
   public let updatedSections: IndexSet
+
+  public init(
+    inserted: [IndexPath] = [],
+    deleted: [IndexPath] = [],
+    updated: [IndexPath] = [],
+    insertedSections: IndexSet = IndexSet(),
+    deletedSections: IndexSet = IndexSet(),
+    updatedSections: IndexSet = IndexSet()
+  ) {
+    self.inserted = inserted
+    self.deleted = deleted
+    self.updated = updated
+    self.insertedSections = insertedSections
+    self.deletedSections = deletedSections
+    self.updatedSections = updatedSections
+  }
 }
 
 /** Error to throw */
