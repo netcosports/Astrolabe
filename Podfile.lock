@@ -1,10 +1,10 @@
 PODS:
-  - Astrolabe (5.1.8):
-    - Astrolabe/Core (= 5.1.8)
-  - Astrolabe/Core (5.1.8):
+  - Astrolabe (5.1.9):
+    - Astrolabe/Core (= 5.1.9)
+  - Astrolabe/Core (5.1.9):
     - RxCocoa (~> 5)
     - RxSwift (~> 5)
-  - Astrolabe/Loaders (5.1.8):
+  - Astrolabe/Loaders (5.1.9):
     - Astrolabe/Core
     - Gnomon/Core (~> 5)
   - Gnomon (5.2.0):
@@ -60,7 +60,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: b90d045e24bfae0096ea7ef2da0dbf233b99ce3a
+  Astrolabe: 97d5636ab06045bdfde8b420197b9aa85d5dff43
   Gnomon: 0f95e89116badf243250721b378c6a0fd5021a71
   Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
