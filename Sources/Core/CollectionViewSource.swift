@@ -21,6 +21,7 @@ public protocol DataSource: UICollectionViewDataSource, UICollectionViewDelegate
   var lastCellСondition: LastCellConditionClosure? { get set }
   var setupCell: ((CellView, Cellable) -> ())? { get set }
   var cellSelected: ((Cellable, IndexPath) -> ())? { get set }
+  var disabledForReorderCells: [String] { get set }
 }
 
 open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, DataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate where CellView: ReusableView, CellView.Container == UICollectionView {
@@ -32,13 +33,14 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
   public var lastCellСondition: LastCellConditionClosure?
   public var setupCell: ((CellView, Cellable) -> ())?
   public var cellSelected: ((Cellable, IndexPath) -> ())?
+  public var disabledForReorderCells: [String] = []
 
   #if os(tvOS)
   public let focusedItem = BehaviorRelay<Int>(value: 0)
   #endif
 
   internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerView = collectionView
+    cellView.hostContainerView = collectionView
     cellView.indexPath = indexPath
     cellView.cell = cell
 
@@ -70,13 +72,13 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
 
   open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
                            at indexPath: IndexPath) -> UICollectionReusableView {
-    let index: Int
+    let sectionIndex: Int
     if indexPath.count == 1 {
-      index = indexPath[0]
+      sectionIndex = indexPath[0]
     } else {
-      index = indexPath.section
+      sectionIndex = indexPath.section
     }
-    let section = sections[index]
+    let section = sections[sectionIndex]
     var type = CellType.header
     switch kind {
     case UICollectionView.elementKindSectionHeader:
@@ -86,10 +88,19 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
     default:
       type = .custom(kind: kind)
     }
-    guard let supplementary = section.supplementary(for: type) else {
+    var targetSupplementary: Cellable?
+    let supplementaries = section.supplementaries(for: type)
+    if indexPath.count == 1 {
+      targetSupplementary = supplementaries.first
+    } else if indexPath.item < supplementaries.count {
+      targetSupplementary = supplementaries[indexPath.item]
+    }
+    guard let supplementary = targetSupplementary else {
       fatalError("Section does not have supplementary view of kind \(kind)")
     }
-    return instance(cell: supplementary, collectionView: collectionView, indexPath: indexPath)
+    return instance(cell: supplementary,
+                    collectionView: collectionView,
+                    indexPath: indexPath)
   }
 
   open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -109,7 +120,7 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                            referenceSizeForHeaderInSection section: Int) -> CGSize {
     let section = sections[section]
-    guard let header = section.supplementary(for: .header) else {
+    guard let header = section.supplementaries(for: .header).first else {
       return CGSize.zero
     }
     return header.size(with: collectionView)
@@ -118,7 +129,7 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                            referenceSizeForFooterInSection section: Int) -> CGSize {
     let section = sections[section]
-    guard let header = section.supplementary(for: .footer) else {
+    guard let header = section.supplementaries(for: .footer).first else {
       return CGSize.zero
     }
     return header.size(with: collectionView)
@@ -199,6 +210,24 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
     }
     return nil
   }
+
+  open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+    let section = sections[indexPath.section]
+    let cell = section.cells[indexPath.item]
+    return !disabledForReorderCells.contains(cell.id)
+  }
+
+  open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    guard var section = sections.first else {
+      return
+    }
+    var cells = section.cells
+    let cell = cells.remove(at: sourceIndexPath.item)
+    cells.insert(cell, at: destinationIndexPath.item)
+    section.cells = cells
+    self.sections = [section]
+  }
+
   #if os(tvOS)
 
   open func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -212,7 +241,6 @@ open class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, D
       focusedItem.accept(focusedIndex)
     }
   }
-
   #endif
 }
 
@@ -260,6 +288,18 @@ open class GenericDataSourceCollectionViewSource<T: DataSource & UIGestureRecogn
   private let disposeBag = DisposeBag()
   #endif
 
+  // NOTE: property to pass current sections from the datasource
+  // it could be different with the one in a sections because of reordering feature
+  public var orderedSections: [Sectionable] {
+    return dataSource.sections
+  }
+
+  public var disabledForReorderCells: [String] = [] {
+    didSet {
+      dataSource.disabledForReorderCells = disabledForReorderCells
+    }
+  }
+
   fileprivate func internalInit() {
     containerView?.backgroundColor = .clear
     containerView?.dataSource = dataSource
@@ -283,7 +323,7 @@ open class GenericDataSourceCollectionViewSource<T: DataSource & UIGestureRecogn
   }
 
   func setup(cellView: CellView, with cell: Cellable) {
-    cellView.containerViewController = hostViewController
+    cellView.hostViewController = hostViewController
     cellView.selectedState = selectedCellIds.contains(cell.id)
   }
 
@@ -297,9 +337,10 @@ open class GenericDataSourceCollectionViewSource<T: DataSource & UIGestureRecogn
   public func registerCellsForSections() {
     guard let containerView = containerView else { return }
     sections.forEach { section in
-      section.supplementaryTypes.forEach {
-        if let supplementary = section.supplementary(for: $0) {
-          supplementary.register(in: containerView)
+      section.supplementaryTypes.forEach { type in
+        let supplementaries = section.supplementaries(for: type)
+        supplementaries.forEach {
+          $0.register(in: containerView)
         }
       }
       section.cells.forEach { cell in

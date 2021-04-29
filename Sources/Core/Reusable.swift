@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 public enum SelectionManagement {
   case none
@@ -16,7 +17,7 @@ public enum SelectionManagement {
 }
 
 public enum SelectionBehavior {
-  case single, multiple
+  case single, singleUnselectable, multiple
 }
 
 public struct ExpandableBehavior {
@@ -72,6 +73,10 @@ extension ReusableSource {
       } else {
         selectedCellIds.insert(cellId)
       }
+    case .singleUnselectable:
+      if !selectedCellIds.contains(cellId) {
+        selectedCellIds = [cellId]
+      }
     }
   }
 }
@@ -91,5 +96,13 @@ public extension Reusable where Data == Void {
 public extension Reusable {
   static func identifier(for data: Data) -> String {
     return String(reflecting: self)
+  }
+}
+
+public extension Reactive where Base: UIView & Reusable {
+  var viewModel: Binder<Base.Data> {
+    .init(base) { (base, data) in
+      base.setup(with: data)
+    }
   }
 }

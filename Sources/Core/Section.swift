@@ -9,6 +9,7 @@
 import UIKit
 
 open class Section: Sectionable {
+
   public var cells: [Cellable]
   public let page: Int
   public var id: String = ""
@@ -38,8 +39,8 @@ open class Section: Sectionable {
 
   public var supplementaryTypes: [CellType] { return [] }
 
-  public func supplementary(for type: CellType) -> Cellable? {
-    return nil
+  public func supplementaries(for type: CellType) -> [Cellable] {
+    return []
   }
 }
 
@@ -61,8 +62,8 @@ open class MultipleSupplementariesSection: Section {
     return supplementaries.map { $0.type }
   }
 
-  public override func supplementary(for type: CellType) -> Cellable? {
-    return supplementaries.first(where: { $0.type == type })
+  public override func supplementaries(for type: CellType) -> [Cellable] {
+    return supplementaries.filter { $0.type == type }
   }
 }
 
@@ -96,12 +97,12 @@ open class HeaderSection<Container, CellView: ReusableView & Reusable>: Section
 
   public override var supplementaryTypes: [CellType] { return [.header] }
 
-  public override func supplementary(for type: CellType) -> Cellable? {
+  public override func supplementaries(for type: CellType) -> [Cellable] {
     switch type {
-    case .header, .custom:
-      return headerCell
+      case .header, .custom:
+      return [headerCell].compactMap { $0 }
     default:
-      return nil
+      return []
     }
   }
 }
@@ -126,12 +127,12 @@ open class CustomHeaderSection<CellView: ReusableView & Reusable>: Section
 
   public override var supplementaryTypes: [CellType] { return [.custom(kind: kind)] }
 
-  public override func supplementary(for type: CellType) -> Cellable? {
+  public override func supplementaries(for type: CellType) -> [Cellable] {
     switch type {
-    case .header, .custom:
-      return headerCell
+      case .header, .custom:
+      return [headerCell].compactMap { $0 }
     default:
-      return nil
+      return []
     }
   }
 }
@@ -166,12 +167,12 @@ open class FooterSection<Container, CellView: ReusableView & Reusable>: Section
 
   public override var supplementaryTypes: [CellType] { return [.footer] }
 
-  public override func supplementary(for type: CellType) -> Cellable? {
+  public override func supplementaries(for type: CellType) -> [Cellable] {
     switch type {
-    case .footer:
-      return footerCell
+      case .footer:
+      return [footerCell].compactMap { $0 }
     default:
-      return nil
+      return []
     }
   }
 }
@@ -205,7 +206,7 @@ open class HeaderFooterSection<Container, HeaderView: ReusableView & Reusable,
   public init(cells: [Cellable], headerData: HeaderData, footerData: FooterData, page: Int = 0, id: String? = nil,
               inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
               headerClick: ClickClosure? = nil, footerClick: ClickClosure? = nil) {
-    super.init(cells: cells, page: page, inset: inset,
+    super.init(cells: cells, id: id ?? "", page: page, inset: inset,
                minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
 
     headerCell = HeaderCell(data: headerData, click: headerClick, type: .header)
@@ -217,15 +218,14 @@ open class HeaderFooterSection<Container, HeaderView: ReusableView & Reusable,
 
   public override var supplementaryTypes: [CellType] { return [.header, .footer] }
 
-  public override func supplementary(for type: CellType) -> Cellable? {
+  public override func supplementaries(for type: CellType) -> [Cellable] {
     switch type {
     case .header:
-      return headerCell
+      return [headerCell].compactMap { $0 }
     case .footer:
-      return footerCell
-
+      return [footerCell].compactMap { $0 }
     default:
-      return nil
+      return []
     }
   }
 }

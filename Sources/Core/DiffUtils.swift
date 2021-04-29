@@ -27,6 +27,22 @@ public struct CollectionUpdateContext {
 
   /** Updated section indecies */
   public let updatedSections: IndexSet
+
+  public init(
+    inserted: [IndexPath] = [],
+    deleted: [IndexPath] = [],
+    updated: [IndexPath] = [],
+    insertedSections: IndexSet = IndexSet(),
+    deletedSections: IndexSet = IndexSet(),
+    updatedSections: IndexSet = IndexSet()
+  ) {
+    self.inserted = inserted
+    self.deleted = deleted
+    self.updated = updated
+    self.insertedSections = insertedSections
+    self.deletedSections = deletedSections
+    self.updatedSections = updatedSections
+  }
 }
 
 /** Error to throw */
@@ -375,7 +391,7 @@ fileprivate extension Sectionable {
   }
 
   func supplyCellsOnly() -> [Cellable] {
-    return supplementaryTypes.compactMap { supplementary(for: $0) }
+    return supplementaryTypes.flatMap { supplementaries(for: $0) }
   }
 
   func firstCellLike(_ cell: Cellable) -> Cellable? {

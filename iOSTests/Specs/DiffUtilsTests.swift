@@ -109,9 +109,11 @@ class DiffUtilsTests: QuickSpec {
 
     var supplementaryCells: [Cellable] = []
 
-    func supplementary(for type: CellType) -> Cellable? {
-      return supplementaryCells.first(where: { $0.type == type })
+
+    func supplementaries(for type: CellType) -> [Cellable] {
+      return supplementaryCells.filter { $0.type == type }
     }
+
 
     var cells: [Cellable] = []
 
