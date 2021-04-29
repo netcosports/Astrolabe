@@ -24,7 +24,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
   var sectionIndexTitles: [String]?
 
   func setupCell(cellView: TableViewCell, containerView: UITableView, cell: Cellable, indexPath: IndexPath) {
-    cellView.containerView = containerView
+    cellView.hostContainerView = containerView
     cellView.indexPath = indexPath
     cellView.cell = cell
 
@@ -86,7 +86,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
 
   open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     let section = sections[section]
-    guard let header = section.supplementary(for: .header) else {
+    guard let header = section.supplementaries(for: .header).first else {
       return 0.0
     }
     return header.size(with: tableView).height
@@ -94,7 +94,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
 
   open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
     let section = sections[section]
-    guard let header = section.supplementary(for: .footer) else {
+    guard let header = section.supplementaries(for: .footer).first else {
       return 0.0
     }
     return header.size(with: tableView).height
@@ -138,7 +138,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
 
   open func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
     let section = sections[section]
-    guard let header = section.supplementary(for: .header) else {
+    guard let header = section.supplementaries(for: .header).first else {
       return 0.0
     }
     return header.size(with: tableView).height
@@ -146,7 +146,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
 
   open func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
     let section = sections[section]
-    guard let header = section.supplementary(for: .footer) else {
+    guard let header = section.supplementaries(for: .footer).first else {
       return 0.0
     }
     return header.size(with: tableView).height
@@ -158,7 +158,7 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
     if !header {
       type = .footer
     }
-    guard let supplementary = section.supplementary(for: type) else { return nil }
+    guard let supplementary = section.supplementaries(for: type).first else { return nil }
     let supplementaryView: TableViewHeaderFooter = supplementary.instance(for: tableView, index: IndexPath())
     setupCell(headerView: supplementaryView, cell: supplementary)
     supplementary.setup(with: supplementaryView)
@@ -184,6 +184,8 @@ open class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDele
 
   open func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
                       at index: Int) -> Int {
-    return sections.firstIndex(where: { $0.supplementary(for: .header)?.id == title }) ?? 0
+    return sections.firstIndex(where: { section in
+      section.supplementaries(for: .header).first?.id == title
+    }) ?? 0
   }
 }
