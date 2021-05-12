@@ -63,7 +63,6 @@ class ReusePagerViewController: BaseCollectionViewController<CollectionViewReuse
 
     edgesForExtendedLayout = []
     extendedLayoutIncludesOpaqueBars = false
-    automaticallyAdjustsScrollViewInsets = false
 
     view.backgroundColor = .white
     view.addSubview(pageStripCollectionView)

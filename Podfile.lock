@@ -1,41 +1,25 @@
 PODS:
-  - Astrolabe (5.1.9):
-    - Astrolabe/Core (= 5.1.9)
-  - Astrolabe/Core (5.1.9):
-    - RxCocoa (~> 5)
-    - RxSwift (~> 5)
-  - Astrolabe/Loaders (5.1.9):
-    - Astrolabe/Core
-    - Gnomon/Core (~> 5)
-  - Gnomon (5.2.0):
-    - Gnomon/JSON (= 5.2.0)
-  - Gnomon/Core (5.2.0):
-    - RxSwift (~> 5)
-  - Gnomon/Decodable (5.2.0):
-    - Gnomon/Core
-  - Gnomon/JSON (5.2.0):
-    - Gnomon/Core
-    - SwiftyJSON (~> 5)
+  - Astrolabe (5.3):
+    - Astrolabe/Core (= 5.3)
+  - Astrolabe/Core (5.3):
+    - RxCocoa (~> 6)
+    - RxSwift (~> 6)
   - Nimble (8.0.4)
   - Quick (2.2.0)
-  - RxBlocking (5.0.1):
-    - RxSwift (~> 5)
-  - RxCocoa (5.0.1):
-    - RxRelay (~> 5)
-    - RxSwift (~> 5)
-  - RxRelay (5.0.1):
-    - RxSwift (~> 5)
-  - RxSwift (5.0.1)
-  - RxTest (5.0.1):
-    - RxSwift (~> 5)
+  - RxBlocking (6.2.0):
+    - RxSwift (= 6.2.0)
+  - RxCocoa (6.2.0):
+    - RxRelay (= 6.2.0)
+    - RxSwift (= 6.2.0)
+  - RxRelay (6.2.0):
+    - RxSwift (= 6.2.0)
+  - RxSwift (6.2.0)
+  - RxTest (6.2.0):
+    - RxSwift (= 6.2.0)
   - SnapKit (4.2.0)
-  - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - Astrolabe (from `.`)
-  - Astrolabe/Loaders (from `.`)
-  - Gnomon
-  - Gnomon/Decodable
   - Nimble
   - Quick
   - RxBlocking
@@ -43,8 +27,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Gnomon
+  trunk:
     - Nimble
     - Quick
     - RxBlocking
@@ -53,25 +36,22 @@ SPEC REPOS:
     - RxSwift
     - RxTest
     - SnapKit
-    - SwiftyJSON
 
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: 97d5636ab06045bdfde8b420197b9aa85d5dff43
-  Gnomon: 0f95e89116badf243250721b378c6a0fd5021a71
+  Astrolabe: 039225a4ab8747032c84fe9f4655c6bc73ebe6e2
   Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
-  RxBlocking: c5e090f42d046df8b0e7752742510f349963710f
-  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
-  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
-  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
-  RxTest: 0132f952a61da82d5233abedaa559df91e5330e5
+  RxBlocking: 0b29f7d2079109a8de49c411381bed7c33ef1eeb
+  RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
+  RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
+  RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
+  RxTest: 0c692fa672b694373ba86d2b00033595297a2831
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: e04fa2144e7587aa54b9aa3e5bb9ccd474fe72cb
+PODFILE CHECKSUM: 1fa0cc0b2f6b00260d0636c65b79342446cffad6
 
 COCOAPODS: 1.8.4

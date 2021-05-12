@@ -9,7 +9,7 @@
 import UIKit
 import Astrolabe
 
-struct TestViewModel: Comparable {
+struct TestViewModel: Comparable, Hashable {
   let title: String
   let color: UIColor
 

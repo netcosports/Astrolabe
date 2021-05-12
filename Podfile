@@ -1,24 +1,21 @@
-source 'https://github.com/CocoaPods/Specs.git'
 
-use_frameworks!
+use_modular_headers!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon'
-  pod 'Gnomon/Decodable'
 
   target 'Demo' do
-    platform :ios, '9.0'
+    platform :ios, '11.0'
     pod 'SnapKit'
   end
 
   target 'DemoTV' do
-    platform :tvos, '9.0'
+    platform :tvos, '11.0'
     pod 'SnapKit'
   end
 
   abstract_target 'Tests' do
-    pod 'Astrolabe/Loaders', :path => '.'
+    pod 'Astrolabe', :path => '.'
 
     pod 'Quick'
     pod 'Nimble'
@@ -26,11 +23,11 @@ abstract_target 'Astrolabe' do
     pod 'RxTest'
 
     target 'iOSTests' do
-      platform :ios, '9.0'
+      platform :ios, '11.0'
     end
 
     target 'tvOSTests' do
-      platform :tvos, '9.0'
+      platform :tvos, '11.0'
     end
   end
 end

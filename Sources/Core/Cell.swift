@@ -29,27 +29,33 @@ where CellView.Container == Container {
   // MARK: - Init
 
   public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil, dataEquals: nil)
+    self.init(data: data, click: click, type: .cell, setup: nil, equals: nil)
   }
 
   public convenience init(data: Data, id: String = "", click: ClickClosure? = nil) {
-    self.init(data: data, id: id, click: click, type: .cell, setup: nil, dataEquals: nil)
+    self.init(data: data, id: id, click: click, type: .cell, setup: nil, equals: nil)
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
+  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
     self.type = type
     self.setup = setup
     self.click = click
     super.init(data: data)
     self.id = id
-    self.equals = {
-      guard !$0.id.isEmpty && !self.id.isEmpty else {
-        assertionFailure("id of a cell must not be empty string")
-        return false
+    if let exactEqual = equals {
+      self.equals = exactEqual
+    } else {
+      self.equals = {
+        guard !$0.id.isEmpty && !self.id.isEmpty else {
+          assertionFailure("id of a cell must not be empty string")
+          return false
+        }
+        guard let anotherCell = $0 as? Self else {
+          return false
+        }
+        return anotherCell.data == self.data
       }
-      return self.id == $0.id
     }
-    self.dataEquals = dataEquals
   }
 
   // MARK: - Lifecycle
@@ -93,9 +99,9 @@ open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Co
   public var expandableCells: [Cellable]?
 
   public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
-              setup: SetupClosure<CellView>? = nil, dataEquals: BothEqualsClosure<Data>? = nil) {
+              setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, id: id, click: click, type: .cell, setup: setup, dataEquals: dataEquals)
+    super.init(data: data, id: id, click: click, type: .cell, setup: setup, equals: equals)
   }
 }
 
@@ -103,31 +109,6 @@ public typealias CollectionExpandableCell<T:ReusableView & Reusable> = Expandabl
   where T.Container == UICollectionView
 public typealias TableExpandableCell<T:ReusableView & Reusable> = ExpandableCell<UITableView, T>
   where T.Container == UITableView
-
-open class LoaderExpandableCell<Container, CellView: ReusableView & Reusable>:
-  ExpandableCell<Container, CellView>, LoaderExpandableCellable where CellView.Container == Container {
-
-  public init(data: Data,
-              id: String,
-              loader: CellObservableClosure? = nil,
-              loaderCell: Cellable,
-              click: ClickClosure? = nil,
-              setup: SetupClosure<CellView>? = nil) {
-    self.loader = loader
-    self.loaderCell = loaderCell
-    super.init(data: data, id: id, expandableCells: nil, click: click, setup: setup)
-    self.expandableCells = [loaderCell]
-  }
-
-  public func load() -> CellObservable {
-    guard let cellsObservable = loader?() else {
-      return .just(nil)
-    }
-    return cellsObservable
-  }
-  public var loaderCell: Cellable
-  public var loader: CellObservableClosure?
-}
 
 public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionView, T>
   where T.Container == UICollectionView

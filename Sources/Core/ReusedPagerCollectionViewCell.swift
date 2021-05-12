@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol ReusedPageData {
-  associatedtype PageData: Equatable
+  associatedtype PageData: Hashable
 
   var data: PageData? { get set }
 }
@@ -39,10 +39,6 @@ where Controller: ReusedPageData {
     return containerSize
   }
 
-  public static func identifier(for data: PagerViewModel) -> String {
-    return data.cellId
-  }
-
   private func setupChildView() {
     viewController.beginAppearanceTransition(true, animated: true)
 
@@ -51,9 +47,9 @@ where Controller: ReusedPageData {
 
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[content]|", metrics: nil,
-                                                              views: ["content": viewController.view]))
+                                                              views: ["content": viewController.view as Any]))
     contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[content]|", metrics: nil,
-                                                              views: ["content": viewController.view]))
+                                                              views: ["content": viewController.view as Any]))
   }
 
   public func willAppear(isCancelled: Bool = false) {

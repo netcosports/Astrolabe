@@ -325,7 +325,7 @@ Astrolabe is the best friend of [Gnomon](https://github.com/netcosports/Gnomon) 
 To make loading content easier over REST API using Gnomon we provide special classes called ```Loader``` which connect Astrolabe decorator and Gnomon request. Let's check for example simple plain loader protocol: 
 
 ```swift
-public protocol PLoader: class {
+public protocol PLoader: AnyObject {
   // Result type
   associatedtype PLResult: OptionalResult
 

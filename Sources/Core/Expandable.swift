@@ -9,15 +9,13 @@
 import UIKit
 import RxSwift
 
-protocol Expandable: class {
+protocol Expandable: AnyObject {
   associatedtype Container: ContainerView
 
   var disposeBag: DisposeBag { get }
 
   var expandableBehavior: ExpandableBehavior { get set }
   var expandedCells: Set<String> { get set }
-  var loadingExpandableCells: [String: CellObservable] { get set }
-  var loadedExpandableCells: [String: [Cellable]] { get set }
   var expandableSections: [Sectionable] { get set } 
 
   func isExpanded(cell: ExpandableCellable) -> Bool
@@ -27,60 +25,6 @@ protocol Expandable: class {
 }
 
 extension Expandable where Self: ReusableSource {
-
-  func updateLoaderCell(loaderExpandableCell: LoaderExpandableCellable,
-                        cells: [Cellable],
-                        indexPath: IndexPath) {
-    let section = sections[indexPath.section]
-    let sectionCells = section.cells
-    let loaderCell = loaderExpandableCell.loaderCell
-
-    loadedExpandableCells[loaderExpandableCell.id] = cells
-    guard isExpanded(cell: loaderExpandableCell) else {
-      return
-    }
-
-    if  sectionCells.contains(where: { $0.id == loaderExpandableCell.id }) {
-      if let loaderIndex = sectionCells.index(where: { $0.id == loaderCell.id }) {
-        self.adjust(newSections: self.sections, excludedCells: [loaderCell.id])
-        containerView?.batchUpdate(block: {
-          self.containerView?.delete(at: [IndexPath(row: loaderIndex, section: indexPath.section)])
-          if cells.count > 0 {
-            let indexPaths = (0 ..< cells.count).map {
-              IndexPath(row: loaderIndex + $0, section: indexPath.section)
-            }
-            self.containerView?.insert(at: indexPaths)
-          }
-        }, completion: nil)
-      } else if expandableCells(for: loaderExpandableCell) != nil {
-        self.adjust(newSections: sections, excludedCells: [loaderCell.id])
-        containerView?.reloadData()
-      }
-    }
-  }
-
-  func handleLoaderCell(expandableCell: ExpandableCellable, indexPath: IndexPath) {
-    guard let loaderExpandableCellable = expandableCell as? LoaderExpandableCellable else {
-      return
-    }
-
-    guard !loadingExpandableCells.keys.contains(expandableCell.id) else { return }
-    let observable = loaderExpandableCellable.load()
-    loadingExpandableCells[expandableCell.id] = observable
-    observable.observeOn(MainScheduler.instance).subscribe(
-      onNext: { [weak self] cells in
-        guard let cells = cells else { return }
-        self?.updateLoaderCell(loaderExpandableCell: loaderExpandableCellable, cells: cells, indexPath: indexPath)
-      },
-      onError: { [weak self] error in
-        self?.updateLoaderCell(loaderExpandableCell: loaderExpandableCellable, cells: [], indexPath: indexPath)
-        self?.loadingExpandableCells.removeValue(forKey: loaderExpandableCellable.id)
-      },
-      onCompleted: { [weak self] in
-        self?.loadingExpandableCells.removeValue(forKey: loaderExpandableCellable.id)
-      }
-    ).disposed(by: disposeBag)
-  }
 
   func adjust(cells: inout [Cellable], excludedCells: [String]) -> [Cellable] {
     for (index, cell) in cells.enumerated() {
@@ -135,7 +79,7 @@ extension Expandable where Self: ReusableSource {
                    expandableCells: [Cellable],
                    sectionCells: inout [Cellable],
                    sectionIndex: Int) -> [IndexPath] {
-    guard var indexToExpand = section.cells.index(where: { $0.id == expandableCell.id }) else {
+    guard var indexToExpand = section.cells.firstIndex(where: { $0.id == expandableCell.id }) else {
       return []
     }
     indexToExpand += 1
@@ -155,7 +99,7 @@ extension Expandable where Self: ReusableSource {
     var indexes: [IndexPath] = []
     let ids = allIds(in: &expandableCell)
     for id in ids {
-      guard let index = sectionCells.index(where: { $0.id == id }) else {
+      guard let index = sectionCells.firstIndex(where: { $0.id == id }) else {
         continue
       }
       indexes.append(IndexPath(row: index, section: sectionIndex))
@@ -275,7 +219,7 @@ extension Expandable where Self: ReusableSource {
       self.containerView?.insert(at: expandIndexes)
     }, completion: { _ in
       if !self.expandableBehavior.autoScrollToItemDisabled,
-        let itemIndex = letSection.cells.index(where: { $0.id == letExpandableCell.id }) {
+         let itemIndex = letSection.cells.firstIndex(where: { $0.id == letExpandableCell.id }) {
         self.scroll(to: IndexPath(row: itemIndex, section: sectionIndex))
       }
     })
@@ -320,14 +264,9 @@ extension Expandable where Self: ReusableSource {
                             sectionIndex: indexPath.section)
       }
     }
-
-    handleLoaderCell(expandableCell: expandableCell, indexPath: indexPath)
   }
 
   func expandableCells(for cell: ExpandableCellable) -> [Cellable]? {
-    if let expandableCells = loadedExpandableCells[cell.id] {
-      return expandableCells
-    }
     return cell.expandableCells
   }
 }

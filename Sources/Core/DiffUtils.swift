@@ -51,7 +51,7 @@ public enum DiffError: Error {
 }
 
 /** Utility class to manage differences between new and old sources */
-open class DiffUtils<Data> {
+open class DiffUtils {
 
   // MARK: - Open API
 
@@ -116,7 +116,7 @@ open class DiffUtils<Data> {
      - data equals closure
      */
     let allSupplyCellsOnly = allSections.compactMap({ $0.supplyCellsOnly() }).reduce([], +)
-    if let cell = allSupplyCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil || ($0 as! DataHodler<Data>).dataEquals == nil }) {
+    if let cell = allSupplyCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
       throw DiffError.error("Check supplementary cell id, equals closure, data equals closure: \(cell)")
     }
     try newSections.forEach { section in
@@ -139,7 +139,7 @@ open class DiffUtils<Data> {
      - data equals closure
      */
     let allCellsOnly = allSections.compactMap({ $0.cellsOnly() }).reduce([], +)
-    if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil || ($0 as! DataHodler<Data>).dataEquals == nil }) {
+    if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
       throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
     }
     try newSections.forEach { section in
@@ -348,7 +348,7 @@ open class DiffUtils<Data> {
   // MARK: - Utils
 
   fileprivate class func areCellableDatasEqual(cell1: Cellable, cell2: Cellable) -> Bool {
-    return (cell1 as! DataHodler<Data>).dataEquals!((cell2 as! DataHodler<Data>).data, (cell1 as! DataHodler<Data>).data)
+    return cell1.equals?(cell2) ?? false
   }
 }
 

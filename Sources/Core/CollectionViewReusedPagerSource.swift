@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public protocol PagerSourceCell: class {
+public protocol PagerSourceCell: AnyObject {
 
   func willAppear(isCancelled: Bool)
   func didAppear()
@@ -34,7 +34,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
       containerView.isPrefetchingEnabled = false
     }
 
-    selectedItem.asObservable().skip(1).observeOn(MainScheduler.instance)
+    selectedItem.asObservable().skip(1).observe(on: MainScheduler.instance)
       .subscribe(onNext: { [weak self] index in
         guard let `self` = self else { return }
         guard let containerView = self.containerView else { return }
@@ -50,13 +50,6 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
         containerView.setContentOffset(offset, animated: true)
         containerView.isUserInteractionEnabled = false
       }).disposed(by: disposeBag)
-
-    if let collectionView = containerView as? CollectionView<CollectionViewPagerSource> {
-      collectionView.sizeDidChange.skip(1).subscribe(onNext: { [weak self] _ in
-        guard let `self` = self else { return }
-        self.finishAppearanceTransitionIfNeeded()
-      }).disposed(by: disposeBag)
-    }
 
     containerView.rx.willBeginDragging.subscribe(onNext: { [weak self] in
       self?.beginAppearanceTransition()

@@ -14,8 +14,6 @@ open class TableViewExpandableSource: TableViewSource, Expandable {
   let disposeBag = DisposeBag()
   public var expandableBehavior = ExpandableBehavior()
   public var expandedCells: Set<String> = []
-  public var loadingExpandableCells: [String : CellObservable] = [:]
-  public var loadedExpandableCells: [String : [Cellable]] = [:]
   public var expandableSections: [Sectionable] = []
   override public var sections: [Sectionable] {
 
@@ -51,7 +49,7 @@ open class TableViewExpandableSource: TableViewSource, Expandable {
   }
 
   @discardableResult func reloadCell(section: Sectionable, sectionIndex: Int, cell: Cellable) -> IndexPath? {
-    guard let itemIndex = section.cells.index(where: { $0.id == cell.id }) else {
+    guard let itemIndex = section.cells.firstIndex(where: { $0.id == cell.id }) else {
       return nil
     }
 

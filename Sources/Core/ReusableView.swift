@@ -16,7 +16,7 @@ public enum TargetScrollPosition {
   case center
 }
 
-public protocol ReusableView: class {
+public protocol ReusableView: AnyObject {
   associatedtype Container: ContainerView
 
   func setup()
@@ -35,7 +35,7 @@ public protocol ReusableView: class {
   func endDisplay()
 }
 
-public protocol ContainerView: class {
+public protocol ContainerView: AnyObject {
   func register<T: ReusableView>(type: CellType, cellClass: T.Type, identifier: String)
   func instance<T: ReusableView>(type: CellType, index: IndexPath, identifier: String) -> T
 
@@ -248,5 +248,37 @@ extension UITableView: ContainerView {
     case .end:
       scrollToRow(at: index, at: .bottom, animated: animated)
     }
+  }
+}
+
+extension ContainerView {
+
+  public func apply(
+    newContext: CollectionUpdateContext?,
+    completion: CompletionClosure? = nil
+  ) {
+      if let context = newContext {
+        self.batchUpdate(block: {
+          self.deleteSectionables(at: context.deletedSections)
+          self.delete(at: context.deleted)
+          self.reloadSectionables(at: context.updatedSections)
+          self.reload(at: context.updated)
+          self.insertSectionables(at: context.insertedSections)
+          self.insert(at: context.inserted)
+        }, completion: completion)
+      } else {
+        self.reloadData()
+      }
+    }
+}
+
+extension ReusableSource {
+
+  public func appply(
+    sections: [Sectionable],
+    completion: ContainerView.CompletionClosure? = nil) {
+    let currectSections = self.sections
+    let context = DiffUtils.diff(new: sections, old: currectSections)
+    self.containerView?.apply(newContext: context, completion: completion)
   }
 }

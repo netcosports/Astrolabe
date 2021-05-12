@@ -7,35 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		636ACB5FDF6BF177BD8A2753 /* Pods_Astrolabe_Tests_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */; };
-		75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */; };
-		8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */; };
-		8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */; };
-		A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */; };
+		2B0E2672B202A81CC5BB6A1C /* libPods-Astrolabe-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 284C4978FA6A8EB4CA1EB239 /* libPods-Astrolabe-Demo.a */; };
 		A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5532A9B1F615C4600186A9F /* SelectionViewController.swift */; };
-		AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
-		AA0376A420DA5F1400E6343A /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
-		AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */; };
-		AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
-		AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */; };
-		AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */; };
-		AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */; };
-		AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */; };
-		AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
-		AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */; };
-		AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */; };
-		AA52599620BC56010089ECD2 /* BasicTestViewModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */; };
-		AAB178762334DD320074ABC2 /* EmptyDataCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */; };
-		AAB178772334DD370074ABC2 /* EmptyDataTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */; };
-		AAB178782334DD470074ABC2 /* EventDrivenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */; };
-		AAB178792334DD510074ABC2 /* DiffTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550A227B773800E37FF4 /* DiffTableViewController.swift */; };
-		AAB1787A2334DD6D0074ABC2 /* DiffTableViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */; };
-		AAB1787B2334DD790074ABC2 /* EventDrivenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */; };
-		AAB1787C2334DD930074ABC2 /* DiffCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */; };
-		AAB1787D2334DDA10074ABC2 /* DiffCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */; };
 		AAB8C76920516E2A00E91771 /* LoaderDecoratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */; };
 		AAD219552223D5400076A6D6 /* EventDrivenSourceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */; };
-		B47ECCCCF35AD03E59C7F676 /* Pods_Astrolabe_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */; };
 		B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */; };
 		B50EFAD91F0CC27E00D31FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */; };
 		B50EFADC1F0CC27E00D31FD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B50EFADA1F0CC27E00D31FD6 /* LaunchScreen.storyboard */; };
@@ -62,24 +37,17 @@
 		B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF31F0CC54D005146DB /* HomeViewController.swift */; };
 		B5716F031F0CC54D005146DB /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF41F0CC54D005146DB /* Generator.swift */; };
 		B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF51F0CC54D005146DB /* BaseViewController.swift */; };
-		B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */; };
-		B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */; };
 		B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF91F0CC54D005146DB /* ReusePagerViewController.swift */; };
 		B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFA1F0CC54D005146DB /* TestTableCell.swift */; };
 		B5716F0A1F0CC54D005146DB /* TestCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFB1F0CC54D005146DB /* TestCollectionCell.swift */; };
 		B5716F0B1F0CC54D005146DB /* BasicExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */; };
 		B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFD1F0CC54D005146DB /* SourceViewController.swift */; };
-		B5716F0E1F0CC54D005146DB /* PagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFF1F0CC54D005146DB /* PagerViewController.swift */; };
-		B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716F011F0CC54D005146DB /* LoaderSourceViewController.swift */; };
 		B5716F1F1F0CC5E2005146DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5716F1E1F0CC5E2005146DB /* Assets.xcassets */; };
 		B5716F241F0CC6E9005146DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */; };
 		B5716F251F0CC6E9005146DB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF51F0CC54D005146DB /* BaseViewController.swift */; };
-		B5716F261F0CC6E9005146DB /* BasicDataExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */; };
 		B5716F271F0CC6E9005146DB /* BasicExampleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */; };
-		B5716F291F0CC6E9005146DB /* ExpandableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */; };
 		B5716F2A1F0CC6E9005146DB /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF41F0CC54D005146DB /* Generator.swift */; };
 		B5716F2B1F0CC6E9005146DB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EF31F0CC54D005146DB /* HomeViewController.swift */; };
-		B5716F2C1F0CC6E9005146DB /* LoaderSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716F011F0CC54D005146DB /* LoaderSourceViewController.swift */; };
 		B5716F2F1F0CC6E9005146DB /* SourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFD1F0CC54D005146DB /* SourceViewController.swift */; };
 		B5716F311F0CC6E9005146DB /* TestCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFB1F0CC54D005146DB /* TestCollectionCell.swift */; };
 		B5716F321F0CC6E9005146DB /* TestTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716EFA1F0CC54D005146DB /* TestTableCell.swift */; };
@@ -102,34 +70,23 @@
 		B5775CAA1F16A7EC00E484A6 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5716ECF1F0CC358005146DB /* Common.swift */; };
 		B5F2C92A1F34733B008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
 		B5F2C92C1F347341008ABBA4 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F2C9281F34733B008ABBA4 /* Params.swift */; };
-		EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */; };
-		EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */; };
-		EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550A227B773800E37FF4 /* DiffTableViewController.swift */; };
-		EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */; };
+		B84DD2E7D08B691404FFDD9F /* libPods-Astrolabe-Tests-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C9E1F014FE592D5A7AB11B /* libPods-Astrolabe-Tests-tvOSTests.a */; };
+		BA8ED2CBA16E7F8D05E39B4B /* libPods-Astrolabe-DemoTV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36F57F0875E961177DC79C61 /* libPods-Astrolabe-DemoTV.a */; };
+		E0340129FF38CCFEDF1562A8 /* libPods-Astrolabe-Tests-iOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7048747CC1EC842B91EEB1C /* libPods-Astrolabe-Tests-iOSTests.a */; };
 		EAF4B388226DCE740076A956 /* DiffUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		036F0DAC81C984CC68A8F33D /* Pods-Astrolabe-Tests-iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_DemoTV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A274C4A69BB8DD79370178 /* Pods-Astrolabe-Tests-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		0BFDFDD88D65812E508F5459 /* Pods-Astrolabe-DemoTV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-DemoTV.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV.debug.xcconfig"; sourceTree = "<group>"; };
 		1C019461B7372E161FC5D909 /* Pods-Astrolabe-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		284C4978FA6A8EB4CA1EB239 /* libPods-Astrolabe-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Astrolabe-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		36F57F0875E961177DC79C61 /* libPods-Astrolabe-DemoTV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Astrolabe-DemoTV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3810A47E622D858CB47D3D73 /* Pods-Astrolabe-DemoTV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-DemoTV.release.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV.release.xcconfig"; sourceTree = "<group>"; };
-		49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_tvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AE31EC04CA8A047821FDD8 /* Pods-Astrolabe-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo.debug.xcconfig"; sourceTree = "<group>"; };
-		737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Tests_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataCollectionCell.swift; sourceTree = "<group>"; };
-		8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataTableCell.swift; sourceTree = "<group>"; };
-		8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Astrolabe_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68C9E1F014FE592D5A7AB11B /* libPods-Astrolabe-Tests-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Astrolabe-Tests-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5532A9B1F615C4600186A9F /* SelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
-		AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModel.swift; sourceTree = "<group>"; };
-		AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestSectionableViewModelViewController.swift; sourceTree = "<group>"; };
-		AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenViewModel.swift; sourceTree = "<group>"; };
-		AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenController.swift; sourceTree = "<group>"; };
-		AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTimelineDataExampleCollectionViewController.swift; sourceTree = "<group>"; };
-		AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModel.swift; sourceTree = "<group>"; };
-		AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTestViewModelViewController.swift; sourceTree = "<group>"; };
 		AAB8C76820516E2A00E91771 /* LoaderDecoratorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderDecoratorSpec.swift; sourceTree = "<group>"; };
 		AAD219542223D5400076A6D6 /* EventDrivenSourceSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrivenSourceSpec.swift; sourceTree = "<group>"; };
 		B50EFACE1F0CC27E00D31FD6 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,15 +118,11 @@
 		B5716EF31F0CC54D005146DB /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		B5716EF41F0CC54D005146DB /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		B5716EF51F0CC54D005146DB /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicDataExampleCollectionViewController.swift; sourceTree = "<group>"; };
-		B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableViewController.swift; sourceTree = "<group>"; };
 		B5716EF91F0CC54D005146DB /* ReusePagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusePagerViewController.swift; sourceTree = "<group>"; };
 		B5716EFA1F0CC54D005146DB /* TestTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTableCell.swift; sourceTree = "<group>"; };
 		B5716EFB1F0CC54D005146DB /* TestCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = TestCollectionCell.swift; sourceTree = "<group>"; tabWidth = 2; };
 		B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicExampleCollectionViewController.swift; sourceTree = "<group>"; };
 		B5716EFD1F0CC54D005146DB /* SourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceViewController.swift; sourceTree = "<group>"; };
-		B5716EFF1F0CC54D005146DB /* PagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagerViewController.swift; sourceTree = "<group>"; };
-		B5716F011F0CC54D005146DB /* LoaderSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderSourceViewController.swift; sourceTree = "<group>"; };
 		B5716F151F0CC5E2005146DB /* DemoTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5716F1E1F0CC5E2005146DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B5716F201F0CC5E2005146DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -178,10 +131,7 @@
 		B5F2C9281F34733B008ABBA4 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		B5F2C9291F34733B008ABBA4 /* Params.swift.erb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Params.swift.erb; sourceTree = "<group>"; };
 		E1DF003CD2D6D1AD6960DE82 /* Pods-Astrolabe-Tests-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewViewModel.swift; sourceTree = "<group>"; };
-		EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCollectionViewController.swift; sourceTree = "<group>"; };
-		EA96550A227B773800E37FF4 /* DiffTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewController.swift; sourceTree = "<group>"; };
-		EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffTableViewViewModel.swift; sourceTree = "<group>"; };
+		E7048747CC1EC842B91EEB1C /* libPods-Astrolabe-Tests-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Astrolabe-Tests-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF4B387226DCE740076A956 /* DiffUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffUtilsTests.swift; sourceTree = "<group>"; };
 		F5D7FAADD7022B14AB91B32D /* Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -191,7 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B47ECCCCF35AD03E59C7F676 /* Pods_Astrolabe_Demo.framework in Frameworks */,
+				2B0E2672B202A81CC5BB6A1C /* libPods-Astrolabe-Demo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				636ACB5FDF6BF177BD8A2753 /* Pods_Astrolabe_Tests_iOSTests.framework in Frameworks */,
+				E0340129FF38CCFEDF1562A8 /* libPods-Astrolabe-Tests-iOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1540D84E8C43C1ADE9B2592 /* Pods_Astrolabe_DemoTV.framework in Frameworks */,
+				BA8ED2CBA16E7F8D05E39B4B /* libPods-Astrolabe-DemoTV.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,7 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75490423C50700B4F16DC05E /* Pods_Astrolabe_Tests_tvOSTests.framework in Frameworks */,
+				B84DD2E7D08B691404FFDD9F /* libPods-Astrolabe-Tests-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,15 +185,6 @@
 				05A274C4A69BB8DD79370178 /* Pods-Astrolabe-Tests-tvOSTests.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		AA44516321D4BCE5008A1EE0 /* EventDriven */ = {
-			isa = PBXGroup;
-			children = (
-				AA44516421D4BCF8008A1EE0 /* EventDrivenViewModel.swift */,
-				AA44516621D4BD15008A1EE0 /* EventDrivenController.swift */,
-			);
-			path = EventDriven;
 			sourceTree = "<group>";
 		};
 		B50EFAC51F0CC27E00D31FD6 = {
@@ -275,32 +216,19 @@
 		B50EFAD01F0CC27E00D31FD6 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				EA96550522773BB200E37FF4 /* Diff */,
-				AA44516321D4BCE5008A1EE0 /* EventDriven */,
 				B50EFAD11F0CC27E00D31FD6 /* AppDelegate.swift */,
 				B50EFAD81F0CC27E00D31FD6 /* Assets.xcassets */,
 				B5716EF51F0CC54D005146DB /* BaseViewController.swift */,
-				B5716EF71F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift */,
-				AA52598920B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift */,
 				B5716EFC1F0CC54D005146DB /* BasicExampleCollectionViewController.swift */,
-				B5716EF81F0CC54D005146DB /* ExpandableViewController.swift */,
 				B5716EF41F0CC54D005146DB /* Generator.swift */,
 				B5716EF31F0CC54D005146DB /* HomeViewController.swift */,
 				B50EFADD1F0CC27E00D31FD6 /* Info.plist */,
 				B50EFADA1F0CC27E00D31FD6 /* LaunchScreen.storyboard */,
-				B5716F011F0CC54D005146DB /* LoaderSourceViewController.swift */,
-				B5716EFF1F0CC54D005146DB /* PagerViewController.swift */,
 				B5716EF91F0CC54D005146DB /* ReusePagerViewController.swift */,
 				B5716EFD1F0CC54D005146DB /* SourceViewController.swift */,
 				B5716EFB1F0CC54D005146DB /* TestCollectionCell.swift */,
 				B5716EFA1F0CC54D005146DB /* TestTableCell.swift */,
 				A5532A9B1F615C4600186A9F /* SelectionViewController.swift */,
-				AA52599320BC4CF10089ECD2 /* BasicTestViewModel.swift */,
-				AA52599520BC56010089ECD2 /* BasicTestViewModelViewController.swift */,
-				AA0376A520DA5FBA00E6343A /* BasicTestSectionableViewModel.swift */,
-				AA0376A720DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift */,
-				8B03025F222D77F200B3BEDB /* EmptyDataCollectionCell.swift */,
-				8B030263222EA22100B3BEDB /* EmptyDataTableCell.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -370,24 +298,13 @@
 			path = tvOSTests;
 			sourceTree = "<group>";
 		};
-		EA96550522773BB200E37FF4 /* Diff */ = {
-			isa = PBXGroup;
-			children = (
-				EA96550722773BDD00E37FF4 /* DiffCollectionViewController.swift */,
-				EA96550A227B773800E37FF4 /* DiffTableViewController.swift */,
-				EA96550622773BDD00E37FF4 /* DiffCollectionViewViewModel.swift */,
-				EA96550C227B781700E37FF4 /* DiffTableViewViewModel.swift */,
-			);
-			path = Diff;
-			sourceTree = "<group>";
-		};
 		FC8FFC32218DD20BA0CF2251 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8DCCE6F89A6E4A048A3EFEAD /* Pods_Astrolabe_Demo.framework */,
-				03A48EC1C90A82F3FC569A6D /* Pods_Astrolabe_DemoTV.framework */,
-				737BBC239C1705EC7F7C404F /* Pods_Astrolabe_Tests_iOSTests.framework */,
-				49C3E7785873F6BC64AD1EE9 /* Pods_Astrolabe_Tests_tvOSTests.framework */,
+				284C4978FA6A8EB4CA1EB239 /* libPods-Astrolabe-Demo.a */,
+				36F57F0875E961177DC79C61 /* libPods-Astrolabe-DemoTV.a */,
+				E7048747CC1EC842B91EEB1C /* libPods-Astrolabe-Tests-iOSTests.a */,
+				68C9E1F014FE592D5A7AB11B /* libPods-Astrolabe-Tests-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -403,7 +320,6 @@
 				B50EFACA1F0CC27E00D31FD6 /* Sources */,
 				B50EFACB1F0CC27E00D31FD6 /* Frameworks */,
 				B50EFACC1F0CC27E00D31FD6 /* Resources */,
-				5A7482A8EA00EEE1FC7475CB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -422,7 +338,6 @@
 				B5716EC31F0CC307005146DB /* Sources */,
 				B5716EC41F0CC307005146DB /* Frameworks */,
 				B5716EC51F0CC307005146DB /* Resources */,
-				A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -441,7 +356,6 @@
 				B5716F111F0CC5E2005146DB /* Sources */,
 				B5716F121F0CC5E2005146DB /* Frameworks */,
 				B5716F131F0CC5E2005146DB /* Resources */,
-				808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -460,7 +374,6 @@
 				B5775C8E1F16A7C700E484A6 /* Sources */,
 				B5775C8F1F16A7C700E484A6 /* Frameworks */,
 				B5775C901F16A7C700E484A6 /* Resources */,
-				62731AFD36A4E713C7C32099 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -597,138 +510,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5A7482A8EA00EEE1FC7475CB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Astrolabe-iOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxRelay-iOS/RxRelay.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit-iOS/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Demo/Pods-Astrolabe-Demo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		62731AFD36A4E713C7C32099 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-tvOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa-tvOS/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxRelay-tvOS/RxRelay.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble-tvOS/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick-tvOS/Quick.framework",
-				"${BUILT_PRODUCTS_DIR}/RxBlocking-tvOS/RxBlocking.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest-tvOS/RxTest.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-tvOSTests/Pods-Astrolabe-Tests-tvOSTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		808B70817F77EBFC8F6DBE57 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Astrolabe-tvOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/Gnomon-tvOS/Gnomon.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa-tvOS/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxRelay-tvOS/RxRelay.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift-tvOS/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit-tvOS/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-tvOS/SwiftyJSON.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-DemoTV/Pods-Astrolabe-DemoTV-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A0A4E1A5A8E90AD7296F8915 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Astrolabe.default-Loaders-iOS/Astrolabe.framework",
-				"${BUILT_PRODUCTS_DIR}/Gnomon-iOS/Gnomon.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxRelay-iOS/RxRelay.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON-iOS/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble-iOS/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick-iOS/Quick.framework",
-				"${BUILT_PRODUCTS_DIR}/RxBlocking-iOS/RxBlocking.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest-iOS/RxTest.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Astrolabe.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gnomon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Astrolabe-Tests-iOSTests/Pods-Astrolabe-Tests-iOSTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D2817AFD902167952BDCA363 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -773,32 +554,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5716F041F0CC54D005146DB /* BaseViewController.swift in Sources */,
-				8B030264222EA22100B3BEDB /* EmptyDataTableCell.swift in Sources */,
-				AA52599420BC4CF10089ECD2 /* BasicTestViewModel.swift in Sources */,
 				B5716F091F0CC54D005146DB /* TestTableCell.swift in Sources */,
-				AA0376A620DA5FBA00E6343A /* BasicTestSectionableViewModel.swift in Sources */,
 				B5716F031F0CC54D005146DB /* Generator.swift in Sources */,
-				8B030260222D77F200B3BEDB /* EmptyDataCollectionCell.swift in Sources */,
-				B5716F071F0CC54D005146DB /* ExpandableViewController.swift in Sources */,
 				B5716F0C1F0CC54D005146DB /* SourceViewController.swift in Sources */,
-				EA96550D227B781700E37FF4 /* DiffTableViewViewModel.swift in Sources */,
 				A5532A9C1F615C4600186A9F /* SelectionViewController.swift in Sources */,
 				B5716F0B1F0CC54D005146DB /* BasicExampleCollectionViewController.swift in Sources */,
-				B5716F0E1F0CC54D005146DB /* PagerViewController.swift in Sources */,
-				AA52599620BC56010089ECD2 /* BasicTestViewModelViewController.swift in Sources */,
 				B5716F0A1F0CC54D005146DB /* TestCollectionCell.swift in Sources */,
-				AA0376A820DA5FF700E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
 				B50EFAD21F0CC27E00D31FD6 /* AppDelegate.swift in Sources */,
-				AA52598A20B817640089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
-				AA44516521D4BCF8008A1EE0 /* EventDrivenViewModel.swift in Sources */,
-				EA96550B227B773800E37FF4 /* DiffTableViewController.swift in Sources */,
-				EA96550922773BDD00E37FF4 /* DiffCollectionViewController.swift in Sources */,
-				B5716F061F0CC54D005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
 				B5716F081F0CC54D005146DB /* ReusePagerViewController.swift in Sources */,
-				B5716F101F0CC54D005146DB /* LoaderSourceViewController.swift in Sources */,
-				EA96550822773BDD00E37FF4 /* DiffCollectionViewViewModel.swift in Sources */,
 				B5716F021F0CC54D005146DB /* HomeViewController.swift in Sources */,
-				AA44516721D4BD15008A1EE0 /* EventDrivenController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,25 +600,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA52598B20B818C60089ECD2 /* BasicTimelineDataExampleCollectionViewController.swift in Sources */,
-				AAB1787B2334DD790074ABC2 /* EventDrivenViewModel.swift in Sources */,
 				B5716F311F0CC6E9005146DB /* TestCollectionCell.swift in Sources */,
-				AAB178762334DD320074ABC2 /* EmptyDataCollectionCell.swift in Sources */,
-				AA0376AA20DA608800E6343A /* BasicTestSectionableViewModelViewController.swift in Sources */,
-				AAB178772334DD370074ABC2 /* EmptyDataTableCell.swift in Sources */,
-				B5716F291F0CC6E9005146DB /* ExpandableViewController.swift in Sources */,
-				AAB1787A2334DD6D0074ABC2 /* DiffTableViewViewModel.swift in Sources */,
-				AAB1787D2334DDA10074ABC2 /* DiffCollectionViewViewModel.swift in Sources */,
-				AA0376A920DA608500E6343A /* BasicTestSectionableViewModel.swift in Sources */,
-				B5716F261F0CC6E9005146DB /* BasicDataExampleCollectionViewController.swift in Sources */,
-				AAB178792334DD510074ABC2 /* DiffTableViewController.swift in Sources */,
 				B5716F241F0CC6E9005146DB /* AppDelegate.swift in Sources */,
-				B5716F2C1F0CC6E9005146DB /* LoaderSourceViewController.swift in Sources */,
-				AAB178782334DD470074ABC2 /* EventDrivenController.swift in Sources */,
 				B5716F321F0CC6E9005146DB /* TestTableCell.swift in Sources */,
-				AA0376A420DA5F1400E6343A /* BasicTestViewModel.swift in Sources */,
-				AAB1787C2334DD930074ABC2 /* DiffCollectionViewController.swift in Sources */,
-				AA0376A320DA5F1100E6343A /* BasicTestViewModelViewController.swift in Sources */,
 				B5716F2F1F0CC6E9005146DB /* SourceViewController.swift in Sources */,
 				B5716F2B1F0CC6E9005146DB /* HomeViewController.swift in Sources */,
 				B5716F271F0CC6E9005146DB /* BasicExampleCollectionViewController.swift in Sources */,
@@ -1006,6 +754,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JPS45PPV79;
 				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1025,6 +774,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JPS45PPV79;
 				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netcosports.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1076,7 +826,7 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
 		};
@@ -1094,7 +844,7 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};

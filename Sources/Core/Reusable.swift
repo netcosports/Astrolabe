@@ -35,7 +35,7 @@ public struct ExpandableBehavior {
   }
 }
 
-public protocol ReusableSource: class {
+public protocol ReusableSource: AnyObject {
 
   init()
 
@@ -82,16 +82,16 @@ extension ReusableSource {
 }
 
 public protocol Reusable {
-  associatedtype Data
+  associatedtype Data: Hashable
 
   func setup(with data: Data)
   static func size(for data: Data, containerSize: CGSize) -> CGSize
   static func identifier(for data: Data) -> String
 }
 
-public extension Reusable where Data == Void {
-  func setup(with data: Data) {}
-}
+//public extension Reusable where Data == Void {
+//  func setup(with data: Data) {}
+//}
 
 public extension Reusable {
   static func identifier(for data: Data) -> String {

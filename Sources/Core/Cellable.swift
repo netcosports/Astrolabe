@@ -13,7 +13,7 @@ public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
 
 public typealias EqualsClosure<T> = (T) -> Bool
-public typealias BothEqualsClosure<T> = (T, T) -> Bool
+
 public typealias LastCellConditionClosure = (_ path: IndexPath, _ sectionsCounts: Int, _ itemsInSectionCount: Int) -> Bool
 
 public enum CellType: Hashable {
@@ -26,7 +26,6 @@ public enum CellType: Hashable {
 open class DataHodler<Data> {
 
   public var data: Data
-  public var dataEquals: BothEqualsClosure<Data>?
 
   public init(data: Data) {
     self.data = data
@@ -52,11 +51,6 @@ public protocol Cellable {
 
 public protocol ExpandableCellable: Cellable {
   var expandableCells: [Cellable]? { get set }
-}
-
-public protocol LoaderExpandableCellable: ExpandableCellable {
-  func load() -> CellObservable
-  var loaderCell: Cellable { get }
 }
 
 public protocol Sectionable {

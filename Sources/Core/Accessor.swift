@@ -13,12 +13,12 @@ public protocol AccessorView: ContainerView {
   var source: Source { get }
 }
 
-public protocol Containerable: class {
+public protocol Containerable: AnyObject {
   associatedtype Item
   var allItems: [Item] { get set }
 }
 
-public protocol Accessor: class {
+public protocol Accessor: AnyObject {
   associatedtype Container: AccessorView
   typealias Source = Container.Source
 
