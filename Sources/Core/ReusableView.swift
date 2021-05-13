@@ -279,6 +279,7 @@ extension ReusableSource {
     completion: ContainerView.CompletionClosure? = nil) {
     let currectSections = self.sections
     let context = DiffUtils.diff(new: sections, old: currectSections)
+    self.sections = sections
     self.containerView?.apply(newContext: context, completion: completion)
   }
 }
