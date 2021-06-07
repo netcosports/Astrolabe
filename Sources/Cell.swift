@@ -9,38 +9,56 @@
 import UIKit
 import RxSwift
 
-open class Cell<Container, CellView: ReusableView & Reusable>: DataHodler<CellView.Data>, Cellable
+open class Cell<Container, CellView: ReusableView & Reusable & Eventable>: DataHodler<CellView.Data>, Cellable
 where CellView.Container == Container {
 
   public typealias Data = CellView.Data
+  public typealias Event = CellView.Event
 
   let setup: SetupClosure<CellView>?
 
   public let type: CellType
-  public let click: ClickClosure?
   public var equals: EqualsClosure<Cellable>?
+  public var click: ClickClosure? = nil
   public let page: Int = 0
   public var id: String = ""
   public var cellClass: CellView.Type { return CellView.self }
+
+  let eventsEmmiter: AnyObserver<Event>?
+  let clickEvent: Event?
+  var eventBinderDisposeBag = DisposeBag()
 
   open var identifier: String { return cellClass.identifier(for: data) }
   open var needsToRegister: Bool { return true }
 
   // MARK: - Init
 
-  public convenience init(data: Data, click: ClickClosure? = nil) {
-    self.init(data: data, click: click, type: .cell, setup: nil, equals: nil)
+  public convenience init(data: Data, eventsEmmiter: AnyObserver<Event>? = nil, clickEvent: Event? = nil) {
+    self.init(data: data, clickEvent: clickEvent, type: .cell, setup: nil, equals: nil)
   }
 
-  public convenience init(data: Data, id: String = "", click: ClickClosure? = nil) {
-    self.init(data: data, id: id, click: click, type: .cell, setup: nil, equals: nil)
+  public convenience init(data: Data, id: String = "", clickEvent: Event? = nil) {
+    self.init(data: data, id: id, clickEvent: clickEvent, type: .cell, setup: nil, equals: nil)
   }
 
-  public init(data: Data, id: String = "", click: ClickClosure? = nil, type: CellType = .cell, setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
+  public init(
+    data: Data,
+    id: String = "",
+    eventsEmmiter: AnyObserver<Event>? = nil,
+    clickEvent: Event? = nil,
+    type: CellType = .cell,
+    setup: SetupClosure<CellView>? = nil,
+    equals: EqualsClosure<Cellable>? = nil
+  ) {
     self.type = type
+    self.eventsEmmiter = eventsEmmiter
+    self.clickEvent = clickEvent
     self.setup = setup
-    self.click = click
     super.init(data: data)
+    self.click = { [weak self] in
+      guard let event = self?.clickEvent else { return }
+      self?.eventsEmmiter?.onNext(event)
+    }
     self.id = id
     if let exactEqual = equals {
       self.equals = exactEqual
@@ -79,6 +97,13 @@ where CellView.Container == Container {
     guard let cellView = cell as? CellView else {
       fatalError("\(cell.self) trying to setup as \(cellClass)")
     }
+    eventBinderDisposeBag = DisposeBag()
+    if let eventsEmmiter = eventsEmmiter {
+      cellView.eventSubject.bind(to: eventsEmmiter).disposed(by: eventBinderDisposeBag)
+    }
+    guard cellView.data != data else {
+      return
+    }
     cellView.setup(with: data)
   }
 
@@ -93,24 +118,24 @@ where CellView.Container == Container {
 
 }
 
-open class ExpandableCell<Container, CellView: ReusableView & Reusable>: Cell<Container, CellView>,
+open class ExpandableCell<Container, CellView: ReusableView & Reusable & Eventable>: Cell<Container, CellView>,
   ExpandableCellable where CellView.Container == Container {
 
   public var expandableCells: [Cellable]?
 
-  public init(data: Data, id: String, expandableCells: [Cellable]?, click: ClickClosure? = nil,
+  public init(data: Data, id: String, expandableCells: [Cellable]?, eventsEmmiter: AnyObserver<Event>? = nil, clickEvent: Event? = nil,
               setup: SetupClosure<CellView>? = nil, equals: EqualsClosure<Cellable>? = nil) {
     self.expandableCells = expandableCells
-    super.init(data: data, id: id, click: click, type: .cell, setup: setup, equals: equals)
+    super.init(data: data, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .cell, setup: setup, equals: equals)
   }
 }
 
-public typealias CollectionExpandableCell<T:ReusableView & Reusable> = ExpandableCell<UICollectionView, T>
+public typealias CollectionExpandableCell<T:ReusableView & Reusable & Eventable> = ExpandableCell<UICollectionView, T>
   where T.Container == UICollectionView
-public typealias TableExpandableCell<T:ReusableView & Reusable> = ExpandableCell<UITableView, T>
+public typealias TableExpandableCell<T:ReusableView & Reusable & Eventable> = ExpandableCell<UITableView, T>
   where T.Container == UITableView
 
-public typealias CollectionCell<T:ReusableView & Reusable> = Cell<UICollectionView, T>
+public typealias CollectionCell<T:ReusableView & Reusable & Eventable> = Cell<UICollectionView, T>
   where T.Container == UICollectionView
-public typealias TableCell<T:ReusableView & Reusable> = Cell<UITableView, T>
+public typealias TableCell<T:ReusableView & Reusable & Eventable> = Cell<UITableView, T>
   where T.Container == UITableView

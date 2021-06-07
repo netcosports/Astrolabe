@@ -8,17 +8,28 @@
 
 import UIKit
 
-public protocol ReusedPageData {
-  associatedtype PageData: Hashable
+import RxSwift
+import RxCocoa
 
-  var data: PageData? { get set }
-}
+public final class ReusedPagerCollectionViewCell<Controller: UIViewController>:
+  CollectionViewCell, Reusable, Eventable,
+  PagerSourceCell where Controller: ReusedData & Eventable {
 
-public final class ReusedPagerCollectionViewCell<Controller: UIViewController>: CollectionViewCell, Reusable, PagerSourceCell
-where Controller: ReusedPageData {
+  public let eventSubject = PublishSubject<Event>()
+  public var data: Controller.Data?
 
-  public typealias Data = Controller.PageData
+  public typealias Event = Controller.Event
+  public typealias Data = Controller.Data
+
   public var viewController = Controller()
+  public let disposeBag = DisposeBag()
+
+  public override func setup() {
+    super.setup()
+    eventSubject
+      .bind(to: viewController.eventSubject)
+      .disposed(by: disposeBag)
+  }
 
   public func setup(with data: Data) {
     if viewController.data != data {

@@ -81,21 +81,37 @@ extension ReusableSource {
   }
 }
 
-public protocol Reusable {
+public protocol ReusedData: AnyObject {
   associatedtype Data: Hashable
+  var data: Data? { get set }
+}
 
+public protocol Eventable: AnyObject {
+  associatedtype Event: Hashable
+  var eventSubject: PublishSubject<Event> { get }
+}
+
+public protocol Reusable: ReusedData {
   func setup(with data: Data)
+
   static func size(for data: Data, containerSize: CGSize) -> CGSize
   static func identifier(for data: Data) -> String
 }
 
-//public extension Reusable where Data == Void {
-//  func setup(with data: Data) {}
-//}
+public extension Reusable where Data == Never {
+  func setup(with data: Data) {}
+}
 
 public extension Reusable {
   static func identifier(for data: Data) -> String {
     return String(reflecting: self)
+  }
+}
+
+public extension Reusable where Self: UIView {
+
+  static func size(for data: Data, containerSize: CGSize) -> CGSize {
+    return containerSize
   }
 }
 

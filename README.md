@@ -106,9 +106,9 @@ All UI sections represents to ```Sectionable``` protocol here. Here are few exam
 
 ```swift
 class Section: Sectionable {}
-class HeaderSection<Container, CellView: ReusableView & Reusable>: Section {}
-class CustomHeaderSection<CellView: ReusableView & Reusable>: Section {}
-class FooterSection<Container, CellView: ReusableView & Reusable>: Section {}
+class HeaderSection<Container, CellView: ReusableView & Reusable & Eventable>: Section {}
+class CustomHeaderSection<CellView: ReusableView & Reusable & Eventable>: Section {}
+class FooterSection<Container, CellView: ReusableView & Reusable & Eventable>: Section {}
 ```
 
 Section can contain header, footer(or both of them) or custom supplementary view. All sections store array of cells represented items inside this section.

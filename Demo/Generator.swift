@@ -10,8 +10,8 @@ import UIKit
 import Astrolabe
 
 class Generator<Container,
-               CellView: ReusableView & Reusable,
-               HeaderView: ReusableView & Reusable>
+               CellView: ReusableView & Reusable & Eventable,
+               HeaderView: ReusableView & Reusable & Eventable>
   where CellView.Container == Container, CellView.Data == TestViewModel,
   HeaderView.Container == Container, HeaderView.Data == TestViewModel {
 
@@ -60,12 +60,12 @@ class Generator<Container,
   }
 }
 
-typealias CollectionGenerator<T1:ReusableView & Reusable, T2:ReusableView & Reusable>
+typealias CollectionGenerator<T1:ReusableView & Reusable & Eventable, T2:ReusableView & Reusable & Eventable>
   = Generator<UICollectionView, T1, T2>
 where T1.Container == UICollectionView, T1.Data == TestViewModel,
 T2.Container == UICollectionView, T2.Data == TestViewModel
 
-typealias TableGenerator<T1:ReusableView & Reusable, T2:ReusableView & Reusable>
+typealias TableGenerator<T1:ReusableView & Reusable & Eventable, T2:ReusableView & Reusable & Eventable>
   = Generator<UITableView, T1, T2>
 where T1.Container == UITableView, T1.Data == TestViewModel,
 T2.Container == UITableView, T2.Data == TestViewModel
