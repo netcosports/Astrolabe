@@ -212,7 +212,7 @@ open class DiffUtils {
       if newSupplyCells.count == oldSupplyCells.count {
         for (index, newSupplyCell) in newSupplyCells.enumerated() {
           let oldSupplyCell = oldSupplyCells[index]
-          if !newSupplyCell.equals!(oldSupplyCell) ||
+          if !(newSupplyCell.id == oldSupplyCell.id) ||
             !areCellableDatasEqual(cell1: newSupplyCell, cell2: oldSupplyCell) {
             updated = true
             break
@@ -357,30 +357,30 @@ open class DiffUtils {
 fileprivate extension Array where Element == Cellable {
 
   func firstCellLike(_ cell: Cellable) -> Cellable? {
-    return first { $0.equals!(cell) }
+    return first { $0.id == cell.id }
   }
 
   func containsCell(_ cell: Cellable) -> Bool {
-    return contains { $0.equals!(cell) }
+    return contains { $0.id == cell.id }
   }
 
   func firstIndexOfCell(_ cell: Cellable) -> Index? {
-    return firstIndex { $0.equals!(cell) }
+    return firstIndex { $0.id == cell.id }
   }
 }
 
 fileprivate extension Array where Element == Sectionable {
 
   func firstSectionLike(_ section: Sectionable) -> Sectionable? {
-    return first { $0.equals!(section) }
+    return first { $0.id == section.id }
   }
 
   func containsSection(_ section: Sectionable) -> Bool {
-    return contains { $0.equals!(section) }
+    return contains { $0.id == section.id }
   }
 
   func firstIndexOfSection(_ section: Sectionable) -> Index? {
-    return firstIndex { $0.equals!(section) }
+    return firstIndex { $0.id == section.id }
   }
 }
 
@@ -395,14 +395,14 @@ fileprivate extension Sectionable {
   }
 
   func firstCellLike(_ cell: Cellable) -> Cellable? {
-    return cellsOnly().first { $0.equals!(cell) }
+    return cellsOnly().first { $0.id == cell.id }
   }
 
   func containsCell(_ cell: Cellable) -> Bool {
-    return cellsOnly().contains { $0.equals!(cell) }
+    return cellsOnly().contains { $0.id == cell.id }
   }
 
   func firstIndexOfCell(_ cell: Cellable) -> Array<Cellable>.Index? {
-    return cellsOnly().firstIndex { $0.equals!(cell) }
+    return cellsOnly().firstIndex { $0.id == cell.id }
   }
 }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Astrolabe'
-  s.version = '5.3'
+  s.version = '6.0'
   s.summary = 'Cells management library'
 
   s.homepage = 'https://github.com/netcosports/Astrolabe'
@@ -16,14 +16,10 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.1', '5.2', '5.3']
 
-  s.default_subspec = 'Core'
+  s.source_files = 'Sources/Core/*.swift'
+  s.tvos.exclude_files = ['Sources/Core/*PagerSource.swift', 'Sources/Core/*PagerCollectionViewCell.swift']
 
-  s.subspec 'Core' do |sub|
-    sub.source_files = 'Sources/Core/*.swift'
-    sub.tvos.exclude_files = ['Sources/Core/*PagerSource.swift', 'Sources/Core/*PagerCollectionViewCell.swift']
-
-    sub.dependency 'RxSwift', '~> 6'
-    sub.dependency 'RxCocoa', '~> 6'
-  end
+  s.dependency 'RxSwift', '~> 6'
+  s.dependency 'RxCocoa', '~> 6'
 
 end
