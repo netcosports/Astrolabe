@@ -78,25 +78,21 @@ open class HeaderSection<Container, CellView: ReusableView & Reusable & Eventabl
 
   var headerCell: HeaderCell?
 
-  public init(cells: [Cellable], headerData: HeaderData, inset: UIEdgeInsets? = nil, id: String? = nil,
+  public init(cells: [Cellable], headerData: HeaderData, id: String, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil, eventsEmmiter: AnyObserver<CellView.Event>? = nil, clickEvent: CellView.Event?) {
     super.init(cells: cells, page: 0, inset: inset, minimumLineSpacing: minimumLineSpacing,
                minimumInteritemSpacing: minimumInteritemSpacing)
-    headerCell = HeaderCell(data: headerData, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .header)
-    if let id = id {
-      headerCell?.id = id
-    }
+    headerCell = HeaderCell(data: headerData, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .header)
+    headerCell?.id = id
   }
 
-  public init(cells: [Cellable], headerData: HeaderData, page: Int, id: String? = nil, inset: UIEdgeInsets? = nil,
+  public init(cells: [Cellable], headerData: HeaderData, id: String, page: Int, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
               eventsEmmiter: AnyObserver<CellView.Event>? = nil, clickEvent: CellView.Event?) {
     super.init(cells: cells, page: page, inset: inset, minimumLineSpacing: minimumLineSpacing,
                minimumInteritemSpacing: minimumInteritemSpacing)
-    headerCell = HeaderCell(data: headerData, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .header)
-    if let id = id {
-      headerCell?.id = id
-    }
+    headerCell = HeaderCell(data: headerData, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .header)
+    headerCell?.id = id
   }
 
   public override var supplementaryTypes: [CellType] { return [.header] }
@@ -120,13 +116,13 @@ open class CustomHeaderSection<CellView: ReusableView & Reusable & Eventable>: S
   private let kind: String
   var headerCell: HeaderCell?
 
-  public init(cells: [Cellable], headerData: HeaderData, page: Int = 0, kind: String, inset: UIEdgeInsets? = nil,
+  public init(cells: [Cellable], headerData: HeaderData, id: String, page: Int = 0, kind: String, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
               eventsEmmiter: AnyObserver<CellView.Event>? = nil, clickEvent: CellView.Event?) {
     self.kind = kind
     super.init(cells: cells, page: page, inset: inset,
                minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
-    headerCell = HeaderCell(data: headerData, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .custom(kind: kind))
+    headerCell = HeaderCell(data: headerData, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .custom(kind: kind))
   }
 
   public override var supplementaryTypes: [CellType] { return [.custom(kind: kind)] }
@@ -147,11 +143,11 @@ public typealias CollectionHeaderSection<T: Reusable & ReusableView & Eventable>
 open class TableHeaderSection<T: UITableViewHeaderFooterView>: HeaderSection<UITableView, T>
   where T.Container == UITableView, T: ReusableView & Reusable & Eventable {
 
-  public override init(cells: [Cellable], headerData: HeaderData, page: Int = 0, id: String? = nil,
+  public override init(cells: [Cellable], headerData: HeaderData, id: String, page: Int = 0,
                        inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil,
                        minimumInteritemSpacing: CGFloat? = nil,
                        eventsEmmiter: AnyObserver<T.Event>? = nil, clickEvent: T.Event?) {
-    super.init(cells: cells, headerData: headerData, page: page, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent)
+    super.init(cells: cells, headerData: headerData, id: id, page: page, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent)
   }
 }
 
@@ -163,12 +159,12 @@ open class FooterSection<Container, CellView: ReusableView & Reusable & Eventabl
 
   var footerCell: FooterCell?
 
-  public init(cells: [Cellable], footerData: FooterData, page: Int = 0, inset: UIEdgeInsets? = nil,
+  public init(cells: [Cellable], footerData: FooterData, id: String, page: Int = 0, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
               eventsEmmiter: AnyObserver<CellView.Event>? = nil, clickEvent: CellView.Event?) {
     super.init(cells: cells, page: page, inset: inset,
                minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
-    footerCell = FooterCell(data: footerData, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .footer)
+    footerCell = FooterCell(data: footerData, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .footer)
   }
 
   public override var supplementaryTypes: [CellType] { return [.footer] }
@@ -189,10 +185,10 @@ public typealias CollectionFooterSection<T:ReusableView & Reusable & Eventable> 
 open class TableFooterSection<T: UITableViewHeaderFooterView>: FooterSection<UITableView, T>
   where T.Container == UITableView, T: ReusableView & Reusable & Eventable {
 
-  public override init(cells: [Cellable], footerData: FooterData, page: Int = 0, inset: UIEdgeInsets? = nil,
+  public override init(cells: [Cellable], footerData: FooterData, id: String, page: Int = 0, inset: UIEdgeInsets? = nil,
                        minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
                        eventsEmmiter: AnyObserver<T.Event>? = nil, clickEvent: T.Event?) {
-    super.init(cells: cells, footerData: footerData, page: page, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent)
+    super.init(cells: cells, footerData: footerData, id: id, page: page, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent)
   }
 }
 
@@ -210,18 +206,21 @@ open class HeaderFooterSection<Container,
   var headerCell: HeaderCell?
   var footerCell: FooterCell?
 
-  public init(cells: [Cellable], headerData: HeaderData, footerData: FooterData, page: Int = 0, id: String? = nil,
-              inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
+  public init(cells: [Cellable],
+              headerData: HeaderData, idHeader: String,
+              footerData: FooterData, idFooter: String,
+              page: Int = 0,
+              inset: UIEdgeInsets? = nil,
+              minimumLineSpacing: CGFloat? = nil,
+              minimumInteritemSpacing: CGFloat? = nil,
               headerEventsEmmiter: AnyObserver<HeaderView.Event>? = nil, headerClickEvent: HeaderView.Event?,
               footerEventsEmmiter: AnyObserver<FooterView.Event>? = nil, footerClickEvent: FooterView.Event?) {
-    super.init(cells: cells, id: id ?? "", page: page, inset: inset,
+    super.init(cells: cells, id: idHeader, page: page, inset: inset,
                minimumLineSpacing: minimumLineSpacing, minimumInteritemSpacing: minimumInteritemSpacing)
 
-    headerCell = HeaderCell(data: headerData, eventsEmmiter: headerEventsEmmiter, clickEvent: headerClickEvent, type: .header)
-    if let id = id {
-      headerCell?.id = id
-    }
-    footerCell = FooterCell(data: footerData, eventsEmmiter: footerEventsEmmiter, clickEvent: footerClickEvent, type: .footer)
+    headerCell = HeaderCell(data: headerData, id: idHeader, eventsEmmiter: headerEventsEmmiter, clickEvent: headerClickEvent, type: .header)
+    headerCell?.id = idHeader
+    footerCell = FooterCell(data: footerData, id: idFooter, eventsEmmiter: footerEventsEmmiter, clickEvent: footerClickEvent, type: .footer)
   }
 
   public override var supplementaryTypes: [CellType] { return [.header, .footer] }
@@ -246,12 +245,18 @@ open class TableHeaderFooterSection<Header: UITableViewHeaderFooterView, Footer:
   HeaderFooterSection<UITableView, Header, Footer> where Header.Container == UITableView,
   Footer.Container == UITableView, Header: ReusableView & Reusable & Eventable, Footer: ReusableView & Reusable & Eventable {
 
-  public override init(cells: [Cellable], headerData: HeaderData, footerData: FooterData, page: Int = 0,
-                       id: String? = nil, inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil,
+  public override init(cells: [Cellable],
+                       headerData: HeaderData, idHeader: String,
+                       footerData: FooterData, idFooter: String,
+                       page: Int = 0,
+                       inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil,
                        minimumInteritemSpacing: CGFloat? = nil,
                        headerEventsEmmiter: AnyObserver<Header.Event>? = nil, headerClickEvent: Header.Event? = nil,
                        footerEventsEmmiter: AnyObserver<Footer.Event>? = nil, footerClickEvent: Footer.Event? = nil) {
-    super.init(cells: cells, headerData: headerData, footerData: footerData, page: page, id: id,
+    super.init(cells: cells,
+               headerData: headerData, idHeader: idHeader,
+               footerData: footerData, idFooter: idFooter,
+               page: page,
                headerEventsEmmiter: headerEventsEmmiter, headerClickEvent: headerClickEvent,
                footerEventsEmmiter: footerEventsEmmiter, footerClickEvent: footerClickEvent)
   }

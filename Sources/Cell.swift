@@ -33,17 +33,9 @@ where CellView.Container == Container {
 
   // MARK: - Init
 
-  public convenience init(data: Data, eventsEmmiter: AnyObserver<Event>? = nil, clickEvent: Event? = nil) {
-    self.init(data: data, clickEvent: clickEvent, type: .cell, setup: nil, equals: nil)
-  }
-
-  public convenience init(data: Data, id: String = "", clickEvent: Event? = nil) {
-    self.init(data: data, id: id, clickEvent: clickEvent, type: .cell, setup: nil, equals: nil)
-  }
-
   public init(
     data: Data,
-    id: String = "",
+    id: String,
     eventsEmmiter: AnyObserver<Event>? = nil,
     clickEvent: Event? = nil,
     type: CellType = .cell,
