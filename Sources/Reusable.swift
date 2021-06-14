@@ -94,8 +94,15 @@ public protocol Eventable: AnyObject {
 public protocol Reusable: ReusedData {
   func setup(with data: Data)
 
+  func cellRequested()
+
   static func size(for data: Data, containerSize: CGSize) -> CGSize
   static func identifier(for data: Data) -> String
+}
+
+public extension Reusable {
+
+  func cellRequested() { }
 }
 
 public extension Reusable where Data == Never {

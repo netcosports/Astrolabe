@@ -93,9 +93,11 @@ where CellView.Container == Container {
     if let eventsEmmiter = eventsEmmiter {
       cellView.eventSubject.bind(to: eventsEmmiter).disposed(by: eventBinderDisposeBag)
     }
+    cellView.cellRequested()
     guard cellView.data != data else {
       return
     }
+    cellView.data = data
     cellView.setup(with: data)
   }
 

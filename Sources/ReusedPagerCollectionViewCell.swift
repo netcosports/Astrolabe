@@ -31,16 +31,18 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>:
       .disposed(by: disposeBag)
   }
 
-  public func setup(with data: Data) {
-    if viewController.data != data {
-      viewController.data = data
-    }
-
+  public func cellRequested() {
     if viewController.view.superview != contentView {
       setupChildView()
       shouldCallWillAppear = false
     } else {
       shouldCallWillAppear = true
+    }
+  }
+
+  public func setup(with data: Data) {
+    if viewController.data != data {
+      viewController.data = data
     }
   }
 
