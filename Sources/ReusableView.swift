@@ -255,10 +255,12 @@ extension ContainerView {
 
   public func apply(
     newContext: CollectionUpdateContext?,
+    sectionsUpdater: VoidClosure?,
     completion: CompletionClosure? = nil
   ) {
       if let context = newContext {
         self.batchUpdate(block: {
+          sectionsUpdater?()
           self.deleteSectionables(at: context.deletedSections)
           self.delete(at: context.deleted)
           self.reloadSectionables(at: context.updatedSections)
@@ -276,10 +278,16 @@ extension ReusableSource {
 
   public func appply(
     sections: [Sectionable],
-    completion: ContainerView.CompletionClosure? = nil) {
+    completion: ContainerView.CompletionClosure? = nil
+  ) {
     let currectSections = self.sections
     let context = DiffUtils.diff(new: sections, old: currectSections)
-    self.sections = sections
-    self.containerView?.apply(newContext: context, completion: completion)
+    self.containerView?.apply(
+      newContext: context,
+      sectionsUpdater: { [weak self] in
+        self?.sections = sections
+      },
+      completion: completion
+    )
   }
 }
