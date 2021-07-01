@@ -31,8 +31,8 @@ open class Section: Sectionable {
     self.minimumLineSpacing = minimumLineSpacing
     self.minimumInteritemSpacing = minimumInteritemSpacing
 
-    self.equals = {
-      guard !$0.id.isEmpty && !self.id.isEmpty else {
+    self.equals = { [weak self] in
+      guard let self = self, !$0.id.isEmpty && !self.id.isEmpty else {
         assertionFailure("id of a section must not be empty string")
         return false
       }

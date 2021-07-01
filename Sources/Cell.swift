@@ -55,8 +55,8 @@ where CellView.Container == Container {
     if let exactEqual = equals {
       self.equals = exactEqual
     } else {
-      self.equals = {
-        guard !$0.id.isEmpty && !self.id.isEmpty else {
+      self.equals = { [weak self] in
+        guard let self = self, !$0.id.isEmpty && !self.id.isEmpty else {
           assertionFailure("id of a cell must not be empty string")
           return false
         }
@@ -108,7 +108,6 @@ where CellView.Container == Container {
       return CGSize.zero
     }
   }
-
 }
 
 open class ExpandableCell<Container, CellView: ReusableView & Reusable & Eventable>: Cell<Container, CellView>,
