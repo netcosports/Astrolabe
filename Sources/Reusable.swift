@@ -40,11 +40,13 @@ public protocol ReusableSource: AnyObject {
   init()
 
   associatedtype Container: UIScrollView & ContainerView
+  associatedtype SectionState: Hashable
+  associatedtype CellState: Hashable
 
   var containerView: Container? { get set }
   var hostViewController: UIViewController? { get set }
-  var sections: [Sectionable] { get set }
-  var selectedCellIds: Set<String> { get set }
+  var sections: [Section<SectionState, CellState>] { get set }
+  var selectedCellStates: Set<CellState> { get set }
   var selectionBehavior: SelectionBehavior { get set }
   var selectionManagement: SelectionManagement { get set }
 
@@ -59,23 +61,23 @@ extension ReusableSource {
     return sections.reduce(0, { $0 + $1.cells.count })
   }
 
-  func processSelection(for cellId: String) {
+  func processSelection(for state: CellState) {
     switch selectionBehavior {
     case .single:
-      if selectedCellIds.contains(cellId) {
-        selectedCellIds.remove(cellId)
+      if selectedCellStates.contains(state) {
+        selectedCellStates.remove(state)
       } else {
-        selectedCellIds = [cellId]
+        selectedCellStates = [state]
       }
     case .multiple:
-      if selectedCellIds.contains(cellId) {
-        selectedCellIds.remove(cellId)
+      if selectedCellStates.contains(state) {
+        selectedCellStates.remove(state)
       } else {
-        selectedCellIds.insert(cellId)
+        selectedCellStates.insert(state)
       }
     case .singleUnselectable:
-      if !selectedCellIds.contains(cellId) {
-        selectedCellIds = [cellId]
+      if !selectedCellStates.contains(state) {
+        selectedCellStates = [state]
       }
     }
   }

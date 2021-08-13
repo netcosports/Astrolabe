@@ -8,6 +8,8 @@
 
 import UIKit
 
+import RxSwift
+
 public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
@@ -39,28 +41,19 @@ public protocol Cellable {
   func size<T: ContainerView>(with container: T) -> CGSize
 
   var type: CellType { get }
-  var click: ClickClosure? { get }
-  var equals: EqualsClosure<Cellable>? { get }
 
-  var page: Int { get }
-
-  // FIXME: need to clarify this
-  var id: String { get }
-
+  func handleClickEvent()
 }
 
 public protocol ExpandableCellable: Cellable {
   var expandableCells: [Cellable]? { get set }
 }
-
-public protocol Sectionable {
-  var supplementaryTypes: [CellType] { get }
-  func supplementaries(for type: CellType) -> [Cellable]
-  var cells: [Cellable] { get set }
-  var equals: EqualsClosure<Sectionable>? { get }
-  var page: Int { get }
-  var inset: UIEdgeInsets? { get set }
-  var minimumLineSpacing: CGFloat? { get set }
-  var minimumInteritemSpacing: CGFloat? { get set }
-  var id: String { get }
-}
+//
+//public protocol Sectionable {
+//  var supplementaryTypes: [CellType] { get }
+//  func supplementaries(for type: CellType) -> [Cellable]
+//
+//  var inset: UIEdgeInsets? { get set }
+//  var minimumLineSpacing: CGFloat? { get set }
+//  var minimumInteritemSpacing: CGFloat? { get set }
+//}

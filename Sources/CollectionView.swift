@@ -9,13 +9,13 @@
 import UIKit
 import RxCocoa
 
-open class CollectionView<T: ReusableSource>: UICollectionView, AccessorView where T.Container == UICollectionView {
+open class CollectionView<T: ReusableSource>: UICollectionView where T.Container == UICollectionView {
 
   public typealias Source = T
   public let source = T()
 
   public required init() {
-    super.init(frame: .zero, collectionViewLayout: CollectionViewSource.defaultLayout)
+    super.init(frame: .zero, collectionViewLayout: CollectionViewSource<T.SectionState, T.CellState>.defaultLayout)
     internalInit()
   }
 

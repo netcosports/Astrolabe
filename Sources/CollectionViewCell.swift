@@ -8,6 +8,8 @@
 
 import UIKit
 
+import RxSwift
+
 open class RootCollectionCell: UICollectionViewCell {
 
   convenience init() {
@@ -39,6 +41,8 @@ open class RootCollectionCell: UICollectionViewCell {
 }
 
 open class CollectionViewCell: RootCollectionCell, ReusableView {
+  public var eventBinderDisposeBag = DisposeBag()
+
   open var cell: Cellable?
   open weak var hostContainerView: UICollectionView?
   open weak var hostViewController: UIViewController?

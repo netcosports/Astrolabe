@@ -8,142 +8,71 @@
 
 import Quick
 import Nimble
-import Astrolabe
+@testable import Astrolabe
+
+import RxSwift
+import RxCocoa
 
 import UIKit
 
 class DiffUtilsTests: QuickSpec {
 
+  class TestCell: CollectionViewCell, Reusable, Eventable {
+
+    func setup(with data: Data) {
+
+    }
+
+    let eventSubject = PublishSubject<Event>()
+
+    var data: DiffUtilsTests.CellParams?
+
+    typealias Data = CellParams
+    typealias Event = String
+  }
+
   struct SectionParams: Hashable {
-    var id: String = ""
+    static func == (lhs: DiffUtilsTests.SectionParams, rhs: DiffUtilsTests.SectionParams) -> Bool {
+      return lhs.state == rhs.state
+    }
+
+    func hash(into hasher: inout Hasher) {
+      hasher.combine(state)
+    }
+
+    var state: String = ""
     var cellParams = [CellParams]()
     var supplyParams = [CellParams]()
   }
 
   struct CellParams: Hashable {
     func hash(into hasher: inout Hasher) {
-      hasher.combine(id)
       hasher.combine(type)
-      hasher.combine(data)
+      hasher.combine(state)
     }
 
     static func == (lhs: DiffUtilsTests.CellParams, rhs: DiffUtilsTests.CellParams) -> Bool {
-      return lhs.id == rhs.id &&
-             lhs.type == rhs.type &&
-             lhs.data == rhs.data
+      return lhs.type == rhs.type &&
+             lhs.state == rhs.state
     }
-
-    var id: String = ""
+    var state: String
     var type: CellType = .cell
-    var data: Int = -1
-    var dataEquals: EqualsClosure<Cellable>?
   }
 
-  fileprivate var emptySectionables = [Sectionable]()
-  //fileprivate let simpleDataEquals: EqualsClosure<Cellable> = { $0 == $1 }
+  fileprivate var emptySectionables = [Section<SectionParams, CellParams>]()
 
   fileprivate func sectionablesWithParams(
     _ params: [SectionParams]
-  ) -> [Sectionable] {
+  ) -> [Section<SectionParams, CellParams>] {
 
     return params.map { sectionParam in
-      let section = SectionStub()
-      section.id = sectionParam.id
-      section.supplementaryTypes = sectionParam.supplyParams.map { $0.type }
-      section.supplementaryCells = sectionParam.supplyParams.map { cellParam in
-        return CellStub(id: cellParam.id, type: cellParam.type, data: cellParam.data)
-      }
-      section.cells = sectionParam.cellParams.map { cellParam in
-        return CellStub(id: cellParam.id, type: cellParam.type, data: cellParam.data)
-      }
-      return section
+      return Section<SectionParams, CellParams>(
+        cells: sectionParam.cellParams.map { Cell<CellParams>.init(cell: TestCell.self, state: $0) },
+        state: sectionParam,
+        supplementaries: sectionParam.supplyParams.map { Cell<CellParams>.init(cell: TestCell.self, state: $0) }.map { $0.cell }
+
+      )
     }
-  }
-
-  fileprivate class CellStub: DataHodler<Int>, Cellable {
-
-    init(id: String, type: CellType, data: Int) {
-      self.type = type
-      super.init(data: data)
-      self.id = id
-      self.equals = {
-        guard !$0.id.isEmpty && !self.id.isEmpty else {
-          assertionFailure("id of a cell must not be empty string")
-          return false
-        }
-        guard let anotherCell = $0 as? Self else {
-          return false
-        }
-        return anotherCell.data == self.data
-      }
-    }
-
-    func register<T>(in container: T) where T : ContainerView {
-      // not used
-      fatalError()
-    }
-
-    func instance<T1, T2>(for container: T1, index: IndexPath) -> T2 where T1 : ContainerView, T2 : ReusableView {
-      // not used
-      fatalError()
-    }
-
-    func setup<T>(with cell: T) where T : ReusableView {
-      // not used
-      fatalError()
-    }
-
-    func size<T>(with container: T) -> CGSize where T : ContainerView {
-      // not used
-      fatalError()
-    }
-
-    var type: CellType
-
-    var click: ClickClosure?
-
-    var equals: EqualsClosure<Cellable>?
-
-    var page: Int = 0
-
-    var id: String = ""
-  }
-
-  fileprivate class SectionStub: Sectionable {
-
-    init() {
-      self.equals = {
-        guard !$0.id.isEmpty && !self.id.isEmpty else {
-          assertionFailure("id of a section must not be empty string")
-          return false
-        }
-        return self.id == $0.id
-      }
-    }
-
-    var supplementaryTypes: [CellType] = []
-
-    var supplementaryCells: [Cellable] = []
-
-
-    func supplementaries(for type: CellType) -> [Cellable] {
-      return supplementaryCells.filter { $0.type == type }
-    }
-
-
-    var cells: [Cellable] = []
-
-    var equals: EqualsClosure<Sectionable>?
-
-    var page: Int = 0
-
-    var inset: UIEdgeInsets?
-
-    var minimumLineSpacing: CGFloat?
-
-    var minimumInteritemSpacing: CGFloat?
-
-    var id: String = ""
   }
 
   override func spec() {
@@ -152,36 +81,36 @@ class DiffUtilsTests: QuickSpec {
 
       context("when sections") {
 
-        it("with empty ids") {
-
-          let old = self.sectionablesWithParams(
-            [
-              SectionParams(id: "", cellParams: [], supplyParams: []),
-              SectionParams(id: "1", cellParams: [], supplyParams: [])
-            ]
-          )
-          let new = self.sectionablesWithParams(
-            [
-              SectionParams(id: "", cellParams: [], supplyParams: []),
-              SectionParams(id: "3", cellParams: [], supplyParams: [])
-            ]
-          )
-
-          expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
-        }
+//        it("with empty ids") {
+//
+//          let old = self.sectionablesWithParams(
+//            [
+//              SectionParams(state: "", cellParams: [], supplyParams: []),
+//              SectionParams(state: "1", cellParams: [], supplyParams: [])
+//            ]
+//          )
+//          let new = self.sectionablesWithParams(
+//            [
+//              SectionParams(state: "", cellParams: [], supplyParams: []),
+//              SectionParams(state: "3", cellParams: [], supplyParams: [])
+//            ]
+//          )
+//
+//          expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
+//        }
 
         it("with id collisions") {
 
           let old = self.sectionablesWithParams(
             [
-              SectionParams(id: "1", cellParams: [], supplyParams: []),
-              SectionParams(id: "1", cellParams: [], supplyParams: [])
+              SectionParams(state: "1", cellParams: [], supplyParams: []),
+              SectionParams(state: "1", cellParams: [], supplyParams: [])
             ]
           )
           let new = self.sectionablesWithParams(
             [
-              SectionParams(id: "3", cellParams: [], supplyParams: []),
-              SectionParams(id: "3", cellParams: [], supplyParams: [])
+              SectionParams(state: "3", cellParams: [], supplyParams: []),
+              SectionParams(state: "3", cellParams: [], supplyParams: [])
             ]
           )
 
@@ -190,110 +119,110 @@ class DiffUtilsTests: QuickSpec {
 
         context("with supplementary cells") {
 
-          it("with empty ids") {
+//          it("with empty ids") {
+//
+//            let old = self.sectionablesWithParams(
+//              [
+//                SectionParams(
+//                  state: "1",
+//                  cellParams: [],
+//                  supplyParams: [
+//                    CellParams(state: "", type: .footer),
+//                  ]),
+//                SectionParams(state: "2", cellParams: [], supplyParams: [])
+//              ]
+//            )
+//            let new = self.sectionablesWithParams(
+//              [
+//                SectionParams(state: "1", cellParams: [], supplyParams: []),
+//                SectionParams(
+//                  state: "2",
+//                  cellParams: [],
+//                  supplyParams: [
+//                    CellParams(state: "", type: .header),
+//                  ])
+//              ]
+//            )
+//
+//            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
+//          }
 
-            let old = self.sectionablesWithParams(
-              [
-                SectionParams(
-                  id: "1",
-                  cellParams: [],
-                  supplyParams: [
-                    CellParams(id: "", type: .footer, data: 1),
-                  ]),
-                SectionParams(id: "2", cellParams: [], supplyParams: [])
-              ]
-            )
-            let new = self.sectionablesWithParams(
-              [
-                SectionParams(id: "1", cellParams: [], supplyParams: []),
-                SectionParams(
-                  id: "2",
-                  cellParams: [],
-                  supplyParams: [
-                    CellParams(id: "", type: .header, data: 1),
-                  ])
-              ]
-            )
-
-            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
-          }
-
-          it("with id collisions") {
-
-            let old = self.sectionablesWithParams(
-              [
-                SectionParams(
-                  id: "1",
-                  cellParams: [],
-                  supplyParams: [
-                    CellParams(id: "1", type: .footer, data: 1),
-                    CellParams(id: "1", type: .header, data: 1),
-                  ]),
-                SectionParams(id: "2", cellParams: [], supplyParams: [])
-              ]
-            )
-            let new = self.sectionablesWithParams(
-              [
-                SectionParams(id: "1", cellParams: [], supplyParams: []),
-                SectionParams(
-                  id: "2",
-                  cellParams: [],
-                  supplyParams: [
-                    CellParams(id: "1", type: .header, data: 1),
-                  ])
-              ]
-            )
-
-            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
-          }
+//          it("with id collisions") {
+//
+//            let old = self.sectionablesWithParams(
+//              [
+//                SectionParams(
+//                  state: "1",
+//                  cellParams: [],
+//                  supplyParams: [
+//                    CellParams(state: "1", type: .footer),
+//                    CellParams(state: "1", type: .header),
+//                  ]),
+//                SectionParams(state: "2", cellParams: [], supplyParams: [])
+//              ]
+//            )
+//            let new = self.sectionablesWithParams(
+//              [
+//                SectionParams(state: "1", cellParams: [], supplyParams: []),
+//                SectionParams(
+//                  state: "2",
+//                  cellParams: [],
+//                  supplyParams: [
+//                    CellParams(state: "1", type: .header),
+//                  ])
+//              ]
+//            )
+//
+//            expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
+//          }
         }
 
         context("are valid") {
 
           context("when cells") {
 
-            it("with empty ids") {
-
-              let old = self.emptySectionables
-              let new = self.sectionablesWithParams(
-                [
-                  SectionParams(
-                    id: "0",
-                    cellParams: [
-                      CellParams(id: "", type: .cell, data: 0),
-                      CellParams(id: "1", type: .cell, data: 1)
-                    ], supplyParams: []),
-                  SectionParams(
-                    id: "1",
-                    cellParams: [
-                      CellParams(id: "1", type: .cell, data: 1),
-                      CellParams(id: "", type: .cell, data: 0)
-                    ], supplyParams: [])
-                ]
-              )
-
-              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
-            }
+//            it("with empty ids") {
+//
+//              let old = self.emptySectionables
+//              let new = self.sectionablesWithParams(
+//                [
+//                  SectionParams(
+//                    state: "0",
+//                    cellParams: [
+//                      CellParams(state: "", type: .cell),
+//                      CellParams(state: "1", type: .cell)
+//                    ], supplyParams: []),
+//                  SectionParams(
+//                    state: "1",
+//                    cellParams: [
+//                      CellParams(state: "1", type: .cell),
+//                      CellParams(state: "", type: .cell)
+//                    ], supplyParams: [])
+//                ]
+//              )
+//
+//              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
+//            }
 
             it("with id collisions") {
 
               let old = self.sectionablesWithParams(
                 [
                   SectionParams(
-                    id: "0",
+                    state: "0",
                     cellParams: [
-                      CellParams(id: "0", type: .cell, data: 0),
-                      CellParams(id: "0", type: .cell, data: 1)
+                      CellParams(state: "0", type: .cell),
+                      CellParams(state: "0", type: .cell)
                     ], supplyParams: [])
                 ]
               )
               let new = self.sectionablesWithParams(
                 [
                   SectionParams(
-                    id: "0",
+                    state: "0",
                     cellParams: [
-                      CellParams(id: "1", type: .cell, data: 0),
-                      CellParams(id: "1", type: .cell, data: 1)
+                      CellParams(state: "1", type: .cell),
+                      CellParams(state: "1", type: .cell)
                     ], supplyParams: [])
                 ]
               )
@@ -301,37 +230,37 @@ class DiffUtilsTests: QuickSpec {
               expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
             }
 
-            it("without data equals closures") {
-
-              let old = self.sectionablesWithParams(
-                [
-                  SectionParams(
-                    id: "0",
-                    cellParams: [
-                      CellParams(id: "", type: .cell, data: 0),
-                      CellParams(id: "1", type: .cell, data: 1, dataEquals: nil)
-                    ], supplyParams: [])
-                ]
-              )
-              let new = self.sectionablesWithParams(
-                [
-                  SectionParams(
-                    id: "0",
-                    cellParams: [
-                      CellParams(id: "0", type: .cell, data: 0),
-                      CellParams(id: "1", type: .cell, data: 1, dataEquals: nil)
-                    ], supplyParams: []),
-                  SectionParams(
-                    id: "1",
-                    cellParams: [
-                      CellParams(id: "1", type: .cell, data: 1),
-                      CellParams(id: "2", type: .cell, data: 0)
-                    ], supplyParams: [])
-                ]
-              )
-
-              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
-            }
+//            it("without data equals closures") {
+//
+//              let old = self.sectionablesWithParams(
+//                [
+//                  SectionParams(
+//                    state: "0",
+//                    cellParams: [
+//                      CellParams(state: "", type: .cell),
+//                      CellParams(state: "1", type: .cell)
+//                    ], supplyParams: [])
+//                ]
+//              )
+//              let new = self.sectionablesWithParams(
+//                [
+//                  SectionParams(
+//                    state: "0",
+//                    cellParams: [
+//                      CellParams(state: "0", type: .cell),
+//                      CellParams(state: "1", type: .cell)
+//                    ], supplyParams: []),
+//                  SectionParams(
+//                    state: "1",
+//                    cellParams: [
+//                      CellParams(state: "1", type: .cell),
+//                      CellParams(state: "2", type: .cell)
+//                    ], supplyParams: [])
+//                ]
+//              )
+//
+//              expect { try DiffUtils.diffOrThrow(new: new, old: old) }.to(throwError())
+//            }
 
             context("are valid") {
 
@@ -341,29 +270,29 @@ class DiffUtilsTests: QuickSpec {
 
                   let sections = [
                     SectionParams(
-                      id: "0",
+                      state: "0",
                       cellParams: [
-                        CellParams(id: "?", type: .header, data: 0),
-                        CellParams(id: "0", type: .cell, data: 0),
-                        CellParams(id: "1", type: .cell, data: 1),
-                        CellParams(id: "??", type: .footer, data: 0)
+                        CellParams(state: "?", type: .header),
+                        CellParams(state: "0", type: .cell),
+                        CellParams(state: "1", type: .cell),
+                        CellParams(state: "??", type: .footer)
                       ],
                       supplyParams: [
-                        CellParams(id: "0", type: .header, data: 0),
-                        CellParams(id: "1", type: .footer, data: 1)
+                        CellParams(state: "0", type: .header),
+                        CellParams(state: "1", type: .footer)
                       ]
                     ),
                     SectionParams(
-                      id: "1",
+                      state: "1",
                       cellParams: [
-                        CellParams(id: "?", type: .header, data: 0),
-                        CellParams(id: "0", type: .cell, data: 0),
-                        CellParams(id: "1", type: .cell, data: 1),
-                        CellParams(id: "??", type: .footer, data: 0)
+                        CellParams(state: "?", type: .header),
+                        CellParams(state: "0", type: .cell),
+                        CellParams(state: "1", type: .cell),
+                        CellParams(state: "??", type: .footer)
                       ],
                       supplyParams: [
-                        CellParams(id: "0", type: .header, data: 0),
-                        CellParams(id: "1", type: .footer, data: 1)
+                        CellParams(state: "0", type: .header),
+                        CellParams(state: "1", type: .footer)
                       ]
                     )
                   ]
@@ -378,44 +307,44 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
                   let new = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
@@ -434,43 +363,43 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
                   let new = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "???", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
@@ -490,32 +419,32 @@ class DiffUtilsTests: QuickSpec {
 
                     let old = self.sectionablesWithParams([
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       ),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       ),
                       SectionParams(
-                        id: "3",
+                        state: "3",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       )
@@ -523,32 +452,32 @@ class DiffUtilsTests: QuickSpec {
                     )
                     let new = self.sectionablesWithParams([
                       SectionParams(
-                        id: "3",
+                        state: "3",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       ),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       ),
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: []
                       )
@@ -568,83 +497,81 @@ class DiffUtilsTests: QuickSpec {
 
                     let old = self.sectionablesWithParams([
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]
                       ),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]
                       ),
                       SectionParams(
-                        id: "3",
+                        state: "3",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]
                       )
                       ]
                     )
                     let new = self.sectionablesWithParams([
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "3", type: .header)
                         ]
                       ),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "3", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "3", type: .header)
                         ]
                       ),
                       SectionParams(
-                        id: "3",
+                        state: "3",
                         cellParams: [
-                          CellParams(id: "?", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "??", type: .footer, data: 0)
+                          CellParams(state: "?", type: .header),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "??", type: .footer)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 5)
+                          CellParams(state: "1", type: .footer)
                         ]
                       )
                       ]
@@ -665,55 +592,55 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "???", type: .footer, data: 0)
+                          CellParams(state: "???", type: .cell),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "", type: .cell)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1)
+                          CellParams(state: "???", type: .cell),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
                   let new = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "???", type: .header, data: 0),
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "", type: .footer, data: 1) // inserted
+                          CellParams(state: "???", type: .cell),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "", type: .cell)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "", type: .header, data: 0), // inserted
-                          CellParams(id: "2", type: .cell, data: 2) // inserted
+                          CellParams(state: "???", type: .cell),
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "2", type: .cell), // inserted
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
@@ -722,7 +649,7 @@ class DiffUtilsTests: QuickSpec {
                   expect(context?.insertedSections) == IndexSet()
                   expect(context?.deletedSections) == IndexSet()
                   expect(context?.updatedSections) == IndexSet()
-                  expect(context?.inserted) == [IndexPath(row: 2, section: 1)]
+                  expect(context?.inserted) == [IndexPath(row: 3, section: 1)]
                   expect(context?.deleted) == [IndexPath]()
                   expect(context?.updated) == [IndexPath]()
                 }
@@ -732,51 +659,49 @@ class DiffUtilsTests: QuickSpec {
                   let old = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1), // deleted
-                          CellParams(id: "", type: .footer, data: 0) // deleted
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell), // deleted
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "", type: .header, data: 0), // deleted
-                          CellParams(id: "2", type: .cell, data: 2)
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "2", type: .cell)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
                   let new = self.sectionablesWithParams(
                     [
                       SectionParams(
-                        id: "0",
+                        state: "0",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
+                          CellParams(state: "0", type: .cell),
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ]),
                       SectionParams(
-                        id: "1",
+                        state: "1",
                         cellParams: [
-                          CellParams(id: "0", type: .cell, data: 0),
-                          CellParams(id: "1", type: .cell, data: 1),
-                          CellParams(id: "2", type: .cell, data: 2)
+                          CellParams(state: "0", type: .cell),
+                          CellParams(state: "1", type: .cell),
+                          CellParams(state: "2", type: .cell)
                         ],
                         supplyParams: [
-                          CellParams(id: "0", type: .header, data: 0),
-                          CellParams(id: "1", type: .footer, data: 1)
+                          CellParams(state: "0", type: .header),
+                          CellParams(state: "1", type: .footer)
                         ])
                     ]
                   )
@@ -792,60 +717,55 @@ class DiffUtilsTests: QuickSpec {
 
                 context("updating cell") {
 
-                  it("when data changes") {
+                  it("when data not changed") {
 
                     let old = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ]),
                         SectionParams(
-                          id: "1",
+                          state: "1",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ])
                       ]
                     )
                     let new = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 2)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ]),
                         SectionParams(
-                          id: "1",
+                          state: "1",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ])
                       ]
                     )
 
                     let context = DiffUtils.diff(new: new, old: old)
-                    expect(context?.insertedSections) == IndexSet()
-                    expect(context?.deletedSections) == IndexSet()
-                    expect(context?.updatedSections) == IndexSet()
-                    expect(context?.inserted) == [IndexPath]()
-                    expect(context?.deleted) == [IndexPath]()
-                    expect(context?.updated) == [IndexPath(row: 0, section: 0)]
+                    expect(context).to(beNil())
                   }
 
                   it("when insert and delete same cell") {
@@ -853,44 +773,44 @@ class DiffUtilsTests: QuickSpec {
                     let old = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ]),
                         SectionParams(
-                          id: "1",
+                          state: "1",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ])
                       ]
                     )
                     let new = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "1", type: .cell, data: 1)
+                            CellParams(state: "1", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ]),
                         SectionParams(
-                          id: "1",
+                          state: "1",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 1)
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: [
-                            CellParams(id: "0", type: .header, data: 0),
-                            CellParams(id: "1", type: .footer, data: 1)
+                            CellParams(state: "0", type: .header),
+                            CellParams(state: "1", type: .footer)
                           ])
                       ]
                     )
@@ -909,11 +829,11 @@ class DiffUtilsTests: QuickSpec {
                     let old = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "0", type: .cell, data: 0),
-                            CellParams(id: "1", type: .cell, data: 1),
-                            CellParams(id: "2", type: .cell, data: 2)
+                            CellParams(state: "0", type: .cell),
+                            CellParams(state: "1", type: .cell),
+                            CellParams(state: "2", type: .cell)
                           ],
                           supplyParams: []),
                       ]
@@ -921,11 +841,11 @@ class DiffUtilsTests: QuickSpec {
                     let new = self.sectionablesWithParams(
                       [
                         SectionParams(
-                          id: "0",
+                          state: "0",
                           cellParams: [
-                            CellParams(id: "2", type: .cell, data: 2),
-                            CellParams(id: "1", type: .cell, data: 1),
-                            CellParams(id: "0", type: .cell, data: 0)
+                            CellParams(state: "2", type: .cell),
+                            CellParams(state: "1", type: .cell),
+                            CellParams(state: "0", type: .cell)
                           ],
                           supplyParams: []),
                       ]

@@ -31,6 +31,8 @@ public protocol ReusableView: AnyObject {
   var selectedState: Bool { get set }
   var expandedState: Bool { get set }
 
+  var eventBinderDisposeBag: DisposeBag { get set }
+
   func willDisplay()
   func endDisplay()
 }
@@ -277,11 +279,11 @@ extension ContainerView {
 extension ReusableSource {
 
   public func appply(
-    sections: [Sectionable],
+    sections: [Section<SectionState, CellState>],
     completion: ContainerView.CompletionClosure? = nil
   ) {
     let currectSections = self.sections
-    let context = DiffUtils.diff(new: sections, old: currectSections)
+    let context = DiffUtils<SectionState, CellState>.diff(new: sections, old: currectSections)
     self.containerView?.apply(
       newContext: context,
       sectionsUpdater: { [weak self] in

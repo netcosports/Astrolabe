@@ -18,7 +18,10 @@ public protocol PagerSourceCell: AnyObject {
   func didDisappear()
 }
 
-open class CollectionViewReusedPagerSource: CollectionViewSource {
+open class CollectionViewReusedPagerSource<
+  SectionState: Hashable,
+  CellState: Hashable
+>: CollectionViewSource<SectionState, CellState> {
 
   override open var containerView: UICollectionView? {
     didSet {
@@ -119,7 +122,8 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   private weak var appearing: PagerCell?
   private weak var disappearing: PagerCell?
   fileprivate let disposeBag = DisposeBag()
-  fileprivate var selectedItem = BehaviorSubject<Int>(value: 0)
+
+  public let selectedItem = BehaviorSubject<Int>(value: 0)
 
   private func beginAppearanceTransition() {
     guard let containerView = containerView else { return }
@@ -179,11 +183,11 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
   }
 }
 
-extension CollectionViewReusedPagerSource: ReactiveCompatible {}
-extension Reactive where Base: CollectionViewReusedPagerSource {
-
-  public var selectedItem: ControlProperty<Int> {
-    return ControlProperty(values: base.selectedItem.asObservable(),
-                           valueSink: base.selectedItem)
-  }
-}
+//extension CollectionViewReusedPagerSource: ReactiveCompatible {}
+//extension Reactive where Base: CollectionViewReusedPagerSource {
+//
+//  public var selectedItem: ControlProperty<Int> {
+//    return ControlProperty(values: base.selectedItem.asObservable(),
+//                           valueSink: base.selectedItem)
+//  }
+//}

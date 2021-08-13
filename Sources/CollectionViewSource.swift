@@ -10,32 +10,76 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate where CellView: ReusableView, CellView.Container == UICollectionView {
+class CollectionViewDataSource<
+  CellView: UICollectionViewCell,
+  SectionState: Hashable,
+  CellState: Hashable
+>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate where CellView: ReusableView, CellView.Container == UICollectionView {
 
-  var sections: [Sectionable] = []
+  var sections: [Section<SectionState, CellState>] = []
 
   var lastCellDisplayed: VoidClosure?
   var lastCellСondition: LastCellConditionClosure?
-  var setupCell: ((CellView, Cellable) -> ())?
-  var cellSelected: ((Cellable, IndexPath) -> ())?
-  var disabledForReorderCells: [String] = []
+
+  var setupCell: ((CellView, Cell<CellState>) -> ())?
+  var setupSupplementary: ((CellView, Cellable) -> ())?
+
+  var cellSelected: ((Cell<CellState>, IndexPath) -> ())?
+  var supplementarySelected: ((Cell<SectionState>, IndexPath) -> ())?
+
+  var disabledForReorderCells: [CellState] = []
 
   #if os(tvOS)
   public let focusedItem = BehaviorRelay<Int>(value: 0)
   #endif
 
-  internal func setupCell(cellView: CellView, collectionView: UICollectionView, cell: Cellable, indexPath: IndexPath) {
+  internal func setupCellable(
+    cellView: CellView,
+    collectionView: UICollectionView,
+    cell: Cellable,
+    indexPath: IndexPath
+  ) {
     cellView.hostContainerView = collectionView
     cellView.indexPath = indexPath
     cellView.cell = cell
-
-    setupCell?(cellView, cell)
   }
 
-  internal func instance(cell: Cellable, collectionView: UICollectionView, indexPath: IndexPath) -> CellView {
+  internal func instanceCellable<State: Hashable>(
+    cell: Cell<State>,
+    collectionView: UICollectionView,
+    indexPath: IndexPath
+  ) -> CellView {
+    let cellView: CellView = cell.cell.instance(for: collectionView, index: indexPath)
+    setupCellable(cellView: cellView, collectionView: collectionView, cell: cell.cell, indexPath: indexPath)
+    // FIXME: bind actions inside
+    cell.cell.setup(with: cellView)
+    return cellView
+  }
+
+  internal func instanceCell(
+    cell: Cell<CellState>,
+    collectionView: UICollectionView,
+    indexPath: IndexPath
+  ) -> CellView {
+    let cellView = instanceCellable(
+      cell: cell,
+      collectionView: collectionView,
+      indexPath: indexPath
+    )
+    setupCell?(cellView, cell)
+    return cellView
+  }
+
+  internal func instanceSupplementary(
+    cell: Cellable,
+    collectionView: UICollectionView,
+    indexPath: IndexPath
+  ) -> CellView {
     let cellView: CellView = cell.instance(for: collectionView, index: indexPath)
-    setupCell(cellView: cellView, collectionView: collectionView, cell: cell, indexPath: indexPath)
+    setupCellable(cellView: cellView, collectionView: collectionView, cell: cell, indexPath: indexPath)
+    // FIXME: bind actions inside
     cell.setup(with: cellView)
+    setupSupplementary?(cellView, cell)
     return cellView
   }
 
@@ -52,7 +96,11 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
                            cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    return instance(cell: cell, collectionView: collectionView, indexPath: indexPath)
+    return instanceCell(
+      cell: cell,
+      collectionView: collectionView,
+      indexPath: indexPath
+    )
   }
 
   open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
@@ -83,15 +131,17 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
     guard let supplementary = targetSupplementary else {
       fatalError("Section does not have supplementary view of kind \(kind)")
     }
-    return instance(cell: supplementary,
-                    collectionView: collectionView,
-                    indexPath: indexPath)
+    return instanceSupplementary(
+      cell: supplementary,
+      collectionView: collectionView,
+      indexPath: indexPath
+    )
   }
 
   open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    cell.click?()
+    cell.cell.handleClickEvent()
     cellSelected?(cell, indexPath)
   }
 
@@ -99,7 +149,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
                            sizeForItemAt indexPath: IndexPath) -> CGSize {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    return cell.size(with: collectionView)
+    return cell.cell.size(with: collectionView)
   }
 
   open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -199,7 +249,7 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
     let section = sections[indexPath.section]
     let cell = section.cells[indexPath.item]
-    return !disabledForReorderCells.contains(cell.id)
+    return !disabledForReorderCells.contains(cell.state)
   }
 
   open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -229,13 +279,17 @@ class CollectionViewDataSource<CellView: UICollectionViewCell>: NSObject, UIColl
   #endif
 }
 
-open class GenericCollectionViewSource<CellView: UICollectionViewCell>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView {
+open class GenericCollectionViewSource<
+  CellView: UICollectionViewCell,
+  SectionState: Hashable,
+  CellState: Hashable
+>: ReusableSource where CellView: ReusableView, CellView.Container == UICollectionView {
 
   public required init() {}
 
   public typealias Container = UICollectionView
 
-  let dataSource = CollectionViewDataSource<CellView>()
+  let dataSource = CollectionViewDataSource<CellView, SectionState, CellState>()
 
   open weak var containerView: Container? {
     didSet {
@@ -244,7 +298,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   }
 
   public weak var hostViewController: UIViewController?
-  public var sections: [Sectionable] = [] {
+  public var sections: [Section<SectionState, CellState>] = [] {
     didSet {
       dataSource.sections = sections
       registerCellsForSections()
@@ -260,7 +314,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
       dataSource.lastCellСondition = lastCellСondition
     }
   }
-  public var selectedCellIds: Set<String> = []
+  public var selectedCellStates: Set<CellState> = []
   public var selectionBehavior: SelectionBehavior = .single
   public var selectionManagement: SelectionManagement = .none
   #if os(tvOS)
@@ -270,11 +324,11 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
 
   // NOTE: property to pass current sections from the datasource
   // it could be different with the one in a sections because of reordering feature
-  public var orderedSections: [Sectionable] {
+  public var orderedSections: [Section<SectionState, CellState>] {
     return dataSource.sections
   }
 
-  public var disabledForReorderCells: [String] = [] {
+  public var disabledForReorderCells: [CellState] = [] {
     didSet {
       dataSource.disabledForReorderCells = disabledForReorderCells
     }
@@ -302,14 +356,14 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
     #endif
   }
 
-  func setup(cellView: CellView, with cell: Cellable) {
+  func setup(cellView: CellView, with cell: Cell<CellState>) {
     cellView.hostViewController = hostViewController
-    cellView.selectedState = selectedCellIds.contains(cell.id)
+    cellView.selectedState = selectedCellStates.contains(cell.state)
   }
 
-  func click(cell: Cellable, indexPath: IndexPath) {
+  func click(cell: Cell<CellState>, indexPath: IndexPath) {
     if selectionManagement == .automatic {
-      processSelection(for: cell.id)
+      processSelection(for: cell.state)
       containerView?.reloadData()
     }
   }
@@ -324,7 +378,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
         }
       }
       section.cells.forEach { cell in
-        cell.register(in: containerView)
+        cell.cell.register(in: containerView)
       }
     }
   }
@@ -343,7 +397,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
 
     while view != nil {
       if let cell = supplementary(in: view, at: recognizer.location(in: view)) {
-        cell.click?()
+        cell.handleClickEvent()
       }
       view = parentScrollView(of: view?.superview)
     }
@@ -376,4 +430,7 @@ open class GenericCollectionViewSource<CellView: UICollectionViewCell>: Reusable
   }
 }
 
-public typealias CollectionViewSource = GenericCollectionViewSource<CollectionViewCell>
+public typealias CollectionViewSource<
+  SectionState: Hashable,
+  CellState: Hashable
+> = GenericCollectionViewSource<CollectionViewCell, SectionState, CellState>

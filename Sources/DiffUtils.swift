@@ -51,7 +51,10 @@ public enum DiffError: Error {
 }
 
 /** Utility class to manage differences between new and old sources */
-open class DiffUtils {
+open class DiffUtils<
+  SectionState: Hashable,
+  CellState: Hashable
+> {
 
   // MARK: - Open API
 
@@ -65,8 +68,8 @@ open class DiffUtils {
    - returns: CollectionUpdateContext instance or nil
    */
   open class func diff(
-    new newSections: [Sectionable],
-    old oldSections: [Sectionable]
+    new newSections: [Section<SectionState, CellState>],
+    old oldSections: [Section<SectionState, CellState>]
     ) -> CollectionUpdateContext? {
     do {
       return try diffOrThrow(new: newSections, old: oldSections)
@@ -89,23 +92,23 @@ open class DiffUtils {
    - throws: DiffError if data inconsistent
    */
   open class func diffOrThrow(
-    new newSections: [Sectionable],
-    old oldSections: [Sectionable]
+    new newSections: [Section<SectionState, CellState>],
+    old oldSections: [Section<SectionState, CellState>]
     ) throws -> CollectionUpdateContext? {
 
-    /*
-     Check validity of sections.
-     - id
-     - equals closure
-     */
-    let allSections = newSections + oldSections
-    if let section = allSections.first(where: { $0.id.isEmpty || $0.equals == nil }) {
-      throw DiffError.error("Check section id, equals closure: \(section)")
-    }
-    if Set(newSections.map({ $0.id })).count != newSections.count {
+//    /*
+//     Check validity of sections.
+//     - id
+//     - equals closure
+//     */
+//    let allSections = newSections + oldSections
+//    if let section = allSections.first(where: { $0.id.isEmpty || $0.equals == nil }) {
+//      throw DiffError.error("Check section id, equals closure: \(section)")
+//    }
+    if Set(newSections.map({ $0.state })).count != newSections.count {
       throw DiffError.error("Check new section ids: collision detected")
     }
-    if Set(oldSections.map({ $0.id })).count != oldSections.count {
+    if Set(oldSections.map({ $0.state })).count != oldSections.count {
       throw DiffError.error("Check old section ids: collision detected")
     }
 
@@ -115,22 +118,22 @@ open class DiffUtils {
      - equals closure
      - data equals closure
      */
-    let allSupplyCellsOnly = allSections.compactMap({ $0.supplyCellsOnly() }).reduce([], +)
-    if let cell = allSupplyCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
-      throw DiffError.error("Check supplementary cell id, equals closure, data equals closure: \(cell)")
-    }
-    try newSections.forEach { section in
-      let supplyCellsOnly = section.supplyCellsOnly()
-      if Set(supplyCellsOnly.map({ $0.id })).count != supplyCellsOnly.count {
-        throw DiffError.error("Check supplementary cell ids: collision detected for new section \(section)")
-      }
-    }
-    try oldSections.forEach { section in
-      let supplyCellsOnly = section.supplyCellsOnly()
-      if Set(supplyCellsOnly.map({ $0.id })).count != supplyCellsOnly.count {
-        throw DiffError.error("Check supplementary cell ids: collision detected for old section \(section)")
-      }
-    }
+//    let allSupplyCellsOnly = allSections.compactMap({ $0.supplyCellsOnly() }).reduce([], +)
+//    if let cell = allSupplyCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
+//      throw DiffError.error("Check supplementary cell id, equals closure, data equals closure: \(cell)")
+//    }
+//    try newSections.forEach { section in
+//      let supplyCellsOnly = section.supplyCellsOnly()
+//      if Set(supplyCellsOnly.map({ $0.sta })).count != supplyCellsOnly.count {
+//        throw DiffError.error("Check supplementary cell ids: collision detected for new section \(section)")
+//      }
+//    }
+//    try oldSections.forEach { section in
+//      let supplyCellsOnly = section.supplyCellsOnly()
+//      if Set(supplyCellsOnly.map({ $0.id })).count != supplyCellsOnly.count {
+//        throw DiffError.error("Check supplementary cell ids: collision detected for old section \(section)")
+//      }
+//    }
 
     /*
      Check validity of cells
@@ -138,19 +141,19 @@ open class DiffUtils {
      - equals closure
      - data equals closure
      */
-    let allCellsOnly = allSections.compactMap({ $0.cellsOnly() }).reduce([], +)
-    if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
-      throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
-    }
+//    let allCellsOnly = allSections.compactMap({ $0.cellsOnly() }).reduce([], +)
+//    if let cell = allCellsOnly.first(where: { $0.id.isEmpty || $0.equals == nil }) {
+//      throw DiffError.error("Check cell id, equals closure, data equals closure: \(cell)")
+//    }
     try newSections.forEach { section in
       let cellsOnly = section.cellsOnly()
-      if Set(cellsOnly.map({ $0.id })).count != cellsOnly.count {
+      if Set(cellsOnly.map({ $0.state })).count != cellsOnly.count {
         throw DiffError.error("Check cell ids: collision detected for new section \(section)")
       }
     }
     try oldSections.forEach { section in
       let cellsOnly = section.cellsOnly()
-      if Set(cellsOnly.map({ $0.id })).count != cellsOnly.count {
+      if Set(cellsOnly.map({ $0.state })).count != cellsOnly.count {
         throw DiffError.error("Check cell ids: collision detected for old section \(section)")
       }
     }
@@ -158,30 +161,30 @@ open class DiffUtils {
     /*
      Detect inserted sections
      */
-    var insertedSections = newSections.filter { !oldSections.containsSection($0) }
-    var insertedSectionsIndecies = insertedSections.compactMap { newSections.firstIndexOfSection($0) }
+    var insertedSections = newSections.filter { !containsSection(in: oldSections, $0) }
+    var insertedSectionsIndecies = insertedSections.compactMap { firstIndexOfSection(in: newSections, $0) }
 
     /*
      Detect deleted sections
      */
-    var deletedSections = oldSections.filter { !newSections.containsSection($0) }
-    var deletedSectionsIndecies = deletedSections.compactMap { oldSections.firstIndexOfSection($0) }
+    var deletedSections = oldSections.filter { !containsSection(in: newSections, $0) }
+    var deletedSectionsIndecies = deletedSections.compactMap { firstIndexOfSection(in: oldSections, $0) }
 
     /*
      Detect updated sections.
      By checking index changes.
      By bypassing it's supplementary items and checking it's equals and dataEquals closures.
      */
-    var updatedSections = [Sectionable]()
+    var updatedSections = [Section<SectionState, CellState>]()
     var updatedSectionsIndecies = [Int]()
     for (oldSectionIndex, oldSectionToDiscover) in oldSections.enumerated() {
 
       /* Skip already deleted sections */
-      if deletedSections.containsSection(oldSectionToDiscover) {
+      if containsSection(in: deletedSections, oldSectionToDiscover) {
         continue
       }
 
-      guard let newSectionToDiscover = newSections.first(where: { oldSectionToDiscover.equals!($0) }) else {
+      guard let newSectionToDiscover = newSections.first(where: { oldSectionToDiscover.state == $0.state }) else {
         assertionFailure("should not happen")
         continue
       }
@@ -190,7 +193,7 @@ open class DiffUtils {
        Check if section moved
        Then don't move but delete/insert intead (safest way for sections)
        */
-      if let sameNewSectionIndex = newSections.firstIndexOfSection(newSectionToDiscover),
+      if let sameNewSectionIndex = firstIndexOfSection(in: newSections, newSectionToDiscover),
         oldSectionIndex != sameNewSectionIndex {
 
         deletedSections.append(oldSectionToDiscover)
@@ -209,16 +212,9 @@ open class DiffUtils {
       var updated = false
       let newSupplyCells = newSectionToDiscover.supplyCellsOnly()
       let oldSupplyCells = oldSectionToDiscover.supplyCellsOnly()
-      if newSupplyCells.count == oldSupplyCells.count {
-        for (index, newSupplyCell) in newSupplyCells.enumerated() {
-          let oldSupplyCell = oldSupplyCells[index]
-          if !(newSupplyCell.id == oldSupplyCell.id) ||
-            !areCellableDatasEqual(cell1: newSupplyCell, cell2: oldSupplyCell) {
-            updated = true
-            break
-          }
-        }
-      } else {
+
+      // NOTE: we only handle case when count of supplimentories updated
+      if newSupplyCells.map({ $0.type }) != oldSupplyCells.map({ $0.type }) {
         updated = true
       }
 
@@ -237,13 +233,13 @@ open class DiffUtils {
     for (oldSectionIndex, oldSectionToDiscover) in oldSections.enumerated() {
 
       /* Skip already inserted, deleted and updated sections */
-      if insertedSections.containsSection(oldSectionToDiscover) ||
-        deletedSections.containsSection(oldSectionToDiscover) ||
-        updatedSections.containsSection(oldSectionToDiscover) {
+      if containsSection(in: insertedSections, oldSectionToDiscover) ||
+         containsSection(in: deletedSections, oldSectionToDiscover) ||
+         containsSection(in: updatedSections, oldSectionToDiscover) {
         continue
       }
 
-      guard let newSectionIndex = newSections.firstIndexOfSection(oldSectionToDiscover) else {
+      guard let newSectionIndex = firstIndexOfSection(in: newSections, oldSectionToDiscover) else {
         assertionFailure("should not happen")
         continue
       }
@@ -290,13 +286,13 @@ open class DiffUtils {
     for (newSectionIndex, newSectionToDiscover) in newSections.enumerated() {
 
       /* Skip already inserted, deleted and updated sections */
-      if insertedSections.containsSection(newSectionToDiscover) ||
-        deletedSections.containsSection(newSectionToDiscover) ||
-        updatedSections.containsSection(newSectionToDiscover) {
+      if containsSection(in: insertedSections, newSectionToDiscover) ||
+         containsSection(in: deletedSections, newSectionToDiscover) ||
+         containsSection(in: updatedSections, newSectionToDiscover) {
         continue
       }
 
-      guard let oldSectionIndex = oldSections.firstIndexOfSection(newSectionToDiscover) else {
+      guard let oldSectionIndex = firstIndexOfSection(in: oldSections, newSectionToDiscover) else {
         assertionFailure("should not happen")
         continue
       }
@@ -347,62 +343,72 @@ open class DiffUtils {
 
   // MARK: - Utils
 
-  fileprivate class func areCellableDatasEqual(cell1: Cellable, cell2: Cellable) -> Bool {
-    return cell1.equals?(cell2) ?? false
+  fileprivate class func areCellableDatasEqual(cell1: Cell<CellState>, cell2: Cell<CellState>) -> Bool {
+    return cell1.state == cell2.state
   }
 }
 
 // MARK: - Conveniens Extensions
 
-fileprivate extension Array where Element == Cellable {
-
-  func firstCellLike(_ cell: Cellable) -> Cellable? {
-    return first { $0.id == cell.id }
-  }
-
-  func containsCell(_ cell: Cellable) -> Bool {
-    return contains { $0.id == cell.id }
-  }
-
-  func firstIndexOfCell(_ cell: Cellable) -> Index? {
-    return firstIndex { $0.id == cell.id }
-  }
+func firstCellLike<
+  CellState: Hashable
+>(in cells: [Cell<CellState>], _ cell: Cell<CellState>) -> Cell<CellState>? {
+  return cells.first { $0.state == cell.state }
 }
 
-fileprivate extension Array where Element == Sectionable {
-
-  func firstSectionLike(_ section: Sectionable) -> Sectionable? {
-    return first { $0.id == section.id }
-  }
-
-  func containsSection(_ section: Sectionable) -> Bool {
-    return contains { $0.id == section.id }
-  }
-
-  func firstIndexOfSection(_ section: Sectionable) -> Index? {
-    return firstIndex { $0.id == section.id }
-  }
+func containsCell<
+  CellState: Hashable
+>(in cells: [Cell<CellState>], _ cell: Cell<CellState>) -> Bool {
+  return cells.contains { $0.state == cell.state }
 }
 
-fileprivate extension Sectionable {
+func firstIndexOfCell<
+  CellState: Hashable
+>(in cells: [Cell<CellState>], _ cell: Cell<CellState>) -> Array<Cell<CellState>>.Index? {
+  return cells.firstIndex { $0.state == cell.state }
+}
 
-  func cellsOnly() -> [Cellable] {
-    return cells.filter { $0.type == .cell }
+func firstSectionLike<
+  SectionState: Hashable,
+  CellState: Hashable
+>(in sections: [Section<SectionState, CellState>], _ section: Section<SectionState, CellState>) -> Section<SectionState, CellState>? {
+  return sections.first { $0.state  == section.state }
+}
+
+func containsSection<
+  SectionState: Hashable,
+  CellState: Hashable
+>(in sections: [Section<SectionState, CellState>], _ section: Section<SectionState, CellState>) -> Bool {
+  return sections.contains { $0.state  == section.state }
+}
+
+func firstIndexOfSection<
+  SectionState: Hashable,
+  CellState: Hashable
+>(in sections: [Section<SectionState, CellState>],
+  _ section: Section<SectionState, CellState>) -> Array<Section<SectionState, CellState>>.Index? {
+  return sections.firstIndex { $0.state  == section.state }
+}
+
+fileprivate extension Section {
+
+  func cellsOnly() -> [Cell<CellState>] {
+    return cells
   }
 
   func supplyCellsOnly() -> [Cellable] {
     return supplementaryTypes.flatMap { supplementaries(for: $0) }
   }
 
-  func firstCellLike(_ cell: Cellable) -> Cellable? {
-    return cellsOnly().first { $0.id == cell.id }
+  func firstCellLike(_ cell: Cell<CellState>) -> Cell<CellState>? {
+    return cellsOnly().first { $0.state == cell.state }
   }
 
-  func containsCell(_ cell: Cellable) -> Bool {
-    return cellsOnly().contains { $0.id == cell.id }
+  func containsCell(_ cell: Cell<CellState>) -> Bool {
+    return cellsOnly().contains { $0.state == cell.state }
   }
 
-  func firstIndexOfCell(_ cell: Cellable) -> Array<Cellable>.Index? {
-    return cellsOnly().firstIndex { $0.id == cell.id }
+  func firstIndexOfCell(_ cell: Cell<CellState>) -> Array<Cell<CellState>>.Index? {
+    return cellsOnly().firstIndex { $0.state == cell.state }
   }
 }
