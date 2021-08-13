@@ -123,7 +123,7 @@ open class CollectionViewReusedPagerSource<
   private weak var disappearing: PagerCell?
   fileprivate let disposeBag = DisposeBag()
 
-  public let selectedItem = BehaviorSubject<Int>(value: 0)
+  fileprivate let selectedItem = BehaviorSubject<Int>(value: 0)
 
   private func beginAppearanceTransition() {
     guard let containerView = containerView else { return }
@@ -181,13 +181,27 @@ open class CollectionViewReusedPagerSource<
     selectedItem.onNext(page)
     containerView.isUserInteractionEnabled = true
   }
+
+  struct Reactive<SectionState: Hashable, CellState: Hashable> {
+    let base: CollectionViewReusedPagerSource<SectionState, CellState>
+
+    fileprivate init(_ base: CollectionViewReusedPagerSource<SectionState, CellState>) {
+      self.base = base
+    }
+  }
+
+  var reactive: Reactive<SectionState, CellState> {
+    return Reactive(self)
+  }
 }
 
-//extension CollectionViewReusedPagerSource: ReactiveCompatible {}
-//extension Reactive where Base: CollectionViewReusedPagerSource {
-//
-//  public var selectedItem: ControlProperty<Int> {
-//    return ControlProperty(values: base.selectedItem.asObservable(),
-//                           valueSink: base.selectedItem)
-//  }
-//}
+extension CollectionViewReusedPagerSource: ReactiveCompatible {}
+extension CollectionViewReusedPagerSource.Reactive {
+
+  public var selectedItem: ControlProperty<Int> {
+    return ControlProperty(
+      values: base.selectedItem.asObservable(),
+      valueSink: base.selectedItem
+    )
+  }
+}

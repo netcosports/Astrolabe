@@ -14,8 +14,6 @@ public typealias VoidClosure = () -> Void
 public typealias ClickClosure = VoidClosure
 public typealias SetupClosure<T> = (T) -> Void
 
-public typealias EqualsClosure<T> = (T) -> Bool
-
 public typealias LastCellConditionClosure = (_ path: IndexPath, _ sectionsCounts: Int, _ itemsInSectionCount: Int) -> Bool
 
 public enum CellType: Hashable {
@@ -44,16 +42,3 @@ public protocol Cellable {
 
   func handleClickEvent()
 }
-
-public protocol ExpandableCellable: Cellable {
-  var expandableCells: [Cellable]? { get set }
-}
-//
-//public protocol Sectionable {
-//  var supplementaryTypes: [CellType] { get }
-//  func supplementaries(for type: CellType) -> [Cellable]
-//
-//  var inset: UIEdgeInsets? { get set }
-//  var minimumLineSpacing: CGFloat? { get set }
-//  var minimumInteritemSpacing: CGFloat? { get set }
-//}

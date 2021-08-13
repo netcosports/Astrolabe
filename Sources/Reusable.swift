@@ -20,21 +20,6 @@ public enum SelectionBehavior {
   case single, singleUnselectable, multiple
 }
 
-public struct ExpandableBehavior {
-  public var collapseDisabled = false
-  public var collapseOtherOnExpand = true
-  // Disabled or enabled scroll to cell after collapse/expand animation
-  public var autoScrollToItemDisabled = false
-
-  public init(collapseDisabled: Bool = false,
-              collapseOtherOnExpand: Bool = true,
-              autoScrollToItemDisabled: Bool = false) {
-    self.collapseDisabled = collapseDisabled
-    self.collapseOtherOnExpand = collapseOtherOnExpand
-    self.autoScrollToItemDisabled = autoScrollToItemDisabled
-  }
-}
-
 public protocol ReusableSource: AnyObject {
 
   init()
@@ -53,6 +38,11 @@ public protocol ReusableSource: AnyObject {
   func registerCellsForSections()
   var lastCellDisplayed: VoidClosure? { get set }
   var lastCellСondition: LastCellConditionClosure? { get set }
+
+  func apply(
+   sections: [Section<SectionState, CellState>],
+   completion: ContainerView.CompletionClosure?
+ )
 }
 
 extension ReusableSource {

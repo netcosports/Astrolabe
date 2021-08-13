@@ -275,21 +275,3 @@ extension ContainerView {
       }
     }
 }
-
-extension ReusableSource {
-
-  public func appply(
-    sections: [Section<SectionState, CellState>],
-    completion: ContainerView.CompletionClosure? = nil
-  ) {
-    let currectSections = self.sections
-    let context = DiffUtils<SectionState, CellState>.diff(new: sections, old: currectSections)
-    self.containerView?.apply(
-      newContext: context,
-      sectionsUpdater: { [weak self] in
-        self?.sections = sections
-      },
-      completion: completion
-    )
-  }
-}
