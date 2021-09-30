@@ -26,8 +26,8 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>:
 
   public override func setup() {
     super.setup()
-    eventSubject
-      .bind(to: viewController.eventSubject)
+    viewController.eventSubject
+      .bind(to: eventSubject)
       .disposed(by: disposeBag)
   }
 

@@ -30,6 +30,7 @@ public protocol ReusableView: AnyObject {
 
   var selectedState: Bool { get set }
   var expandedState: Bool { get set }
+  var eventBinderDisposeBag: DisposeBag { get set }
 
   func willDisplay()
   func endDisplay()

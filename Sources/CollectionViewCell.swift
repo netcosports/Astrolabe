@@ -6,6 +6,7 @@
 //  Copyright © 2016 Netcosports. All rights reserved.
 //
 
+import RxSwift
 import UIKit
 
 open class RootCollectionCell: UICollectionViewCell {
@@ -39,6 +40,8 @@ open class RootCollectionCell: UICollectionViewCell {
 }
 
 open class CollectionViewCell: RootCollectionCell, ReusableView {
+  public var eventBinderDisposeBag = DisposeBag()
+
   open var cell: Cellable?
   open weak var hostContainerView: UICollectionView?
   open weak var hostViewController: UIViewController?

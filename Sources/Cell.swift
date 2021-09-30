@@ -26,7 +26,6 @@ where CellView.Container == Container {
 
   let eventsEmmiter: AnyObserver<Event>?
   let clickEvent: Event?
-  var eventBinderDisposeBag = DisposeBag()
 
   open var identifier: String { return cellClass.identifier(for: data) }
   open var needsToRegister: Bool { return true }
@@ -89,9 +88,11 @@ where CellView.Container == Container {
     guard let cellView = cell as? CellView else {
       fatalError("\(cell.self) trying to setup as \(cellClass)")
     }
-    eventBinderDisposeBag = DisposeBag()
+    cellView.eventBinderDisposeBag = DisposeBag()
     if let eventsEmmiter = eventsEmmiter {
-      cellView.eventSubject.bind(to: eventsEmmiter).disposed(by: eventBinderDisposeBag)
+      cellView.eventSubject
+        .bind(to: eventsEmmiter)
+        .disposed(by: cellView.eventBinderDisposeBag)
     }
     if cellView.data != data {
       cellView.data = data

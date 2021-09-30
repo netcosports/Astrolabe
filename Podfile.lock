@@ -1,7 +1,5 @@
 PODS:
-  - Astrolabe (5.3):
-    - Astrolabe/Core (= 5.3)
-  - Astrolabe/Core (5.3):
+  - Astrolabe (6.0.0):
     - RxCocoa (~> 6)
     - RxSwift (~> 6)
   - Nimble (8.0.4)
@@ -42,7 +40,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Astrolabe: 039225a4ab8747032c84fe9f4655c6bc73ebe6e2
+  Astrolabe: 29b16a5fa299a352001433bdf92fb1bbb9207b19
   Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   RxBlocking: 0b29f7d2079109a8de49c411381bed7c33ef1eeb
@@ -54,4 +52,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1fa0cc0b2f6b00260d0636c65b79342446cffad6
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.11.2
