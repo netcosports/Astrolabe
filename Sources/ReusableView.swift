@@ -282,13 +282,18 @@ extension ReusableSource {
     completion: ContainerView.CompletionClosure? = nil
   ) {
     let currectSections = self.sections
-    let context = DiffUtils.diff(new: sections, old: currectSections)
-    self.containerView?.apply(
-      newContext: context,
-      sectionsUpdater: { [weak self] in
-        self?.sections = sections
-      },
-      completion: completion
-    )
+    do {
+      let context = try DiffUtils.diffOrThrow(new: sections, old: currectSections)
+      self.containerView?.apply(
+        newContext: context,
+        sectionsUpdater: { [weak self] in
+          self?.sections = sections
+        },
+        completion: completion
+      )
+    } catch {
+      self.sections = sections
+      self.containerView?.reloadData()
+    }
   }
 }
