@@ -25,7 +25,7 @@ open class Section: Sectionable {
 
   public init(cells: [Cellable], id: String = "", page: Int = 0, inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil) {
     self.cells = cells
-        self.id = id
+    self.id = id
     self.page = page
     self.inset = inset
     self.minimumLineSpacing = minimumLineSpacing
@@ -80,7 +80,7 @@ open class HeaderSection<Container, CellView: ReusableView & Reusable & Eventabl
 
   public init(cells: [Cellable], headerData: HeaderData, id: String, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil, eventsEmmiter: AnyObserver<CellView.Event>? = nil, clickEvent: CellView.Event?) {
-    super.init(cells: cells, page: 0, inset: inset, minimumLineSpacing: minimumLineSpacing,
+    super.init(cells: cells, id: id, page: 0, inset: inset, minimumLineSpacing: minimumLineSpacing,
                minimumInteritemSpacing: minimumInteritemSpacing)
     headerCell = HeaderCell(data: headerData, id: id, eventsEmmiter: eventsEmmiter, clickEvent: clickEvent, type: .header)
     headerCell?.id = id
