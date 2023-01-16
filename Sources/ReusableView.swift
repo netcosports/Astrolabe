@@ -253,26 +253,22 @@ extension UITableView: ContainerView {
 }
 
 extension ContainerView {
-
+  
   public func apply(
-    newContext: CollectionUpdateContext?,
+    newContext: CollectionUpdateContext,
     sectionsUpdater: VoidClosure?,
     completion: CompletionClosure? = nil
   ) {
-      if let context = newContext {
-        self.batchUpdate(block: {
-          sectionsUpdater?()
-          self.deleteSectionables(at: context.deletedSections)
-          self.delete(at: context.deleted)
-          self.reloadSectionables(at: context.updatedSections)
-          self.reload(at: context.updated)
-          self.insertSectionables(at: context.insertedSections)
-          self.insert(at: context.inserted)
-        }, completion: completion)
-      } else {
-        self.reloadData()
-      }
-    }
+    self.batchUpdate(block: {
+      sectionsUpdater?()
+      self.deleteSectionables(at: newContext.deletedSections)
+      self.delete(at: newContext.deleted)
+      self.reloadSectionables(at: newContext.updatedSections)
+      self.reload(at: newContext.updated)
+      self.insertSectionables(at: newContext.insertedSections)
+      self.insert(at: newContext.inserted)
+    }, completion: completion)
+  }
 }
 
 extension ReusableSource {
@@ -283,17 +279,19 @@ extension ReusableSource {
   ) {
     let currectSections = self.sections
     do {
-      let context = try DiffUtils.diffOrThrow(new: sections, old: currectSections)
-      self.containerView?.apply(
-        newContext: context,
-        sectionsUpdater: { [weak self] in
-          self?.sections = sections
-        },
-        completion: completion
-      )
+      if let context = try DiffUtils.diffOrThrow(new: sections, old: currectSections) {
+        self.containerView?.apply(
+          newContext: context,
+          sectionsUpdater: { [weak self] in
+            self?.sections = sections
+          },
+          completion: completion
+        )
+      }
     } catch {
       self.sections = sections
       self.containerView?.reloadData()
     }
   }
 }
+
