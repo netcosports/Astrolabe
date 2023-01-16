@@ -39,12 +39,8 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
         guard let `self` = self else { return }
         guard let containerView = self.containerView else { return }
 
-        let offset: CGPoint
-        if UIView.userInterfaceLayoutDirection(for: containerView.semanticContentAttribute) == .rightToLeft {
-          offset = CGPoint(x: containerView.contentSize.width - CGFloat(index + 1) * containerView.frame.width, y: 0)
-        } else {
-          offset = CGPoint(x: CGFloat(index) * containerView.frame.width, y: 0)
-        }
+        let offset: CGPoint = CGPoint(x: CGFloat(index) * containerView.frame.width, y: 0)
+        
         if offset == containerView.contentOffset { return }
 
         containerView.setContentOffset(offset, animated: true)
@@ -167,12 +163,7 @@ open class CollectionViewReusedPagerSource: CollectionViewSource {
       print("\(#file):\(#line) WAT")
     }
 
-    let page: Int
-    if UIView.userInterfaceLayoutDirection(for: containerView.semanticContentAttribute) == .rightToLeft {
-      page = Int((containerView.contentSize.width - containerView.contentOffset.x -  containerView.frame.width) / containerView.frame.width)
-    } else {
-      page = Int(containerView.contentOffset.x / containerView.frame.width)
-    }
+    let page: Int = Int(containerView.contentOffset.x / containerView.frame.width)
 
     selectedItem.onNext(page)
     containerView.isUserInteractionEnabled = true
