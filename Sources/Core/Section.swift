@@ -73,7 +73,7 @@ open class HeaderSection<Container, CellView: ReusableView & Reusable>: Section
   public typealias HeaderCell = Cell<Container, CellView>
   public typealias HeaderData = HeaderCell.Data
 
-  var headerCell: HeaderCell?
+  public var headerCell: HeaderCell?
 
   public init(cells: [Cellable], headerData: HeaderData, inset: UIEdgeInsets? = nil, id: String? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil, click: ClickClosure? = nil) {
@@ -114,7 +114,7 @@ open class CustomHeaderSection<CellView: ReusableView & Reusable>: Section
   public typealias HeaderData = HeaderCell.Data
 
   private let kind: String
-  var headerCell: HeaderCell?
+  public var headerCell: HeaderCell?
 
   public init(cells: [Cellable], headerData: HeaderData, page: Int = 0, kind: String, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
@@ -156,7 +156,7 @@ open class FooterSection<Container, CellView: ReusableView & Reusable>: Section
   public typealias FooterCell = Cell<Container, CellView>
   public typealias FooterData = FooterCell.Data
 
-  var footerCell: FooterCell?
+  public var footerCell: FooterCell?
 
   public init(cells: [Cellable], footerData: FooterData, page: Int = 0, inset: UIEdgeInsets? = nil,
               minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil, click: ClickClosure? = nil) {
@@ -200,8 +200,8 @@ open class HeaderFooterSection<Container, HeaderView: ReusableView & Reusable,
   public typealias FooterCell = Cell<Container, FooterView>
   public typealias FooterData = FooterCell.Data
 
-  var headerCell: HeaderCell?
-  var footerCell: FooterCell?
+  public var headerCell: HeaderCell?
+  public var footerCell: FooterCell?
 
   public init(cells: [Cellable], headerData: HeaderData, footerData: FooterData, page: Int = 0, id: String? = nil,
               inset: UIEdgeInsets? = nil, minimumLineSpacing: CGFloat? = nil, minimumInteritemSpacing: CGFloat? = nil,
