@@ -86,11 +86,6 @@ public protocol ReusedData: AnyObject {
   var data: Data? { get set }
 }
 
-public protocol Eventable: AnyObject {
-  associatedtype Event: Hashable
-  var eventSubject: PublishSubject<Event> { get }
-}
-
 public protocol Reusable: ReusedData {
   func setup(with data: Data)
 

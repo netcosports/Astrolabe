@@ -12,64 +12,45 @@ import Astrolabe
 
 class HomeViewController: BaseTableViewController<TableViewSource> {
   typealias Item = TableCell<TestTableCell>
-  typealias Header = TableHeaderSection<TestTableHeader>
 
   // swiftlint:disable:next function_body_length
   override func allSections() -> [Sectionable]? {
     var tableCells: [Cellable] = [
-      Item(data: TestViewModel("Source"), id: "Table Source") { [weak self] in
-        self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
-      }
+      Item(data: TestViewModel("Source"))
     ]
 
 #if !os(tvOS)
     tableCells.append(contentsOf: [
-      Item(data: TestViewModel("Singe Selection Example"), id: "Singe Selection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionTableViewController(with: .single, ids: []), animated: true)
-      },
-      Item(data: TestViewModel("Multiple Selection Example"), id: "Singe Selection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionTableViewController(with: .multiple, ids: []), animated: true)
-      }
+      Item(data: TestViewModel("Singe Selection Example")),
+      Item(data: TestViewModel("Multiple Selection Example"))
     ])
 #endif
 
 
     var collectionCells: [Cellable] = [
-      Item(data: TestViewModel("Basic Collection Example"), id: "Basic Collection Source") { [weak self] in
-        self?.navigationController?.pushViewController(BasicExampleCollectionViewController(), animated: true)
-      }
+      Item(data: TestViewModel("Basic Collection Example"))
     ]
 
 #if !os(tvOS)
     collectionCells.append(contentsOf: [
-      Item(data: TestViewModel("Singe Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .single, ids: []), animated: true)
-      },
-      Item(data: TestViewModel("Multiple Selection Collection Example"), id: "Singe Selection Collection Example") { [weak self] in
-        self?.navigationController?.pushViewController(SelectionCollectionViewController(with: .multiple, ids: []), animated: true)
-      }
+      Item(data: TestViewModel("Singe Selection Collection Example")) ,
+      Item(data: TestViewModel("Multiple Selection Collection Example"))
     ])
 #endif
 
     collectionCells.append(contentsOf: [
-      Item(data: TestViewModel("Source"), id: "Collection Source") { [weak self] in
-        self?.navigationController?.pushViewController(CollectionSourceViewController(), animated: true)
-      }
+      Item(data: TestViewModel("Source"))
     ])
 
 #if !os(tvOS)
     collectionCells.append(contentsOf: [
-      Item(data: TestViewModel("Reuse Pager"), id: "Collection Reuse Pager") { [weak self] in
-        self?.navigationController?.pushViewController(ReusePagerViewController(), animated: true)
-      }
+      Item(data: TestViewModel("Reuse Pager"))
     ])
 #endif
 
     return [
-      Header(cells: tableCells, headerData: TestViewModel("Table View:"), page: 0) { [weak self] in
-        self?.navigationController?.pushViewController(TableSourceViewController(), animated: true)
-      },
-      Header(cells: collectionCells, headerData: TestViewModel("Collection View:"))
+      Section(cells: tableCells, id: "Table View:"),
+      Section(cells: collectionCells, id: "Collection View:")
     ]
   }
 }

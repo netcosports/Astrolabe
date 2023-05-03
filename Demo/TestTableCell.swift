@@ -10,7 +10,8 @@ import UIKit
 import Astrolabe
 
 class TestTableCell: TableViewCell {
-
+  
+  var data: Data?
   let label: UILabel = {
     let label = UILabel()
     label.textColor = .black
@@ -31,6 +32,8 @@ class TestTableCell: TableViewCell {
 
 extension TestTableCell: Reusable {
 
+  typealias Data = TestViewModel
+  
   func setup(with data: TestViewModel) {
     label.text = data.title
     if selectedState {
@@ -46,7 +49,8 @@ extension TestTableCell: Reusable {
 }
 
 class TestTableHeader: TableViewHeaderFooter {
-
+  
+  var data: Data?
   let label: UILabel = {
     let label = UILabel()
     label.textColor = .black
@@ -66,6 +70,7 @@ class TestTableHeader: TableViewHeaderFooter {
 }
 
 extension TestTableHeader: Reusable {
+  typealias Data = TestViewModel
 
   func setup(with data: TestViewModel) {
     label.text = data.title

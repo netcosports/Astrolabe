@@ -12,13 +12,10 @@ import RxSwift
 import RxCocoa
 
 public final class ReusedPagerCollectionViewCell<Controller: UIViewController>:
-  CollectionViewCell, Reusable, Eventable,
-  PagerSourceCell where Controller: ReusedData & Eventable {
+  CollectionViewCell, Reusable,
+  PagerSourceCell where Controller: ReusedData {
 
-  public let eventSubject = PublishSubject<Event>()
   public var data: Controller.Data?
-
-  public typealias Event = Controller.Event
   public typealias Data = Controller.Data
 
   public var viewController = Controller()
@@ -26,9 +23,6 @@ public final class ReusedPagerCollectionViewCell<Controller: UIViewController>:
 
   public override func setup() {
     super.setup()
-    viewController.eventSubject
-      .bind(to: eventSubject)
-      .disposed(by: disposeBag)
   }
 
   public func cellRequested() {

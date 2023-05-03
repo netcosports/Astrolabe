@@ -11,12 +11,16 @@ import RxSwift
 import RxCocoa
 import Astrolabe
 
-class ExampleReusePagerItemViewController: BaseCollectionViewController<CollectionViewSource>, ReusedPageData {
+extension Int: Identifyable {
+  public var id: String { return "\(self)" }
+}
+
+class ExampleReusePagerItemViewController: BaseCollectionViewController<CollectionViewSource>, ReusedData {
 
   var data: Int? {
     didSet {
       if let page = data {
-        sections = [CollectionGenerator<TestCollectionCell, TestCollectionCell>().section(page: page, cells: 20)]
+        sections = (0...page).map({ _ in Section(cells: (0...20).map { CollectionCell<TestCollectionCell>(data: .init("\($0)")) }) })
         containerView.reloadData()
       }
     }
@@ -85,9 +89,7 @@ class ReusePagerViewController: BaseCollectionViewController<CollectionViewReuse
     containerView.reloadData()
 
     let pageStripCells: [Cellable] = datas.enumerated().map { data in
-      PageStripCell(data: TestViewModel("\(data.offset)")) { [weak self] in
-        self?.source.rx.selectedItem.onNext(data.offset)
-      }
+      PageStripCell(data: TestViewModel("\(data.offset)"))
     }
     pageStripCollectionView.source.sections = [Section(cells: pageStripCells)]
     pageStripCollectionView.reloadData()

@@ -31,25 +31,3 @@ class SelectionCollectionViewController: BasicExampleCollectionViewController {
   }
 
 }
-
-class SelectionTableViewController: TableSourceViewController {
-
-  let selectionBehavior: SelectionBehavior
-  let initialSelectedIds: Set<String>
-
-  init(with selectionBehavior: SelectionBehavior, ids initialSelectedIds: Set<String>) {
-    self.selectionBehavior = selectionBehavior
-    self.initialSelectedIds = initialSelectedIds
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  required init?(coder aDecoder: NSCoder) { fatalError() }
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    source.selectionBehavior = selectionBehavior
-    source.selectedCellIds = initialSelectedIds
-    source.selectionManagement = .automatic
-  }
-  
-}

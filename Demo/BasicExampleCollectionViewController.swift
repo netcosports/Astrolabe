@@ -36,13 +36,13 @@ class BasicExampleCollectionViewController: UIViewController {
 
     containerView.source.sections = [
       Section(cells: models.enumerated().map { index, data in
-        Cell(data: data, id: "0-\(index)")
+        Cell(data: data)
       }, minimumLineSpacing: 44.0, minimumInteritemSpacing: 44.0),
       Section(cells: models.enumerated().map { index, data in
-        Cell(data: data, id: "1-\(index)")
+        Cell(data: data)
       }, minimumLineSpacing: 44.0),
       Section(cells: models.enumerated().map { index, data in
-        Cell(data: data, id: "2-\(index)")
+        Cell(data: data)
       }, minimumInteritemSpacing: 44.0)
     ]
     containerView.reloadData()

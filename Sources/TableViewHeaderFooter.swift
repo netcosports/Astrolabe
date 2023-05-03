@@ -40,7 +40,6 @@ open class RootTableHeaderFooter: UITableViewHeaderFooterView {
 }
 
 open class TableViewHeaderFooter: RootTableHeaderFooter, ReusableView {
-  public var eventBinderDisposeBag = DisposeBag()
   open var cell: Cellable?
   open weak var hostViewController: UIViewController?
   open weak var hostContainerView: UITableView?

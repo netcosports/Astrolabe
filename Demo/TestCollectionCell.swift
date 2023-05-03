@@ -9,9 +9,11 @@
 import UIKit
 import Astrolabe
 
-struct TestViewModel: Comparable, Hashable {
+struct TestViewModel: Comparable, Hashable, Identifyable {
   let title: String
   let color: UIColor
+  
+  var id: String { return title }
 
   init(_ title: String) {
     self.title = title
@@ -36,7 +38,9 @@ func == (lhs: TestViewModel, rhs: TestViewModel) -> Bool {
 
 
 class TestCollectionCell: CollectionViewCell, Reusable {
-
+  var data: Data?
+  typealias Data = TestViewModel
+  
   let label: UILabel = {
     let label = UILabel()
     label.textColor = .black
@@ -55,7 +59,7 @@ class TestCollectionCell: CollectionViewCell, Reusable {
     }
   }
 
-  func setup(with data: TestViewModel) {
+  func setup(with data: Data) {
     label.text = data.title
     if selectedState {
       contentView.backgroundColor = .white
@@ -64,7 +68,7 @@ class TestCollectionCell: CollectionViewCell, Reusable {
     }
   }
 
-  class func size(for data: TestViewModel, containerSize: CGSize) -> CGSize {
+  class func size(for data: Data, containerSize: CGSize) -> CGSize {
     return CGSize(width: 64.0, height: 64.0)
   }
 }
