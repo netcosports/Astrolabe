@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Astrolabe.Swift
+import Astrolabe
 import RxSwift
 
 extension String: Error {
