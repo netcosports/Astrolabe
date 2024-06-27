@@ -63,7 +63,7 @@ class EventDrivenViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-    Observable<Int>.timer(5.0, scheduler: MainScheduler.instance).map { _ in
+    Observable<Int>.timer(.seconds(5), scheduler: MainScheduler.instance).map { _ in
       LoaderResultEvent.softCurrent
     }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }
@@ -85,7 +85,7 @@ class EventDrivenViewModel {
       let context = DiffUtils<TestViewModel>.diff(new: self.sections, old: oldSections)
       return Observable<LoaderResultEvent>
         .just(LoaderResultEvent.soft(sections: self.sections, context: context))
-        .delay(1.0, scheduler: MainScheduler.instance)
+        .delay(.seconds(1), scheduler: MainScheduler.instance)
     default:
       let result = [
         TestViewModel("Test title initials - 1"),
@@ -97,7 +97,7 @@ class EventDrivenViewModel {
       self.sections = self.sections.merge(items: sections, for: intent)?.items ?? []
       return Observable<LoaderResultEvent>
         .just(LoaderResultEvent.force(sections: self.sections, context: nil))
-        .delay(1.0, scheduler: MainScheduler.instance)
+        .delay(.seconds(1), scheduler: MainScheduler.instance)
     }
   }
 }

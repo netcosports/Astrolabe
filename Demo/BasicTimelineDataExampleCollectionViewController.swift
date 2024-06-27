@@ -99,7 +99,7 @@ class BasicTimelineDataExampleCollectionViewController: UIViewController, Loadab
         TestViewModel("Test title initials - 3")
       ]
     }
-    return Observable<[Item]?>.just(result).delay(1.0, scheduler: MainScheduler.instance)
+    return Observable<[Item]?>.just(result).delay(.seconds(1), scheduler: MainScheduler.instance)
   }
 
   func merge(items: [Item]?, for intent: LoaderIntent) -> Observable<MergeResult?>? {

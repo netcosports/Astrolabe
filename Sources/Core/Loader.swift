@@ -121,7 +121,7 @@ public enum MergeStatus {
   case equalWithCurrent
 }
 
-public protocol Loadable: class {
+public protocol Loadable: AnyObject {
 
   associatedtype Item
 
@@ -132,7 +132,7 @@ public protocol Loadable: class {
   func apply(mergeResult: MergeResult?, for intent: LoaderIntent)
 }
 
-public protocol LoaderMediatorProtocol: class {
+public protocol LoaderMediatorProtocol: AnyObject {
   func load<T: LoaderReusableSource>(into source: T, for intent: LoaderIntent) -> Observable<Void>
 }
 
@@ -151,7 +151,7 @@ public class LoaderMediator<Loader: Loadable>: LoaderMediatorProtocol {
     return observable.flatMap { [weak self] items -> Observable<Loader.MergeResult?> in
       guard let merged = self?.loader?.merge(items: items, for: intent) else { return .empty() }
       return merged
-    }.observeOn(MainScheduler.instance)
+    }.observe(on: MainScheduler.instance)
      .do(onNext: { [weak self] mergeResult in
         self?.loader?.apply(mergeResult: mergeResult, for: intent)
       }).map { _ in () }
@@ -184,7 +184,7 @@ extension Array where Element == Sectionable {
 
       let sectionByPages = Dictionary(grouping: updatedSections, by: { $0.page })
       for sectionsByPage in sectionByPages {
-        if let indexToReplace = merged.index(where: { sectionsByPage.key == $0.page }) {
+        if let indexToReplace = merged.firstIndex(where: { sectionsByPage.key == $0.page }) {
           merged = merged.filter { $0.page != sectionsByPage.key }
           let updatedSectionsForPage = sectionsByPage.value.reversed()
           updatedSectionsForPage.forEach {

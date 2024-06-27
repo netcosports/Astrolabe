@@ -149,7 +149,7 @@ open class LoaderDecoratorSource<DecoratedSource: ReusableSource>: LoaderReusabl
   fileprivate func startAutoupdateIfNeeded() {
     guard timerDisposeBag == nil else { return }
     let disposeBag = DisposeBag()
-    Observable<Int>.interval(autoupdatePeriod, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] _ in
+    Observable<Int>.interval(.seconds(Int(autoupdatePeriod)), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] _ in
       self?.load(.autoupdate)
     }).disposed(by: disposeBag)
     timerDisposeBag = disposeBag

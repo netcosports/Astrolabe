@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Astrolabe
+import Astrolabe.Swift
 import RxSwift
 
 extension String: Error {
@@ -146,26 +146,26 @@ class BaseLoaderViewController<T: UIView>: BaseViewController<T>, Loadable, Cont
 
     switch type {
     case .infinitePaging:
-      return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
+      return SectionObservable.just(result).delay(.seconds(1), scheduler: MainScheduler.instance)
     case .emptyPage1:
-      return SectionObservable.just([]).delay(1.0, scheduler: MainScheduler.instance)
+      return SectionObservable.just([]).delay(.seconds(1), scheduler: MainScheduler.instance)
     case .errorPage1:
-      return SectionObservable.just([]).delay(1.0, scheduler: MainScheduler.instance).flatMapLatest({ _ in
+      return SectionObservable.just([]).delay(.seconds(1), scheduler: MainScheduler.instance).flatMapLatest({ _ in
         return SectionObservable.error("Error")
       })
     case .emptyPage4:
       if currentPage > 3 {
-        return SectionObservable.just([]).delay(1.0, scheduler: MainScheduler.instance)
+        return SectionObservable.just([]).delay(.seconds(1), scheduler: MainScheduler.instance)
       } else {
-        return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
+        return SectionObservable.just(result).delay(.seconds(1), scheduler: MainScheduler.instance)
       }
     case .errorPage4:
       if currentPage > 3 {
-        return SectionObservable.just([]).delay(1.0, scheduler: MainScheduler.instance).flatMapLatest({ _ in
+        return SectionObservable.just([]).delay(.seconds(1), scheduler: MainScheduler.instance).flatMapLatest({ _ in
           return SectionObservable.error("Error")
         })
       } else {
-        return SectionObservable.just(result).delay(1.0, scheduler: MainScheduler.instance)
+        return SectionObservable.just(result).delay(.seconds(1), scheduler: MainScheduler.instance)
       }
     }
   }

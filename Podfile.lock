@@ -2,41 +2,40 @@ PODS:
   - Astrolabe (4.2.3):
     - Astrolabe/Core (= 4.2.3)
   - Astrolabe/Core (4.2.3):
-    - RxCocoa (~> 4.5)
-    - RxSwift (~> 4.5)
+    - RxCocoa
+    - RxSwift
   - Astrolabe/Loaders (4.2.3):
     - Astrolabe/Core
-    - Gnomon/Core (~> 5.0)
-  - FormatterKit/Resources (1.8.2)
-  - FormatterKit/URLRequestFormatter (1.8.2):
-    - FormatterKit/Resources
-  - Gnomon (5.0):
-    - Gnomon/JSON (= 5.0)
-  - Gnomon/Core (5.0):
-    - FormatterKit/URLRequestFormatter (>= 1.8.2)
-    - RxSwift (~> 4.2)
-  - Gnomon/Decodable (5.0):
     - Gnomon/Core
-  - Gnomon/JSON (5.0):
+  - Gnomon (5.2.4):
+    - Gnomon/JSON (= 5.2.4)
+  - Gnomon/Core (5.2.4):
+    - RxSwift (~> 6)
+  - Gnomon/Decodable (5.2.4):
     - Gnomon/Core
-    - SwiftyJSON (~> 4.2)
-  - Nimble (8.0.1)
-  - Quick (2.1.0)
-  - RxBlocking (4.5.0):
-    - RxSwift (>= 4.4.2, ~> 4.4)
-  - RxCocoa (4.5.0):
-    - RxSwift (>= 4.4.2, ~> 4.4)
-  - RxSwift (4.5.0)
-  - RxTest (4.5.0):
-    - RxSwift (>= 4.4.2, ~> 4.4)
-  - SnapKit (4.2.0)
-  - SwiftyJSON (4.3.0)
+  - Gnomon/JSON (5.2.4):
+    - Gnomon/Core
+    - SwiftyJSON (~> 5)
+  - Nimble (10.0.0)
+  - Quick (5.0.1)
+  - RxBlocking (6.7.1):
+    - RxSwift (= 6.7.1)
+  - RxCocoa (6.7.1):
+    - RxRelay (= 6.7.1)
+    - RxSwift (= 6.7.1)
+  - RxRelay (6.7.1):
+    - RxSwift (= 6.7.1)
+  - RxSwift (6.7.1)
+  - RxTest (6.7.1):
+    - RxSwift (= 6.7.1)
+  - SnapKit (5.7.1)
+  - SwiftyJSON (5.0.2)
 
 DEPENDENCIES:
   - Astrolabe (from `.`)
   - Astrolabe/Loaders (from `.`)
-  - Gnomon
-  - Gnomon/Decodable
+  - "Gnomon (from `git@github.com:netcosports/Gnomon.git`, branch `rolandgarros`)"
+  - "Gnomon/Decodable (from `git@github.com:netcosports/Gnomon.git`, branch `rolandgarros`)"
   - Nimble
   - Quick
   - RxBlocking
@@ -44,13 +43,12 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - FormatterKit
-    - Gnomon
+  trunk:
     - Nimble
     - Quick
     - RxBlocking
     - RxCocoa
+    - RxRelay
     - RxSwift
     - RxTest
     - SnapKit
@@ -59,20 +57,28 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Astrolabe:
     :path: "."
+  Gnomon:
+    :branch: rolandgarros
+    :git: "git@github.com:netcosports/Gnomon.git"
+
+CHECKOUT OPTIONS:
+  Gnomon:
+    :commit: ddca4219bfbff8b2dec74f7f7ddfe38a724c9049
+    :git: "git@github.com:netcosports/Gnomon.git"
 
 SPEC CHECKSUMS:
-  Astrolabe: 897228e9a0c99056ac2f828d3bae623e9d7a6f12
-  FormatterKit: 4b8f29acc9b872d5d12a63efb560661e8f2e1b98
-  Gnomon: 1ec31fc498ccab37377fc1fdc1cbe68f341d4ac6
-  Nimble: 45f786ae66faa9a709624227fae502db55a8bdd0
-  Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
-  RxBlocking: 79413e4d916f44bb3e113c5b2cc059e36fe58910
-  RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
-  RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
-  RxTest: 3ccb66bfbace0bf7df1c43a7c75d046f8ce60372
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
+  Astrolabe: 36b63292a0fc10f12db69d5ed4df05882f158857
+  Gnomon: 89f5afb0de1f1b93f0f9db3214039cb7b57dc546
+  Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
+  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
+  RxBlocking: 48b86e3ed2a9a19150491e8dc5409973baac2eb1
+  RxCocoa: f5609cb4637587a7faa99c5d5787e3ad582b75a4
+  RxRelay: 4151ba01152436b08271e08410135e099880eae5
+  RxSwift: b9a93a26031785159e11abd40d1a55bcb8057e52
+  RxTest: eec2bff159d799cdc02da2b40ef47e43dc17e688
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
 
-PODFILE CHECKSUM: e04fa2144e7587aa54b9aa3e5bb9ccd474fe72cb
+PODFILE CHECKSUM: b4ff948b18e45d302981285d5a1fb7ad069ff1ee
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.15.2

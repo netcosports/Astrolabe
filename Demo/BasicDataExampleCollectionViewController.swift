@@ -105,6 +105,6 @@ class BasicDataExampleCollectionViewController: UIViewController, Loadable, Acce
     let footer: Cellable = Header(data: TestViewModel("Footer"), type: CellType.footer)
     let section = MultipleSupplementariesSection(supplementaries: [header, footer], cells: cells, page: intent.page)
 
-    return SectionObservable.just([section]).delay(1.0, scheduler: MainScheduler.instance)
+    return SectionObservable.just([section]).delay(.seconds(1), scheduler: MainScheduler.instance)
   }
 }

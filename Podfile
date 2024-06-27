@@ -1,19 +1,19 @@
-source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
 
 use_frameworks!
 
 abstract_target 'Astrolabe' do
   pod 'Astrolabe', :path => '.'
-  pod 'Gnomon'
-  pod 'Gnomon/Decodable'
+  pod 'Gnomon', :git => 'git@github.com:netcosports/Gnomon.git', :branch => 'rolandgarros'
+  pod 'Gnomon/Decodable', :git => 'git@github.com:netcosports/Gnomon.git', :branch => 'rolandgarros'
 
   target 'Demo' do
-    platform :ios, '9.0'
+    platform :ios, '12.0'
     pod 'SnapKit'
   end
 
   target 'DemoTV' do
-    platform :tvos, '9.0'
+    platform :tvos, '12.0'
     pod 'SnapKit'
   end
 
@@ -26,11 +26,11 @@ abstract_target 'Astrolabe' do
     pod 'RxTest'
 
     target 'iOSTests' do
-      platform :ios, '9.0'
+      platform :ios, '12.0'
     end
 
     target 'tvOSTests' do
-      platform :tvos, '9.0'
+      platform :tvos, '12.0'
     end
   end
 end

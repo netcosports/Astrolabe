@@ -12,7 +12,7 @@ import RxTest
 import Nimble
 import Quick
 
-public func equal<T: Equatable>(expectedEvents: [Recorded<Event<T>>]) -> Predicate<[Recorded<Event<T>>]> {
+public func equal<T: Equatable>(expectedEvents: [Recorded<Event<T>>]) -> Nimble.Predicate<[Recorded<Event<T>>]> {
   return Predicate { (actualExpression: Expression<[Recorded<Event<T>>]>) throws -> PredicateResult in
     let msg = ExpectationMessage.expectedActualValueTo("equal <\(expectedEvents)>")
     if let actualEvents = try actualExpression.evaluate() {

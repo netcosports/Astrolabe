@@ -75,11 +75,11 @@ class DiffTableViewViewModel {
       }
     }.bind(to: input.isLoading).disposed(by: disposeBag)
 
-    Observable<Int>.interval(2.2, scheduler: ConcurrentDispatchQueueScheduler(qos: .background)).map { _ in
+    Observable<Int>.interval(.milliseconds(2200), scheduler: ConcurrentDispatchQueueScheduler(qos: .background)).map { _ in
       LoaderResultEvent.force(sections: [], context: nil)
       }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
 
-    Observable<Int>.interval(0.3, scheduler: MainScheduler.instance).map { _ in
+    Observable<Int>.interval(.milliseconds(300), scheduler: MainScheduler.instance).map { _ in
       LoaderResultEvent.softCurrent
     }.bind(to: input.source.sectionsObserver).disposed(by: disposeBag)
   }

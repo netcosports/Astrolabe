@@ -43,7 +43,7 @@ class ExpandableTableViewController: BaseLoaderTableViewController<LoaderDecorat
     return LoaderExpandableCell<UITableView, TestTableCell>(data: TestViewModel("loader \(page)"), id: "Loader \(page)", loader: {
       let gen = TableGenerator<TestTableCell, TestTableHeader>()
       return CellObservable.just(gen.cellsViews(page: 1000 * page + 99, cells: 10))
-        .delay(1.0, scheduler: MainScheduler.instance)
+        .delay(.seconds(1), scheduler: MainScheduler.instance)
     }, loaderCell: loader)
   }
 }
@@ -77,7 +77,7 @@ class ExpandableCollectionViewController: BaseLoaderCollectionViewController<Loa
     return LoaderExpandableCell<UICollectionView, TestCollectionCell>(data: TestViewModel("loader"), id: "indicator", loader: {
       let gen = CollectionGenerator<TestCollectionCell, TestCollectionCell>()
       return CellObservable.just(gen.cellsViews(page: 99, cells: 10))
-        .delay(1.0, scheduler: MainScheduler.instance)
+        .delay(.seconds(1), scheduler: MainScheduler.instance)
     }, loaderCell: loader)
   }
 }

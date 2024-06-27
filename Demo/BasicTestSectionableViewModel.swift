@@ -38,7 +38,7 @@ class BasicTestSectionableViewModel: Loadable, Containerable {
     let cells: [Cellable] = result.map { Cell(data: $0) }
     return Observable<[Item]?>
       .just([Section(cells: cells, page: intent.page)])
-      .delay(1.0, scheduler: MainScheduler.instance)
+      .delay(.seconds(1), scheduler: MainScheduler.instance)
   }
 
   func apply(mergeResult: MergeResult?, for intent: LoaderIntent) {
