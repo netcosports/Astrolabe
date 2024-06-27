@@ -1,21 +1,21 @@
 PODS:
-  - Astrolabe (4.2.3):
-    - Astrolabe/Core (= 4.2.3)
-  - Astrolabe/Core (4.2.3):
+  - Astrolabe (6.7.1):
+    - Astrolabe/Core (= 6.7.1)
+  - Astrolabe/Core (6.7.1):
     - RxCocoa
     - RxSwift
-  - Astrolabe/Loaders (4.2.3):
+  - Astrolabe/Loaders (6.7.1):
     - Astrolabe/Core
     - Gnomon/Core
-  - Gnomon (5.2.4):
-    - Gnomon/JSON (= 5.2.4)
-  - Gnomon/Core (5.2.4):
-    - RxSwift (~> 6)
-  - Gnomon/Decodable (5.2.4):
+  - Gnomon (6.7.1):
+    - Gnomon/JSON (= 6.7.1)
+  - Gnomon/Core (6.7.1):
+    - RxSwift
+  - Gnomon/Decodable (6.7.1):
     - Gnomon/Core
-  - Gnomon/JSON (5.2.4):
+  - Gnomon/JSON (6.7.1):
     - Gnomon/Core
-    - SwiftyJSON (~> 5)
+    - SwiftyJSON
   - Nimble (10.0.0)
   - Quick (5.0.1)
   - RxBlocking (6.7.1):
@@ -63,12 +63,12 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Gnomon:
-    :commit: ddca4219bfbff8b2dec74f7f7ddfe38a724c9049
+    :commit: 78d7a8024edf3eab9b8cdbe554549b68b1c13ebb
     :git: "git@github.com:netcosports/Gnomon.git"
 
 SPEC CHECKSUMS:
-  Astrolabe: 36b63292a0fc10f12db69d5ed4df05882f158857
-  Gnomon: 89f5afb0de1f1b93f0f9db3214039cb7b57dc546
+  Astrolabe: c8b2a5e3a620a096ae461e462b5815e3d36b9076
+  Gnomon: da80969ab131481ab4be4be39c86c4290ead23b1
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   RxBlocking: 48b86e3ed2a9a19150491e8dc5409973baac2eb1
